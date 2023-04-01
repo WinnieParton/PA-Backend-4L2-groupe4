@@ -1,7 +1,5 @@
 package com.esgi.pa.domain.entities;
 
-import java.util.UUID;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Builder;
@@ -12,8 +10,7 @@ import lombok.Data;
 @Builder
 public class Friend {
     
-    private UUID playerId;
-    private UUID friendId;
+    private User user;
     private boolean accepted;
     
 }

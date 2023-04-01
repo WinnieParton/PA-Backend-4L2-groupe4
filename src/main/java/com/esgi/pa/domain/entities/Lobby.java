@@ -15,8 +15,8 @@ public class Lobby {
     
     private UUID id;
     private String name;
-    private UUID creator;
-    private UUID game;
+    private User creator;
+    private Game game;
     private boolean privacySetting;
     private boolean status;
     private LocalDateTime createdAt;

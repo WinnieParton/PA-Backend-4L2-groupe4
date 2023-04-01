@@ -13,8 +13,8 @@ import lombok.Data;
 public class Ranking {
     
     private UUID id;
-    private UUID gameId;
-    private UUID playerId;
+    private Game game;
+    private User player;
     private double score;
 
 }

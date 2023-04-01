@@ -1,5 +1,6 @@
 package com.esgi.pa.domain.entities;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,5 +20,6 @@ public class User {
     private String email;
     private String password;
     private RoleEnum role;
+    private List<Friend> friends;
 
 }
