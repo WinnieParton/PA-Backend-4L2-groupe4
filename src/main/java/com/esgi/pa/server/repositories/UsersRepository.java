@@ -1,0 +1,11 @@
+package com.esgi.pa.server.repositories;
+
+import java.util.UUID;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.esgi.pa.domain.entities.User;
+
+public interface UsersRepository extends MongoRepository<UUID, User> {
+    
+}

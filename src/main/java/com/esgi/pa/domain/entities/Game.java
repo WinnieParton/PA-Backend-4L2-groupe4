@@ -16,6 +16,9 @@ public class Game {
     
     private UUID id;
     private String name;
+    private String description;
+    private String gameFiles;
+    private String miniature;
     private int minPlayers;
     private int maxPlayers;
     private GameStatusEnum status;
