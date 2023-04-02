@@ -8,35 +8,50 @@ import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.server.PersistenceSpi;
+import com.esgi.pa.server.repositories.LobbiesRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LobbyMongoAdapter implements PersistenceSpi<UUID, Lobby> {
+public class LobbyMongoAdapter implements PersistenceSpi<Lobby, UUID> {
+    
+    private final LobbiesRepository lobbiesRepository;
     
     @Override
-    public UUID save(UUID o) {
+    public Lobby save(Lobby o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<UUID> saveInBatch(List<UUID> oList) {
+    public List<Lobby> saveAll(List<Lobby> oList) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveInBatch'");
+        throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<UUID> findById(Lobby id) {
+    public Optional<Lobby> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<UUID>> findAll() {
+    public Optional<List<Lobby>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public void removeById(UUID id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeById'");
+    }
+
+    @Override
+    public void removeAll(List<UUID> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
     
 }

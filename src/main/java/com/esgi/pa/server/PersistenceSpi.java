@@ -7,9 +7,13 @@ public interface PersistenceSpi<T, ID> {
 
     T save(T o);
 
-    List<T> saveInBatch(List<T> oList);
+    List<T> saveAll(List<T> oList);
 
     Optional<T> findById(ID id);
 
     Optional<List<T>> findAll();
+
+    void removeById(ID id);
+
+    void removeAll(List<ID> ids);
 }

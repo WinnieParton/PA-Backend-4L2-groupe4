@@ -8,35 +8,49 @@ import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Ranking;
 import com.esgi.pa.server.PersistenceSpi;
+import com.esgi.pa.server.repositories.RankingsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RankingMongoAdapter implements PersistenceSpi<UUID, Ranking> {
+public class RankingMongoAdapter implements PersistenceSpi<Ranking, UUID> {
     
+    private final RankingsRepository rankingsRepository;
+
     @Override
-    public UUID save(UUID o) {
+    public Ranking save(Ranking o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<UUID> saveInBatch(List<UUID> oList) {
+    public List<Ranking> saveAll(List<Ranking> oList) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveInBatch'");
+        throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<UUID> findById(Ranking id) {
+    public Optional<Ranking> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<UUID>> findAll() {
+    public Optional<List<Ranking>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
-    
+
+    @Override
+    public void removeById(UUID id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeById'");
+    }
+
+    @Override
+    public void removeAll(List<UUID> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+    }
 }
