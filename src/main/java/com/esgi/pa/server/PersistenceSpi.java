@@ -13,7 +13,7 @@ public interface PersistenceSpi<T, ID> {
 
     Optional<List<T>> findAll();
 
-    void removeById(ID id);
+    boolean removeById(ID id);
 
-    void removeAll(List<ID> ids);
+    boolean removeAll(List<ID> ids);
 }

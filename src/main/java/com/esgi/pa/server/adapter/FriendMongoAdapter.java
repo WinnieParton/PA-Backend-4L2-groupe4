@@ -43,13 +43,13 @@ public class FriendMongoAdapter implements PersistenceSpi<Friend, UUID> {
     }
 
     @Override
-    public void removeById(UUID id) {
+    public boolean removeById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public void removeAll(List<UUID> ids) {
+    public boolean removeAll(List<UUID> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
