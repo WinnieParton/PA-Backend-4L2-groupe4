@@ -8,18 +8,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.esgi.pa.domain.enums.RoleEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
+import lombok.With;
+import lombok.Builder.Default;
 
 @Document
-@Data
+@Value
 @Builder
 public class User {
     
-    private UUID id;
+    @Default
+    UUID id = UUID.randomUUID();
     private String name;
     private String email;
     private String password;
+    @With
     private RoleEnum role;
-    private List<Friend> friends;
+    @Default @With
+    List<Friend> friends = null;
 
 }

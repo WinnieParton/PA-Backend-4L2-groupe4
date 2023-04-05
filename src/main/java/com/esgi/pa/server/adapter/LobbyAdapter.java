@@ -6,38 +6,38 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.UsersRepository;
+import com.esgi.pa.server.repositories.LobbiesRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserMongoAdapter implements PersistenceSpi<User, UUID> {
+public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
     
-    private final UsersRepository usersRepository;
+    private final LobbiesRepository lobbiesRepository;
     
     @Override
-    public User save(User o) {
+    public Lobby save(Lobby o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<User> saveAll(List<User> oList) {
+    public List<Lobby> saveAll(List<Lobby> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
+    public Optional<Lobby> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<User>> findAll() {
+    public Optional<List<Lobby>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
@@ -53,4 +53,5 @@ public class UserMongoAdapter implements PersistenceSpi<User, UUID> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
+    
 }

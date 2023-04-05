@@ -6,38 +6,38 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Ranking;
+import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.RankingsRepository;
+import com.esgi.pa.server.repositories.GamesRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RankingMongoAdapter implements PersistenceSpi<Ranking, UUID> {
+public class GameAdapter implements PersistenceSpi<Game, UUID> {
     
-    private final RankingsRepository rankingsRepository;
+    private final GamesRepository gamesRepository;
 
     @Override
-    public Ranking save(Ranking o) {
+    public Game save(Game o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<Ranking> saveAll(List<Ranking> oList) {
+    public List<Game> saveAll(List<Game> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Ranking> findById(UUID id) {
+    public Optional<Game> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<Ranking>> findAll() {
+    public Optional<List<Game>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
@@ -53,4 +53,5 @@ public class RankingMongoAdapter implements PersistenceSpi<Ranking, UUID> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
+    
 }

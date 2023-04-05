@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.esgi.pa.domain.entities.Lobby;
 
-public interface LobbiesRepository extends MongoRepository<UUID, Lobby> {
+public interface LobbiesRepository extends MongoRepository<Lobby, UUID> {
     
 }

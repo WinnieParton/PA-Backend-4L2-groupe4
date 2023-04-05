@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.esgi.pa.domain.entities.Ranking;
 
-public interface RankingsRepository extends MongoRepository<UUID, Ranking> {
+public interface RankingsRepository extends MongoRepository<Ranking, UUID> {
     
 }
