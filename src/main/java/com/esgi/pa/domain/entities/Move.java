@@ -2,17 +2,22 @@ package com.esgi.pa.domain.entities;
 
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
+import lombok.Value;
 
-@Document
-@Data
+@Value
 @Builder
+@Entity
+@Table(name = "MOVES")
 public class Move {
     
-    private UUID id;
+    @Id @Default
+    UUID id = UUID.randomUUID();
     private Game game;
     private int turn;
     private String gameInstructions;

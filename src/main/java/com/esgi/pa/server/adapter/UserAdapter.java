@@ -31,8 +31,11 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
 
     @Override
     public Optional<User> findById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return usersRepository.findById(id);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return usersRepository.findByEmail(email);
     }
 
     @Override

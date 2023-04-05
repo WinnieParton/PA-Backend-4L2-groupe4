@@ -2,9 +2,6 @@ package com.esgi.pa.api.dtos;
 
 import com.esgi.pa.domain.enums.RoleEnum;
 
-import lombok.Builder;
-
-@Builder
 public record CreateUserRequest(
     String name,
     String email,

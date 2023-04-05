@@ -1,15 +1,23 @@
 package com.esgi.pa.domain.entities;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
+import lombok.Value;
 
-@Document
-@Data
+@Value
 @Builder
+@Entity
+@Table(name = "FRIENDS")
 public class Friend {
     
+    @Id @Default
+    UUID id = UUID.randomUUID();
     private User user;
     private boolean accepted;
     

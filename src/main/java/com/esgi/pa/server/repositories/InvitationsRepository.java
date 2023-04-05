@@ -2,10 +2,10 @@ package com.esgi.pa.server.repositories;
 
 import java.util.UUID;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.esgi.pa.domain.entities.Invitation;
 
-public interface InvitationsRepository extends MongoRepository<Invitation, UUID> {
+public interface InvitationsRepository extends JpaRepository<Invitation, UUID> {
     
 }
