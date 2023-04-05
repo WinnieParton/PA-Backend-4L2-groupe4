@@ -3,7 +3,12 @@ package com.esgi.pa.domain.entities;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.esgi.pa.domain.enums.RoleEnum;
 
@@ -12,17 +17,19 @@ import lombok.Value;
 import lombok.With;
 import lombok.Builder.Default;
 
-@Document
 @Value
 @Builder
+@Entity
+@Table(name = "USERS")
 public class User {
     
-    @Default
+    @Id @Default
     UUID id = UUID.randomUUID();
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
-    @With
+    @With @Enumerated(EnumType.ORDINAL)
     private RoleEnum role;
     @Default @With
     List<Friend> friends = null;

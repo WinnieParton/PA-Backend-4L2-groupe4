@@ -2,17 +2,22 @@ package com.esgi.pa.domain.entities;
 
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
+import lombok.Value;
 
-@Document
-@Data
+@Value
 @Builder
+@Entity
+@Table(name = "RANKINGS")
 public class Ranking {
     
-    private UUID id;
+    @Id @Default
+    UUID id = UUID.randomUUID();
     private Game game;
     private User player;
     private double score;

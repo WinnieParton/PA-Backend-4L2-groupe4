@@ -2,19 +2,24 @@ package com.esgi.pa.domain.entities;
 
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.esgi.pa.domain.enums.GameStatusEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
+import lombok.Value;
 
-@Document
-@Data
+@Value
 @Builder
+@Entity
+@Table(name = "GAMES")
 public class Game {
     
-    private UUID id;
+    @Id @Default
+    UUID id = UUID.randomUUID();
     private String name;
     private String description;
     private String gameFiles;

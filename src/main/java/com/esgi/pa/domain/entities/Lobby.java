@@ -3,17 +3,22 @@ package com.esgi.pa.domain.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
+import lombok.Builder.Default;
 
-@Document
-@Data
+@Value
 @Builder
+@Entity
+@Table(name = "LOBBIES")
 public class Lobby {
     
-    private UUID id;
+    @Id @Default
+    UUID id = UUID.randomUUID();
     private String name;
     private User creator;
     private Game game;

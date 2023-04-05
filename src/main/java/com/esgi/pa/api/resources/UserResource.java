@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.esgi.pa.api.dtos.CreateUserRequest;
 import com.esgi.pa.api.dtos.UserDto;
+import com.esgi.pa.api.dtos.UserLoginRequest;
 import com.esgi.pa.api.mappers.UserMapper;
+import com.esgi.pa.domain.exceptions.FunctionalException;
+import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +25,7 @@ public class UserResource {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody CreateUserRequest request) {        
+    public ResponseEntity<UserDto> create(@RequestBody CreateUserRequest request) throws FunctionalException {        
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.create(
@@ -32,5 +35,11 @@ public class UserResource {
                     request.role())));
     }
     
-
+    @PostMapping(value="login")
+    public ResponseEntity<UserDto> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException {
+        return ResponseEntity.ok(
+            UserMapper.toDto(
+                userService.login(request.email(), request.password())));
+    }
+    
 }
