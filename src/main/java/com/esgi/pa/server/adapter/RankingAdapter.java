@@ -6,38 +6,38 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.entities.Ranking;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.MovesRepository;
+import com.esgi.pa.server.repositories.RankingsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MoveMongoAdapter implements PersistenceSpi<Move, UUID> {
+public class RankingAdapter implements PersistenceSpi<Ranking, UUID> {
     
-    private final MovesRepository movesRepository;
-    
+    private final RankingsRepository rankingsRepository;
+
     @Override
-    public Move save(Move o) {
+    public Ranking save(Ranking o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<Move> saveAll(List<Move> oList) {
+    public List<Ranking> saveAll(List<Ranking> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Move> findById(UUID id) {
+    public Optional<Ranking> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<Move>> findAll() {
+    public Optional<List<Ranking>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
@@ -53,5 +53,4 @@ public class MoveMongoAdapter implements PersistenceSpi<Move, UUID> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
-    
 }

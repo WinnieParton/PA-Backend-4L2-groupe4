@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.esgi.pa.domain.entities.User;
 
-public interface UsersRepository extends MongoRepository<UUID, User> {
+public interface UsersRepository extends MongoRepository<User, UUID> {
     
 }

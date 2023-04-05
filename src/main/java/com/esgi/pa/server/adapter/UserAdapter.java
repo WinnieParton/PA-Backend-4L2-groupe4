@@ -6,38 +6,37 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Friend;
+import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.FriendsRepository;
+import com.esgi.pa.server.repositories.UsersRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class FriendMongoAdapter implements PersistenceSpi<Friend, UUID> {
+public class UserAdapter implements PersistenceSpi<User, UUID> {
     
-    private final FriendsRepository friendsRepository;
+    private final UsersRepository usersRepository;
     
     @Override
-    public Friend save(Friend o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    public User save(User o) {
+        return usersRepository.save(o);
     }
 
     @Override
-    public List<Friend> saveAll(List<Friend> oList) {
+    public List<User> saveAll(List<User> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Friend> findById(UUID id) {
+    public Optional<User> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<Friend>> findAll() {
+    public Optional<List<User>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
@@ -53,5 +52,4 @@ public class FriendMongoAdapter implements PersistenceSpi<Friend, UUID> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
-    
 }

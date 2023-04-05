@@ -6,38 +6,38 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.GamesRepository;
+import com.esgi.pa.server.repositories.FriendsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class GameMongoAdapter implements PersistenceSpi<Game, UUID> {
+public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
     
-    private final GamesRepository gamesRepository;
-
+    private final FriendsRepository friendsRepository;
+    
     @Override
-    public Game save(Game o) {
+    public Friend save(Friend o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<Game> saveAll(List<Game> oList) {
+    public List<Friend> saveAll(List<Friend> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Game> findById(UUID id) {
+    public Optional<Friend> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<Game>> findAll() {
+    public Optional<List<Friend>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

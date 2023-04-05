@@ -6,38 +6,38 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Invitation;
+import com.esgi.pa.domain.entities.Move;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.InvitationsRepository;
+import com.esgi.pa.server.repositories.MovesRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InvitationMongoAdapter implements PersistenceSpi<Invitation, UUID> {
+public class MoveAdapter implements PersistenceSpi<Move, UUID> {
     
-    private final InvitationsRepository invitationsRepository;
+    private final MovesRepository movesRepository;
     
     @Override
-    public Invitation save(Invitation o) {
+    public Move save(Move o) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<Invitation> saveAll(List<Invitation> oList) {
+    public List<Move> saveAll(List<Move> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Invitation> findById(UUID id) {
+    public Optional<Move> findById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
-    public Optional<List<Invitation>> findAll() {
+    public Optional<List<Move>> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

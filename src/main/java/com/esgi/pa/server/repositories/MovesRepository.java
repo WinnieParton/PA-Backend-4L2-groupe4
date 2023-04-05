@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.esgi.pa.domain.entities.Move;
 
-public interface MovesRepository extends MongoRepository<UUID, Move> {
+public interface MovesRepository extends MongoRepository<Move, UUID> {
     
 }
