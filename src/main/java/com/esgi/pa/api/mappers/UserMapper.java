@@ -10,6 +10,7 @@ public interface UserMapper {
         .id(user.getId())
         .name(user.getName())
         .email(user.getEmail())
+        .password(user.getPassword())
         .role(user.getRole())
         .friends(null) // TODO impl friends mapper
         .build();
@@ -20,6 +21,7 @@ public interface UserMapper {
         .id(dto.id())
         .name(dto.name())
         .email(dto.email())
+        .password(dto.password())
         .role(dto.role())
         .friends(null) // TODO impl friends mapper
         .build();
