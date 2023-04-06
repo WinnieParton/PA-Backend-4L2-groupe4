@@ -9,7 +9,9 @@ import com.esgi.pa.api.dtos.UserLoginRequest;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
+import com.esgi.pa.domain.services.AuthService;
 import com.esgi.pa.domain.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserResource {
     
     private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody CreateUserRequest request) throws FunctionalException {        
@@ -36,9 +39,9 @@ public class UserResource {
     }
     
     @PostMapping(value="login")
-    public ResponseEntity<UserDto> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException {
+    public ResponseEntity<String> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException, JsonProcessingException {
         return ResponseEntity.ok(
-            UserMapper.toDto(
+            authService.createBase64Token(
                 userService.login(request.email(), request.password())));
     }
     
