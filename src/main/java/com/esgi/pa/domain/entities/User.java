@@ -14,25 +14,34 @@ import javax.persistence.Table;
 
 import com.esgi.pa.domain.enums.RoleEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.Builder.Default;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS")
 public class User {
     
     @Id @Default
     UUID id = UUID.randomUUID();
-    private String name;
+
+    String name;
+
     @Column(unique = true)
-    private String email;
-    private String password;
+    String email;
+
+    String password;
+
     @With @Enumerated(EnumType.STRING)
-    private RoleEnum role;
+    RoleEnum role;
+
     @Default @With
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Friend> friends = null;

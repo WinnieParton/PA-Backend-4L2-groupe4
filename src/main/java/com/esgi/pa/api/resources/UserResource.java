@@ -2,6 +2,7 @@ package com.esgi.pa.api.resources;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.ServerRequest.Headers;
 
 import com.esgi.pa.api.dtos.CreateUserRequest;
 import com.esgi.pa.api.dtos.UserDto;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class UserResource {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody CreateUserRequest request) throws FunctionalException {        
+    public ResponseEntity<Object> create(@RequestBody CreateUserRequest request) throws FunctionalException {        
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.create(
@@ -39,7 +41,7 @@ public class UserResource {
     }
     
     @PostMapping(value="login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException, JsonProcessingException {
+    public ResponseEntity<Object> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException, JsonProcessingException {
         return ResponseEntity.ok(
             authService.createBase64Token(
                 userService.login(request.email(), request.password())));

@@ -7,21 +7,28 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Value;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "MOVES")
 public class Move {
     
     @Id @Default
     UUID id = UUID.randomUUID();
+
     @ManyToOne
-    private Game game;
-    private int turn;
-    private String gameInstructions;
+    Game game;
+
+    int turn;
+    
+    String gameInstructions;
 
 }

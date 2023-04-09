@@ -7,22 +7,29 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Value;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "RANKINGS")
 public class Ranking {
     
     @Id @Default
     UUID id = UUID.randomUUID();
+
     @ManyToOne
-    private Game game;
+    Game game;
+
     @ManyToOne
-    private User player;
-    private double score;
+    User player;
+
+    double score;
 
 }

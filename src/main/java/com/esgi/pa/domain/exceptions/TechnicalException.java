@@ -5,7 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TechnicalException extends Exception {
     
-    public void error(String message) {
+    public TechnicalException(String message) {
         log.error(message, getCause());
+    }
+
+    public TechnicalException(String message, Object object) {
+        log.error(String.format(message, object));
     }
 }

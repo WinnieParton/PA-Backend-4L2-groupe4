@@ -12,28 +12,40 @@ import javax.persistence.Table;
 
 import com.esgi.pa.domain.enums.GameStatusEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Value;
 import lombok.With;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "GAMES")
 public class Game {
     
     @Id @Default
     UUID id = UUID.randomUUID();
-    private String name;
-    private String description;
-    private String gameFiles;
-    private String miniature;
-    private int minPlayers;
-    private int maxPlayers;
+
+    String name;
+
+    String description;
+
+    String gameFiles;
+
+    String miniature;
+
+    int minPlayers;
+
+    int maxPlayers;
+
     @With @Enumerated(EnumType.STRING)
-    private GameStatusEnum status;
+    GameStatusEnum status;
+
     @OneToMany(mappedBy = "game")
-    private List<Ranking> rankings;
+    List<Ranking> rankings;
 
 }

@@ -16,7 +16,7 @@ public interface UserMapper {
         .build();
     }
 
-    static User toDomain(UserDto dto) { // PASSWORD NEEDED ?
+    static User toDomain(UserDto dto) {
         return User.builder()
         .id(dto.id())
         .name(dto.name())

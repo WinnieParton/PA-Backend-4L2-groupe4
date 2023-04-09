@@ -8,26 +8,37 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "LOBBIES")
 public class Lobby {
     
     @Id @Default
     UUID id = UUID.randomUUID();
-    private String name;
+
+    String name;
+
     @ManyToOne
-    private User creator;
+    User creator;
+
     @ManyToOne
-    private Game game;
-    private boolean privacySetting;
-    private boolean status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    Game game;
+
+    boolean privacySetting;
+
+    boolean status;
+
+    LocalDateTime createdAt;
+
+    LocalDateTime updateAt;
 
 }

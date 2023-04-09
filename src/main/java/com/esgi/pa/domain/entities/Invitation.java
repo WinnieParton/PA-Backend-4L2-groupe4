@@ -7,22 +7,29 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Value;
 
-@Value
+@Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "INVITATIONS")
 public class Invitation {
     
     @Id @Default
     UUID id = UUID.randomUUID();
+
     @ManyToOne
-    private User user;
+    User user;
+
     @ManyToOne
-    private Lobby lobby;
-    private boolean accepted;
+    Lobby lobby;
+
+    boolean accepted;
 
 }
