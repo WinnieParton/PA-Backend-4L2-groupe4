@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
@@ -12,7 +12,7 @@ import com.esgi.pa.server.repositories.UsersRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class UserAdapter implements PersistenceSpi<User, UUID> {
     

@@ -1,5 +1,7 @@
 package com.esgi.pa.domain.services;
 
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.FunctionalException;
@@ -8,6 +10,7 @@ import com.esgi.pa.server.adapter.UserAdapter;
 
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 public class UserService {
     
