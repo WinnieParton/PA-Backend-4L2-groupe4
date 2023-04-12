@@ -1,5 +1,7 @@
 package com.esgi.pa.domain.services;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.User;

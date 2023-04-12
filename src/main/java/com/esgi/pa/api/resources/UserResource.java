@@ -48,7 +48,7 @@ public class UserResource {
     }
     
     @GetMapping
-    public ResponseEntity<UserDto> getUserByUsername(@RequestBody GetByUsernameRequest request) throws FunctionalException {
+    public ResponseEntity<Object> getUserByUsername(@RequestBody GetByUsernameRequest request) throws FunctionalException {
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.getByName(request.name())));
