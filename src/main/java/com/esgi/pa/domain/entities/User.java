@@ -32,6 +32,7 @@ public class User {
     @Id @Default
     UUID id = UUID.randomUUID();
 
+    @Column(unique = true)
     String name;
 
     @Column(unique = true)

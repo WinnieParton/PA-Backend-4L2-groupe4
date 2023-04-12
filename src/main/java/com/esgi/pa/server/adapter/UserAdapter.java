@@ -38,6 +38,10 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
         return usersRepository.findByEmail(email);
     }
 
+    public Optional<User> findByName(String name) {
+        return usersRepository.findByName(name);
+    }
+
     @Override
     public Optional<List<User>> findAll() {
         // TODO Auto-generated method stub

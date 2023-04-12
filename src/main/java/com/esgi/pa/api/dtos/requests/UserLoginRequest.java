@@ -1,6 +1,4 @@
-package com.esgi.pa.api.dtos;
-
-import com.esgi.pa.domain.enums.RoleEnum;
+package com.esgi.pa.api.dtos.requests;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
@@ -10,11 +8,9 @@ import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record CreateUserRequest(
-    String name,
+public record UserLoginRequest(
     String email,
-    String password,
-    RoleEnum role
+    String password
 ) {
 
 }

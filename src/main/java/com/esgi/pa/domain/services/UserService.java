@@ -34,4 +34,10 @@ public class UserService {
             return user;
         else throw new FunctionalException("Incorrect password : %s", password);
     }
+
+    public User getByName(String name) throws FunctionalException {
+        return adapter.findByName(name)
+            .orElseThrow(
+                () -> new FunctionalException("No user found with following name : %s", name));
+    }
 }
