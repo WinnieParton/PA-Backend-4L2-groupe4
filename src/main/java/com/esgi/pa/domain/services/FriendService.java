@@ -1,43 +1,35 @@
 package com.esgi.pa.domain.services;
 
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
-import com.esgi.pa.server.adapter.FriendAdapter;
+import com.esgi.pa.domain.exceptions.FunctionalException;
+import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.server.adapter.UserAdapter;
 
-import antlr.collections.List;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @RequiredArgsConstructor
 public class FriendService {
 
-    private final FriendAdapter friendAdapter;
     private final UserAdapter userAdapter;
 
-    public Object add(UUID requesterId, UUID requestedId) {
-        return null;
+    public User add(User sender, User receiver) throws TechnicalException, FunctionalException {
+        if (!checkIfFriend(sender, receiver)) {
+            List<Friend> friends = sender.getFriends();
+            friends.add(Friend.builder().user(receiver).build());
+            return userAdapter.save(
+                sender.withFriends(friends));
+        } else throw new FunctionalException("Sender already friend with user : %s", receiver);
     }
     
-    private boolean checkIfFriend(UUID requestedID, UUID requesterID) {
-        if (checkUserExists(requestedID)) {
-            User requested = userAdapter.findById(requestedID).get();
-            for (val friend : requested.getFriends()) {
-                if (friend.getId().equals(requesterID))
-                    return true;
-            }
-        } return false;
-    }
-    
-    private boolean checkIfFriendRequestExists(UUID requester, UUID requested) {
-        return friendAdapter.findById(requester).isPresent() || friendAdapter.findById(requested).isPresent();
-    }
-
-    private boolean checkUserExists(UUID id) {
-        return userAdapter.findById(id).isPresent();
+    private boolean checkIfFriend(User sender, User receiver) throws TechnicalException {
+            return sender.getFriends()
+                .stream()
+                .anyMatch(friend -> friend.getUser().equals(receiver));
     }
 }

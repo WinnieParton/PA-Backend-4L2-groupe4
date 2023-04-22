@@ -42,4 +42,10 @@ public class UserService {
             .orElseThrow(
                 () -> new FunctionalException("No user found with following name : %s", name));
     }
+
+    public User getById(UUID id) throws FunctionalException {
+        return adapter.findById(id)
+        .orElseThrow(
+            () -> new FunctionalException("No user found with following name : %s", id));
+    }
 }
