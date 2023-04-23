@@ -3,6 +3,7 @@ package com.esgi.pa.api.resources;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,6 +28,14 @@ public class FriendResource {
     
     private final FriendService friendService;
     private final UserService userService;
+
+    @GetMapping("{senderId}")
+    public ResponseEntity<Object> get(@PathVariable UUID senderId) throws FunctionalException {
+        return ResponseEntity.ok(
+            FriendMapper.toDto(
+                friendService.getFriendRequest(
+                    userService.getById(senderId))));
+    }
 
     @PostMapping("{senderId}")
     public ResponseEntity<Object> add(@PathVariable UUID senderId, @RequestBody AddFriendRequest request) throws TechnicalException, FunctionalException {

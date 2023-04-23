@@ -40,6 +40,9 @@ public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
         return repository.findByUserAndFriend(user, friend);
     }
 
+    public List<Friend> findByUser(User o) {
+        return repository.findByUser(o);
+    }
 
     @Override
     public List<Friend> findAll() {

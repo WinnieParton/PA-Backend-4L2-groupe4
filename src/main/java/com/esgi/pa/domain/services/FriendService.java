@@ -1,5 +1,7 @@
 package com.esgi.pa.domain.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Friend;
@@ -27,6 +29,10 @@ public class FriendService {
         } else throw new FunctionalException("Sender already friend with user : %s", receiver);
     }
     
+    public List<Friend> getFriendRequest(User sender) {
+        return friendAdapter.findByUser(sender);
+    }
+
     private boolean checkIfFriend(User sender, User receiver) {
             return sender.getFriends().contains(receiver);
     }
@@ -52,6 +58,5 @@ public class FriendService {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
         return friendAdapter.save(friend.withStatus(FriendRequestStatus.REJECTED));
-
     }
 }
