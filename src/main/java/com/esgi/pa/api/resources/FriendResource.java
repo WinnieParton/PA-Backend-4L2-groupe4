@@ -2,7 +2,10 @@ package com.esgi.pa.api.resources;
 
 import java.util.UUID;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +29,11 @@ public class FriendResource {
     private final FriendService friendService;
     private final UserService userService;
 
-    @PostMapping("{requesterId}")
-    public ResponseEntity<Object> add(@PathVariable UUID requesterId, @RequestBody AddFriendRequest request) throws TechnicalException, FunctionalException {
+    @PostMapping("{senderId}")
+    public ResponseEntity<Object> add(@PathVariable UUID senderId, @RequestBody AddFriendRequest request) throws TechnicalException, FunctionalException {
         return ResponseEntity.ok(
             friendService.add(
-                userService.getById(requesterId), 
-                userService.getById(request.requestedId())));
+                userService.getById(senderId), 
+                userService.getById(request.recieverId())));
     }
-
 }

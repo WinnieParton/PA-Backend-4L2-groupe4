@@ -19,13 +19,16 @@ import lombok.Builder.Default;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "FRIENDS")
-public class Friend {
+public class Friends {
     
     @Id @Default
     UUID id = UUID.randomUUID();
 
     @ManyToOne
-    User user;
+    private User user;
+
+    @ManyToOne
+    private User friend;
 
     @Default
     boolean accepted = false;

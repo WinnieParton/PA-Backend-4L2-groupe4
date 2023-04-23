@@ -3,14 +3,14 @@ package com.esgi.pa.domain.entities;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.esgi.pa.domain.enums.RoleEnum;
@@ -45,8 +45,14 @@ public class User {
     RoleEnum role;
 
     @With
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Friend> friends;
+    @ManyToMany
+    @JoinTable(
+        name = "FRIENDS",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+
+    List<User> friends;
 
     @ManyToMany(mappedBy = "players")
     private List<Game> games;

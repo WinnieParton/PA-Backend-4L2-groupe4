@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.UsersRepository;

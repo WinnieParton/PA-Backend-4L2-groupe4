@@ -3,6 +3,7 @@ package com.esgi.pa.api.resources;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.esgi.pa.api.dtos.LoginDto;
 import com.esgi.pa.api.dtos.UserDto;
 import com.esgi.pa.api.dtos.requests.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.GetByUsernameRequest;
@@ -14,6 +15,8 @@ import com.esgi.pa.domain.services.AuthService;
 import com.esgi.pa.domain.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +46,11 @@ public class UserResource {
     
     @PostMapping(value="login")
     public ResponseEntity<Object> login(@RequestBody UserLoginRequest request) throws FunctionalException, TechnicalException {
-        return ResponseEntity.ok(
-            authService.createBase64Token(
-                userService.login(request.email(), request.password())));
+        return ResponseEntity.ok(LoginDto.builder()
+            .token(authService.createBase64Token(
+                userService.login(request.email(), request.password())))
+            .build());
+            
     }
     
     @GetMapping("{name}")
@@ -53,6 +58,13 @@ public class UserResource {
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.getByName(name)));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getUserByid(@PathVariable UUID id) throws FunctionalException {
+        return ResponseEntity.ok(
+            UserMapper.toDto(
+                userService.getById(id)));
     }
     
 }
