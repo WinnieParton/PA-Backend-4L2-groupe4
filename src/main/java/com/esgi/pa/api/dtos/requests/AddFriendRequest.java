@@ -10,4 +10,4 @@ import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record AddFriendRequest(UUID recieverId) {}
+public record AddFriendRequest(UUID receiverId) {}

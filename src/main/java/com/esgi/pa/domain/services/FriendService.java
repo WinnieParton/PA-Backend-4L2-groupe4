@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.FriendRequestStatus;
 import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
-import com.esgi.pa.server.adapter.UserAdapter;
+import com.esgi.pa.server.adapter.FriendAdapter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,18 +17,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FriendService {
 
-    private final UserAdapter userAdapter;
+    private final FriendAdapter friendAdapter;
 
-    public User add(User sender, User receiver) throws TechnicalException, FunctionalException {
+    public Friend sendRequest(User sender, User receiver) throws TechnicalException, FunctionalException {
         if (!checkIfFriend(sender, receiver)) {
             List<User> friends = sender.getFriends();
             friends.add(receiver);
-            return userAdapter.save(
-                sender.withFriends(friends));
+            return friendAdapter.save(
+                Friend.builder()
+                .user(sender)
+                .friend(receiver)
+                .build());
         } else throw new FunctionalException("Sender already friend with user : %s", receiver);
     }
     
-    private boolean checkIfFriend(User sender, User receiver) throws TechnicalException {
+    private boolean checkIfFriend(User sender, User receiver) {
             return sender.getFriends().contains(receiver);
+    }
+
+    public Friend acceptRequest(User sender, User receiver) throws TechnicalException {
+        Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
+            .orElseThrow(() -> new TechnicalException("Friend request not found"));
+        return friendAdapter.save(friend.withAccepted(FriendRequestStatus.ACCEPTED));
+    }
+
+    public Friend rejectRequest(User sender, User receiver) throws TechnicalException {
+        Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
+            .orElseThrow(() -> new TechnicalException("Friend request not found"));
+        return friendAdapter.save(friend.withAccepted(FriendRequestStatus.REJECTED));
+
     }
 }
