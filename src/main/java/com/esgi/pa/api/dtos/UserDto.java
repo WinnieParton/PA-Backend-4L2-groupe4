@@ -18,5 +18,5 @@ public record UserDto(
     String email,
     String password,
     RoleEnum role,
-    List<FriendDto> friends
+    List<UserDto> friends
 ) {}

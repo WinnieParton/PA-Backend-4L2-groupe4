@@ -49,13 +49,13 @@ public class FriendService {
     private Friend acceptRequest(User sender, User receiver) throws TechnicalException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
-        return friendAdapter.save(friend.withAccepted(FriendRequestStatus.ACCEPTED));
+        return friendAdapter.save(friend.withStatus(FriendRequestStatus.ACCEPTED));
     }
 
     private Friend rejectRequest(User sender, User receiver) throws TechnicalException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
-        return friendAdapter.save(friend.withAccepted(FriendRequestStatus.REJECTED));
+        return friendAdapter.save(friend.withStatus(FriendRequestStatus.REJECTED));
 
     }
 }

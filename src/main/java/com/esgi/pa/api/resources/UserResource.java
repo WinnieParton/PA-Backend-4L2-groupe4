@@ -51,7 +51,7 @@ public class UserResource {
             
     }
     
-    @GetMapping("{name}")
+    @GetMapping("name/{name}")
     public ResponseEntity<Object> getUserByUsername(@PathVariable String name) throws FunctionalException {
         return ResponseEntity.ok(
             UserMapper.toDto(

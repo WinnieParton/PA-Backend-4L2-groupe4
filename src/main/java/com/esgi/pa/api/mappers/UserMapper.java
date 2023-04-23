@@ -1,5 +1,7 @@
 package com.esgi.pa.api.mappers;
 
+import java.util.List;
+
 import com.esgi.pa.api.dtos.UserDto;
 import com.esgi.pa.domain.entities.User;
 
@@ -12,8 +14,14 @@ public interface UserMapper {
         .email(user.getEmail())
         .password(user.getPassword())
         .role(user.getRole())
-        .friends(null) // TODO impl friends mapper
+        .friends(UserMapper.toDto(user.getFriends())) // TODO impl friends mapper
         .build();
+    }
+
+    static List<UserDto> toDto(List<User> entities) {
+        return entities.stream()
+            .map(entity -> toDto(entity))
+            .toList();
     }
 
     static User toDomain(UserDto dto) {

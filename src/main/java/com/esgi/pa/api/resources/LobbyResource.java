@@ -47,8 +47,8 @@ public class LobbyResource {
             LobbyMapper.toDto(
                 lobbyService.create(
                     request.name(), 
-                    userService.getById(request.userId()), 
-                    gameService.getById(request.gameId()), 
+                    userService.getById(request.user()), 
+                    gameService.getById(request.game()), 
                     request.isPrivate())));
     }
 }

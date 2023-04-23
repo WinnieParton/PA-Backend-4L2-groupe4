@@ -4,11 +4,17 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
+import java.util.UUID;
+
+import com.esgi.pa.domain.enums.FriendRequestStatus;
+
 import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record FriendDto(
+    UUID id,
     UserDto user,
-    boolean accepted
+    UserDto friend,
+    FriendRequestStatus status
 ) {}

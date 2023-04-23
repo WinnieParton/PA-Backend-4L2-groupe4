@@ -44,13 +44,13 @@ public class User {
     @With @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @With
+    @Default @With
     @ManyToMany
     @JoinTable(
         name = "friends",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private List<User> friends;
+    private List<User> friends = List.of();
 
     @ManyToMany(mappedBy = "players")
     private List<Game> games;

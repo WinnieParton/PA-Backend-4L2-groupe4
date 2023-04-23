@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,16 +34,16 @@ public class FriendResource {
             FriendMapper.toDto(
                 friendService.sendRequest(
                     userService.getById(senderId), 
-                    userService.getById(request.receiverId()))));
+                    userService.getById(request.receiver()))));
     }
 
-    @PostMapping("{senderId}")
+    @PutMapping("{senderId}/answer")
     public ResponseEntity<Object> answerRequest(@PathVariable UUID senderId, @RequestBody AnswerFriendRequest request) throws TechnicalException, FunctionalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.handleRequest(
                     userService.getById(senderId),
-                    userService.getById(request.receiverId()),
+                    userService.getById(request.receiver()),
                     request.status())));
     }
 

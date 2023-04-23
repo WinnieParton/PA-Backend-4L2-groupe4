@@ -37,6 +37,6 @@ public class Friend {
 
     @With @Default
     @Enumerated(EnumType.STRING)
-    private FriendRequestStatus accepted = FriendRequestStatus.PENDING;
+    private FriendRequestStatus status = FriendRequestStatus.PENDING;
     
 }
