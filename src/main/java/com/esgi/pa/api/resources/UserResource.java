@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -47,11 +48,11 @@ public class UserResource {
                 userService.login(request.email(), request.password())));
     }
     
-    @GetMapping
-    public ResponseEntity<UserDto> getUserByUsername(@RequestBody GetByUsernameRequest request) throws FunctionalException {
+    @GetMapping("{name}")
+    public ResponseEntity<Object> getUserByUsername(@PathVariable String name) throws FunctionalException {
         return ResponseEntity.ok(
             UserMapper.toDto(
-                userService.getByName(request.name())));
+                userService.getByName(name)));
     }
     
 }

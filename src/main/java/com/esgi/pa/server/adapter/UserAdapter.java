@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.UsersRepository;
@@ -19,8 +20,8 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
     private final UsersRepository usersRepository;
     
     @Override
-    public User save(User o) {
-        return usersRepository.save(o);
+    public User save(User user) {
+        return usersRepository.save(user);
     }
 
     @Override

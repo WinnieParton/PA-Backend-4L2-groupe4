@@ -44,9 +44,9 @@ public class User {
     @With @Enumerated(EnumType.STRING)
     RoleEnum role;
 
-    @Default @With
+    @With
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Friend> friends = null;
+    List<Friend> friends;
 
     @ManyToMany(mappedBy = "players")
     private List<Game> games;
