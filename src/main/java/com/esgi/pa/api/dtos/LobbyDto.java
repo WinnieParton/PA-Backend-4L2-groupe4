@@ -3,6 +3,7 @@ package com.esgi.pa.api.dtos;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -16,8 +17,8 @@ public record LobbyDto(
     String name,
     UserDto creator,
     GameDto game,
-    boolean privacySetting,
-    boolean status,
+    boolean isPrivate,
+    GameStatusEnum status,
     LocalDateTime createdAt,
     LocalDateTime updateAt
 

@@ -22,7 +22,7 @@ import lombok.Builder.Default;
 public class Friends {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     @ManyToOne
     private User user;
@@ -31,6 +31,6 @@ public class Friends {
     private User friend;
 
     @Default
-    boolean accepted = false;
+    private boolean accepted = false;
     
 }

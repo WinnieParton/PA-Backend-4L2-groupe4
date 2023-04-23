@@ -29,25 +29,22 @@ import lombok.With;
 public class Game {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
-    String name;
+    private String name;
 
-    String description;
+    private String description;
 
-    String gameFiles;
+    private String gameFiles;
 
-    String miniature;
+    private String miniature;
 
-    int minPlayers;
+    private int minPlayers;
 
-    int maxPlayers;
-
-    @With @Enumerated(EnumType.STRING)
-    GameStatusEnum status;
+    private int maxPlayers;
 
     @OneToMany(mappedBy = "game")
-    List<Ranking> rankings;
+    private List<Ranking> rankings;
 
     @ManyToMany
     private List<User> players;

@@ -22,14 +22,14 @@ import lombok.Builder.Default;
 public class Invitation {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     @ManyToOne
-    User user;
+    private User user;
 
     @ManyToOne
-    Lobby lobby;
+    private Lobby lobby;
 
-    boolean accepted;
+    private boolean accepted;
 
 }

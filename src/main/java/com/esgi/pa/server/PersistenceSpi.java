@@ -11,7 +11,7 @@ public interface PersistenceSpi<T, ID> {
 
     Optional<T> findById(ID id);
 
-    Optional<List<T>> findAll();
+    List<T> findAll();
 
     boolean removeById(ID id);
 

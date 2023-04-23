@@ -37,7 +37,7 @@ public class MoveAdapter implements PersistenceSpi<Move, UUID> {
     }
 
     @Override
-    public Optional<List<Move>> findAll() {
+    public List<Move> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

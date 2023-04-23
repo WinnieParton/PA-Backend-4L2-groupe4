@@ -22,13 +22,13 @@ import lombok.Builder.Default;
 public class Move {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     @ManyToOne
-    Game game;
+    private Game game;
 
-    int turn;
+    private int turn;
     
-    String gameInstructions;
+    private String gameInstructions;
 
 }

@@ -20,8 +20,7 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
     
     @Override
     public Lobby save(Lobby o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        return lobbiesRepository.save(o);
     }
 
     @Override
@@ -32,14 +31,12 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
 
     @Override
     public Optional<Lobby> findById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return lobbiesRepository.findById(id);
     }
 
     @Override
-    public Optional<List<Lobby>> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    public List<Lobby> findAll() {
+        return lobbiesRepository.findAll();
     }
 
     @Override

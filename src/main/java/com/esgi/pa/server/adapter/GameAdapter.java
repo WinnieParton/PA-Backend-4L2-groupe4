@@ -37,7 +37,7 @@ public class GameAdapter implements PersistenceSpi<Game, UUID> {
     }
 
     @Override
-    public Optional<List<Game>> findAll() {
+    public List<Game> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

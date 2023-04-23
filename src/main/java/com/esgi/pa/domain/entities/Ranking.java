@@ -22,14 +22,14 @@ import lombok.Builder.Default;
 public class Ranking {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     @ManyToOne
-    Game game;
+    private Game game;
 
     @ManyToOne
-    User player;
+    private User player;
 
-    double score;
+    private double score;
 
 }

@@ -31,29 +31,30 @@ import lombok.Builder.Default;
 public class User {
     
     @Id @Default
-    UUID id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     @Column(unique = true)
-    String name;
+    private String name;
 
     @Column(unique = true)
-    String email;
+    private String email;
 
-    String password;
+    private String password;
 
     @With @Enumerated(EnumType.STRING)
-    RoleEnum role;
+    private RoleEnum role;
 
     @With
     @ManyToMany
     @JoinTable(
-        name = "FRIENDS",
+        name = "friends",
         joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
-
-    List<User> friends;
+        inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private List<User> friends;
 
     @ManyToMany(mappedBy = "players")
     private List<Game> games;
+
+    @ManyToMany(mappedBy = "participants")
+    private List<Lobby> participatingLobbies;
 }

@@ -37,7 +37,7 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, UUID> {
     }
 
     @Override
-    public Optional<List<Invitation>> findAll() {
+    public List<Invitation> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

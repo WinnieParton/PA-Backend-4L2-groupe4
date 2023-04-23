@@ -43,7 +43,7 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
     }
 
     @Override
-    public Optional<List<User>> findAll() {
+    public List<User> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }

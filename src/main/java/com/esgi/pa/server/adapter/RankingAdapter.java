@@ -37,7 +37,7 @@ public class RankingAdapter implements PersistenceSpi<Ranking, UUID> {
     }
 
     @Override
-    public Optional<List<Ranking>> findAll() {
+    public List<Ranking> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
