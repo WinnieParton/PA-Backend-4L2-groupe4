@@ -35,13 +35,24 @@ public class FriendService {
             return sender.getFriends().contains(receiver);
     }
 
-    public Friend acceptRequest(User sender, User receiver) throws TechnicalException {
+    public Friend handleRequest(User sender, User receiver, FriendRequestStatus status) throws TechnicalException {
+        switch(status) {
+            case ACCEPTED:
+                return acceptRequest(sender, receiver);
+            case REJECTED:
+                return rejectRequest(sender, receiver);
+            default:
+                throw new TechnicalException("Unexpected error with friend request status : %s", status);
+        }
+    }
+
+    private Friend acceptRequest(User sender, User receiver) throws TechnicalException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
         return friendAdapter.save(friend.withAccepted(FriendRequestStatus.ACCEPTED));
     }
 
-    public Friend rejectRequest(User sender, User receiver) throws TechnicalException {
+    private Friend rejectRequest(User sender, User receiver) throws TechnicalException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
         return friendAdapter.save(friend.withAccepted(FriendRequestStatus.REJECTED));

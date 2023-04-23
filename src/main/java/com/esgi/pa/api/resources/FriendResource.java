@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esgi.pa.api.dtos.requests.AddFriendRequest;
+import com.esgi.pa.api.dtos.requests.AnswerFriendRequest;
 import com.esgi.pa.api.mappers.FriendMapper;
 import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
@@ -34,4 +35,15 @@ public class FriendResource {
                     userService.getById(senderId), 
                     userService.getById(request.receiverId()))));
     }
+
+    @PostMapping("{senderId}")
+    public ResponseEntity<Object> answerRequest(@PathVariable UUID senderId, @RequestBody AnswerFriendRequest request) throws TechnicalException, FunctionalException {
+        return ResponseEntity.ok(
+            FriendMapper.toDto(
+                friendService.handleRequest(
+                    userService.getById(senderId),
+                    userService.getById(request.receiverId()),
+                    request.status())));
+    }
+
 }
