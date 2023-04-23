@@ -1,7 +1,5 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Friend;
@@ -21,8 +19,6 @@ public class FriendService {
 
     public Friend sendRequest(User sender, User receiver) throws TechnicalException, FunctionalException {
         if (!checkIfFriend(sender, receiver)) {
-            List<User> friends = sender.getFriends();
-            friends.add(receiver);
             return friendAdapter.save(
                 Friend.builder()
                 .user(sender)

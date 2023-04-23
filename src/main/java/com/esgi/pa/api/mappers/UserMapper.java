@@ -14,7 +14,7 @@ public interface UserMapper {
         .email(user.getEmail())
         .password(user.getPassword())
         .role(user.getRole())
-        .friends(UserMapper.toDto(user.getFriends())) // TODO impl friends mapper
+        .friends(UserMapper.toDto(user.getFriends()))
         .build();
     }
 

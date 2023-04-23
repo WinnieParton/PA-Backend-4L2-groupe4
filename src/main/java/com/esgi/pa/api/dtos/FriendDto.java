@@ -8,9 +8,6 @@ import java.util.UUID;
 
 import com.esgi.pa.domain.enums.FriendRequestStatus;
 
-import lombok.Builder;
-
-@Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record FriendDto(
     UUID id,
