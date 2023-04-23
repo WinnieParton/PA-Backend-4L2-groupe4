@@ -1,6 +1,5 @@
 package com.esgi.pa.api.resources;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;

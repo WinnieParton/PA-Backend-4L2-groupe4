@@ -4,9 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esgi.pa.api.dtos.LoginDto;
-import com.esgi.pa.api.dtos.UserDto;
 import com.esgi.pa.api.dtos.requests.CreateUserRequest;
-import com.esgi.pa.api.dtos.requests.GetByUsernameRequest;
 import com.esgi.pa.api.dtos.requests.UserLoginRequest;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.FunctionalException;
