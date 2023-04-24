@@ -1,16 +1,15 @@
 package com.esgi.pa.api.dtos.requests;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.esgi.pa.domain.enums.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Builder;
 
 import java.util.UUID;
 
-import com.esgi.pa.domain.enums.FriendRequestStatus;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
-import lombok.Builder;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record AnswerFriendRequest(UUID receiver, FriendRequestStatus status) {
+public record AnswerFriendRequest(UUID receiver, RequestStatus status) {
 
 }

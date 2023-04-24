@@ -1,22 +1,11 @@
 package com.esgi.pa.domain.entities;
 
-import java.util.UUID;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.esgi.pa.domain.enums.FriendRequestStatus;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import com.esgi.pa.domain.enums.RequestStatus;
+import lombok.*;
 import lombok.Builder.Default;
+
+import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -25,8 +14,9 @@ import lombok.Builder.Default;
 @NoArgsConstructor
 @Table(name = "FRIENDS")
 public class Friend {
-    
-    @Id @Default
+
+    @Id
+    @Default
     private UUID id = UUID.randomUUID();
 
     @ManyToOne
@@ -35,8 +25,9 @@ public class Friend {
     @ManyToOne
     private User friend;
 
-    @With @Default
+    @With
+    @Default
     @Enumerated(EnumType.STRING)
-    private FriendRequestStatus status = FriendRequestStatus.PENDING;
-    
+    private RequestStatus status = RequestStatus.PENDING;
+
 }

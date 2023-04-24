@@ -1,6 +1,6 @@
 package com.esgi.pa.domain.enums;
 
-public enum FriendRequestStatus {
+public enum RequestStatus {
     PENDING,
     ACCEPTED,
     REJECTED
