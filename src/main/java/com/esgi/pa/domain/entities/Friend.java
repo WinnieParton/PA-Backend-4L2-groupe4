@@ -20,10 +20,10 @@ public class Friend {
     private UUID id = UUID.randomUUID();
 
     @ManyToOne
-    private User user;
+    private User user1;
 
     @ManyToOne
-    private User friend;
+    private User user2;
 
     @With
     @Default

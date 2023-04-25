@@ -1,38 +1,24 @@
 package com.esgi.pa.api.mappers;
 
-import java.util.List;
-
 import com.esgi.pa.api.dtos.UserDto;
 import com.esgi.pa.domain.entities.User;
+
+import java.util.List;
 
 public interface UserMapper {
 
     static UserDto toDto(User user) {
         return UserDto.builder()
-        .id(user.getId())
-        .name(user.getName())
-        .email(user.getEmail())
-        .password(user.getPassword())
-        .role(user.getRole())
-        .friends(UserMapper.toDto(user.getFriends()))
-        .build();
+            .id(user.getId())
+            .name(user.getName())
+            .email(user.getEmail())
+            .role(user.getRole())
+            .build();
     }
 
     static List<UserDto> toDto(List<User> entities) {
         return entities.stream()
-            .map(entity -> toDto(entity))
+            .map(UserMapper::toDto)
             .toList();
     }
-
-    static User toDomain(UserDto dto) {
-        return User.builder()
-        .id(dto.id())
-        .name(dto.name())
-        .email(dto.email())
-        .password(dto.password())
-        .role(dto.role())
-        .friends(null) // TODO impl friends mapper
-        .build();
-    }
-    
 }

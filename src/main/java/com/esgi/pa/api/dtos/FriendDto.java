@@ -10,7 +10,6 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @JsonAutoDetect(fieldVisibility = ANY)
 public record FriendDto(
     UUID id,
-    UserDto user,
     UserDto friend,
     RequestStatus status
 ) {}

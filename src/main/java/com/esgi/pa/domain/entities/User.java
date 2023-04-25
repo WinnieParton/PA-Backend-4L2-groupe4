@@ -1,26 +1,12 @@
 package com.esgi.pa.domain.entities;
 
+import com.esgi.pa.domain.enums.RoleEnum;
+import lombok.*;
+import lombok.Builder.Default;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import com.esgi.pa.domain.enums.RoleEnum;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
-import lombok.Builder.Default;
 
 @Data
 @Builder
@@ -47,9 +33,9 @@ public class User {
     @Default @With
     @ManyToMany
     @JoinTable(
-        name = "friends",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "friend_id"))
+        name = "FRIENDS",
+        joinColumns = @JoinColumn(name = "user1_id"),
+        inverseJoinColumns = @JoinColumn(name = "user2_id"))
     private List<User> friends = List.of();
 
     @ManyToMany(mappedBy = "players")

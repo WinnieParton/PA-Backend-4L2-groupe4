@@ -1,17 +1,15 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.FriendsRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,11 +35,11 @@ public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
     }
 
     public Optional<Friend> findByUserAndFriend(User user, User friend) {
-        return repository.findByUserAndFriend(user, friend);
+        return repository.findByUser1AndUser2(user, friend);
     }
 
     public List<Friend> findByUser(User o) {
-        return repository.findByUser(o);
+        return repository.findByUser1(o);
     }
 
     @Override

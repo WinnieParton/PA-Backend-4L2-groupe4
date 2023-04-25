@@ -1,16 +1,15 @@
 package com.esgi.pa.domain.services;
 
-import java.util.Base64;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.server.adapter.UserAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class AuthService {
     
     public boolean validateBase64Token(String token) throws TechnicalException {
         try {
-            String encodeUserString = String.valueOf(Base64.getDecoder().decode(token));
+            String encodeUserString = Arrays.toString(Base64.getDecoder().decode(token));
             User user = objectMapper.readValue(encodeUserString, User.class);
             return adapter.findById(user.getId()).isPresent();
         } catch (JsonProcessingException exception) {

@@ -1,18 +1,17 @@
 package com.esgi.pa.server.repositories;
 
+import com.esgi.pa.domain.entities.Friend;
+import com.esgi.pa.domain.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.esgi.pa.domain.entities.Friend;
-import com.esgi.pa.domain.entities.User;
-
 public interface FriendsRepository extends JpaRepository<Friend, UUID> {
 
-    Optional<Friend> findByUserAndFriend(User user, User friend);
+    Optional<Friend> findByUser1AndUser2(User user1, User user2);
 
-    List<Friend> findByUser(User o);
+    List<Friend> findByUser1(User o);
 
 }

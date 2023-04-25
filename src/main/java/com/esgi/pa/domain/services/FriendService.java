@@ -21,8 +21,8 @@ public class FriendService {
         if (!checkIfFriend(sender, receiver)) {
             return friendAdapter.save(
                 Friend.builder()
-                    .user(sender)
-                    .friend(receiver)
+                    .user1(sender)
+                    .user2(receiver)
                     .build());
         } else throw new FunctionalException("Sender already friend with user : %s", receiver);
     }

@@ -1,18 +1,18 @@
 package com.esgi.pa.api.dtos;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Builder;
+
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-
-import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record RankingDto(
     UUID id,
-    GameDto game,
-    UserDto player,
+    UUID game,
+    UUID player,
     double score
-) {}
+) {
+}
