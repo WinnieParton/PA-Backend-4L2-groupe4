@@ -1,16 +1,14 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.GamesRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +30,7 @@ public class GameAdapter implements PersistenceSpi<Game, UUID> {
 
     @Override
     public Optional<Game> findById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return gamesRepository.findById(id);
     }
 
     @Override
