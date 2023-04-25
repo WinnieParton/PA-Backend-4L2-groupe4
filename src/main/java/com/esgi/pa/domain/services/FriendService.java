@@ -46,6 +46,11 @@ public class FriendService {
     private Friend acceptRequest(User sender, User receiver) throws TechnicalException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalException("Friend request not found"));
+        friendAdapter.save(Friend.builder()
+            .user1(receiver)
+            .user2(sender)
+            .status(RequestStatus.ACCEPTED)
+            .build());
         return friendAdapter.save(friend.withStatus(RequestStatus.ACCEPTED));
     }
 

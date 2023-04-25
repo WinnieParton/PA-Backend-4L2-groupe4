@@ -8,12 +8,12 @@ import java.util.List;
 public interface UserMapper {
 
     static UserDto toDto(User user) {
-        return UserDto.builder()
-            .id(user.getId())
-            .name(user.getName())
-            .email(user.getEmail())
-            .role(user.getRole())
-            .build();
+        return new UserDto(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getFriends().stream().map(User::getId).toList());
     }
 
     static List<UserDto> toDto(List<User> entities) {

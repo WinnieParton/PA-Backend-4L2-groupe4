@@ -10,6 +10,7 @@ public interface FriendMapper {
     static FriendDto toDto(Friend entity) {
         return new FriendDto(
             entity.getId(),
+            entity.getUser1().getId(),
             UserMapper.toDto(entity.getUser2()),
             entity.getStatus());
     }
