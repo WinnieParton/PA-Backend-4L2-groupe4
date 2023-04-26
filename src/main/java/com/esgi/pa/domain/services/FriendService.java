@@ -27,8 +27,12 @@ public class FriendService {
         } else throw new FunctionalException("Sender already friend with user : %s", receiver);
     }
 
-    public List<Friend> getFriendRequest(User sender) {
-        return friendAdapter.findByUser(sender);
+    public List<Friend> getFriendRequestSent(User sender) {
+        return friendAdapter.findByUser1(sender);
+    }
+
+    public List<Friend> getFriendRequestReceived(User receiver) {
+        return friendAdapter.findByUser2(receiver);
     }
 
     private boolean checkIfFriend(User sender, User receiver) {

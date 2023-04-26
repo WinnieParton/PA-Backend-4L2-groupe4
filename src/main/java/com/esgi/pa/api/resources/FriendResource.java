@@ -21,12 +21,20 @@ public class FriendResource {
     private final FriendService friendService;
     private final UserService userService;
 
-    @GetMapping("{senderId}")
-    public ResponseEntity<Object> getRequests(@PathVariable UUID senderId) throws FunctionalException {
+    @GetMapping("sent/{senderId}")
+    public ResponseEntity<Object> getRequestsSent(@PathVariable UUID senderId) throws FunctionalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
-                friendService.getFriendRequest(
+                friendService.getFriendRequestSent(
                     userService.getById(senderId))));
+    }
+
+    @GetMapping("received/{receiverId}")
+    public ResponseEntity<Object> getRequestReceived(@PathVariable UUID receiverId) throws FunctionalException {
+        return ResponseEntity.ok(
+            FriendMapper.toDto(
+                friendService.getFriendRequestReceived(
+                    userService.getById(receiverId))));
     }
 
     @PutMapping("{senderId}/answer")
