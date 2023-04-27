@@ -11,7 +11,7 @@ public interface FriendMapper {
         return new FriendDto(
             entity.getId(),
             entity.getUser1().getId(),
-            UserMapper.toDto(entity.getUser2()),
+            NoFriendsUserMapper.toDto(entity.getUser2()),
             entity.getStatus());
     }
 

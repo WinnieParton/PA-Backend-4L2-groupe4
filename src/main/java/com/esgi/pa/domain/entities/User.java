@@ -1,6 +1,7 @@
 package com.esgi.pa.domain.entities;
 
 import com.esgi.pa.domain.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.Builder.Default;
 
@@ -32,15 +33,18 @@ public class User {
 
     @Default @With
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
         name = "FRIENDS",
         joinColumns = @JoinColumn(name = "user1_id"),
         inverseJoinColumns = @JoinColumn(name = "user2_id"))
     private List<User> friends = List.of();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "players")
     private List<Game> games;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "participants")
     private List<Lobby> participatingLobbies;
 }
