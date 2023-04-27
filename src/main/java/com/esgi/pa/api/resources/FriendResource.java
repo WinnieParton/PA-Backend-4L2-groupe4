@@ -38,13 +38,13 @@ public class FriendResource {
                     userService.getById(receiverId))));
     }
 
-    @PutMapping("{senderId}/answer")
-    public ResponseEntity<Object> answerRequest(@PathVariable UUID senderId, @RequestBody AnswerFriendRequest request) throws TechnicalException, FunctionalException {
+    @PutMapping("{receiver}/answer")
+    public ResponseEntity<Object> answerRequest(@PathVariable UUID receiver, @RequestBody AnswerFriendRequest request) throws TechnicalException, FunctionalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.handleRequest(
-                    userService.getById(senderId),
-                    userService.getById(request.receiver()),
+                    userService.getById(request.sender()),
+                    userService.getById(receiver),
                     request.status())));
     }
 

@@ -10,6 +10,6 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record AnswerFriendRequest(UUID receiver, RequestStatus status) {
+public record AnswerFriendRequest(UUID sender, RequestStatus status) {
 
 }
