@@ -1,9 +1,10 @@
 package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Game;
-import com.esgi.pa.domain.exceptions.FunctionalException;
+import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.server.adapter.GameAdapter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,10 +15,10 @@ public class GameService {
 
     private final GameAdapter gameAdapter;
 
-    public Game getById(UUID gameId) throws FunctionalException {
+    public Game getById(UUID gameId) throws TechnicalException {
         return gameAdapter.findById(gameId)
             .orElseThrow(
-                () -> new FunctionalException("Cannot find game with id : %s", gameId));
+                () -> new TechnicalException(HttpStatus.NOT_FOUND, "Cannot find game with id : %s", gameId));
     }
 
 }

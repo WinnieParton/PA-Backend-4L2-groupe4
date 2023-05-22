@@ -3,6 +3,7 @@ package com.esgi.pa.api.resources;
 import com.esgi.pa.api.dtos.LoginDto;
 import com.esgi.pa.api.dtos.requests.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.UserLoginRequest;
+import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
@@ -24,7 +25,7 @@ public class UserResource {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CreateUserRequest request) throws FunctionalException {
+    public ResponseEntity<Object> create(@RequestBody CreateUserRequest request) throws TechnicalException {
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.create(
@@ -43,16 +44,23 @@ public class UserResource {
     }
 
     @GetMapping("name/{name}")
-    public ResponseEntity<Object> getUserByUsername(@PathVariable String name) throws FunctionalException {
+    public ResponseEntity<Object> getUserByUsername(@PathVariable String name) throws TechnicalException {
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.getByName(name)));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable UUID id) throws FunctionalException {
+    public ResponseEntity<Object> getUserById(@PathVariable UUID id) throws TechnicalException {
         return ResponseEntity.ok(
             UserMapper.toDto(
                 userService.getById(id)));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getLobbies(@PathVariable UUID id) throws TechnicalException {
+        return ResponseEntity.ok(
+            LobbyMapper.toDto(
+                userService.getLobbiesByUserId(id)));
     }
 }

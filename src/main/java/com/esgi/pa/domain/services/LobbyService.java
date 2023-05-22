@@ -1,18 +1,17 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.GameStatusEnum;
-import com.esgi.pa.domain.exceptions.FunctionalException;
+import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.server.adapter.LobbyAdapter;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +31,9 @@ public class LobbyService {
             .build());
     }
 
-    public Lobby findOne(UUID id) throws FunctionalException {
+    public Lobby findOne(UUID id) throws TechnicalException {
         return lobbyAdapter.findById(id)
-            .orElseThrow(() -> new FunctionalException("No Lobby found with id : %s", id));
+            .orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No Lobby found with id : %s", id));
     }
 
     public List<Lobby> findAll() {

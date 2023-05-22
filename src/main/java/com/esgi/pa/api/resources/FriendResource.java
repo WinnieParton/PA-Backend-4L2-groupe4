@@ -4,7 +4,6 @@ import com.esgi.pa.api.dtos.requests.AddFriendRequest;
 import com.esgi.pa.api.dtos.requests.AnswerFriendRequest;
 import com.esgi.pa.api.mappers.FriendMapper;
 import com.esgi.pa.api.mappers.FriendRequestsReceivedResponseMapper;
-import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.FriendService;
 import com.esgi.pa.domain.services.UserService;
@@ -23,7 +22,7 @@ public class FriendResource {
     private final UserService userService;
 
     @GetMapping("sent/{senderId}")
-    public ResponseEntity<Object> getRequestsSent(@PathVariable UUID senderId) throws FunctionalException {
+    public ResponseEntity<Object> getRequestsSent(@PathVariable UUID senderId) throws TechnicalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.getFriendRequestSent(
@@ -31,7 +30,7 @@ public class FriendResource {
     }
 
     @GetMapping("received/{receiverId}")
-    public ResponseEntity<Object> getRequestReceived(@PathVariable UUID receiverId) throws FunctionalException {
+    public ResponseEntity<Object> getRequestReceived(@PathVariable UUID receiverId) throws TechnicalException {
         return ResponseEntity.ok(
             FriendRequestsReceivedResponseMapper.toDto(
                 friendService.getFriendRequestReceived(
@@ -39,7 +38,7 @@ public class FriendResource {
     }
 
     @PutMapping("{receiver}/answer")
-    public ResponseEntity<Object> answerRequest(@PathVariable UUID receiver, @RequestBody AnswerFriendRequest request) throws TechnicalException, FunctionalException {
+    public ResponseEntity<Object> answerRequest(@PathVariable UUID receiver, @RequestBody AnswerFriendRequest request) throws TechnicalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.handleRequest(
@@ -50,7 +49,7 @@ public class FriendResource {
 
 
     @PostMapping("{senderId}")
-    public ResponseEntity<Object> add(@PathVariable UUID senderId, @RequestBody AddFriendRequest request) throws FunctionalException {
+    public ResponseEntity<Object> add(@PathVariable UUID senderId, @RequestBody AddFriendRequest request) throws TechnicalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.sendRequest(
