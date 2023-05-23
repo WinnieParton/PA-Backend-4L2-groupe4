@@ -57,7 +57,7 @@ public class UserResource {
                 userService.getById(id)));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{id}/lobbies")
     public ResponseEntity<Object> getLobbies(@PathVariable UUID id) throws TechnicalException {
         return ResponseEntity.ok(
             LobbyMapper.toDto(
