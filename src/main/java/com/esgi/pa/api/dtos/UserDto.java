@@ -16,6 +16,6 @@ public record UserDto(
     String name,
     String email,
     RoleEnum role,
-    List<UUID> friends
+    List<NoFriendsUserDto> friends
 ) {
 }

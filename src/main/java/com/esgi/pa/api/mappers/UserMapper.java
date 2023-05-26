@@ -13,7 +13,7 @@ public interface UserMapper {
             user.getName(),
             user.getEmail(),
             user.getRole(),
-            user.getFriends().stream().map(User::getId).toList());
+            user.getFriends().stream().map(NoFriendsUserMapper::toDto).toList());
     }
 
     static List<UserDto> toDto(List<User> entities) {

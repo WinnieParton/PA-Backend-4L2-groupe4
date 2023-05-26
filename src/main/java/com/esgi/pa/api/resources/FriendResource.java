@@ -48,12 +48,12 @@ public class FriendResource {
     }
 
 
-    @PostMapping("{senderId}")
-    public ResponseEntity<Object> add(@PathVariable UUID senderId, @RequestBody AddFriendRequest request) throws TechnicalException {
+    @PostMapping("{receiver}")
+    public ResponseEntity<Object> add(@PathVariable UUID receiver, @RequestBody AddFriendRequest request) throws TechnicalException {
         return ResponseEntity.ok(
             FriendMapper.toDto(
                 friendService.sendRequest(
-                    userService.getById(senderId),
-                    userService.getById(request.receiver()))));
+                    userService.getById(request.sender()),
+                    userService.getById(receiver))));
     }
 }

@@ -7,9 +7,15 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatResource {
 
-    @MessageMapping("/send")
-    @SendTo("/chat")
-    public Object sendMessage(Object message) {
+    @MessageMapping("/privateChatMessage")
+    @SendTo("/chat/private")
+    public Object processPrivateMessage(Object message) {
+        return new Object();
+    }
+
+    @MessageMapping("/lobbyChatMessage")
+    @SendTo("/chat/lobby")
+    public Object processLobbyMessage(Object message) {
         return new Object();
     }
 }
