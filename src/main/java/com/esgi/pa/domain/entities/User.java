@@ -47,4 +47,8 @@ public class User {
     @JsonIgnore
     @ManyToMany(mappedBy = "participants")
     private List<Lobby> participatingLobbies;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "participants")
+    private List<Chat> participatingChats; 
 }

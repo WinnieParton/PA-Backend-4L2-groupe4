@@ -21,9 +21,11 @@ public class Message {
     @Id @Default
     private UUID id = UUID.randomUUID();
 
+    @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
 
