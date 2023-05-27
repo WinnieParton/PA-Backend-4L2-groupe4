@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos;
+package com.esgi.pa.api.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
@@ -8,4 +8,4 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record LoginDto(String token) {}
+public record LoginResponse(String token) {}

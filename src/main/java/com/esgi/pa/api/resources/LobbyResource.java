@@ -1,6 +1,9 @@
 package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.CreateLobbyRequest;
+import com.esgi.pa.api.dtos.responses.CreateLobbyResponse;
+import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
+import com.esgi.pa.api.dtos.responses.GetlobbyResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.GameService;
@@ -22,22 +25,23 @@ public class LobbyResource {
     private final GameService gameService;
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> getOne(@PathVariable UUID id) throws TechnicalException {
+    public ResponseEntity<GetlobbyResponse> getOne(@PathVariable UUID id) throws TechnicalException {
         return ResponseEntity.ok(
-            LobbyMapper.toDto(lobbyService.findOne(id)));
+            LobbyMapper.toGetlobbyResponse(lobbyService.findOne(id)));
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAll() {
+    public ResponseEntity<GetlobbiesResponse> getAll() {
         return ResponseEntity.ok(
-            LobbyMapper.toDto(
-                lobbyService.findAll()));
+            new GetlobbiesResponse(
+                LobbyMapper.toGetlobbyResponse(
+                    lobbyService.findAll())));
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CreateLobbyRequest request) throws TechnicalException {
+    public ResponseEntity<CreateLobbyResponse> create(@RequestBody CreateLobbyRequest request) throws TechnicalException {
         return ResponseEntity.ok(
-            LobbyMapper.toDto(
+            LobbyMapper.toCreateLobbyResponse(
                 lobbyService.create(
                     request.name(),
                     userService.getById(request.user()),
