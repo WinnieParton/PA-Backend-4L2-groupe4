@@ -1,10 +1,9 @@
 package com.esgi.pa.server.repositories;
 
-import com.esgi.pa.domain.entities.Ranking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import com.esgi.pa.domain.entities.Ranking;
 
-public interface RankingsRepository extends JpaRepository<Ranking, UUID> {
-    
+public interface RankingsRepository extends JpaRepository<Ranking, Long> {
+
 }

@@ -1,13 +1,28 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.GameStatusEnum;
-import lombok.*;
-import lombok.Builder.Default;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.esgi.pa.domain.enums.GameStatusEnum;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
 @Builder
@@ -16,9 +31,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "LOBBIES")
 public class Lobby {
-    
-    @Id @Default
-    private UUID id = UUID.randomUUID();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String name;
 
@@ -30,7 +46,8 @@ public class Lobby {
 
     private boolean isPrivate;
 
-    @With @Enumerated(EnumType.STRING)
+    @With
+    @Enumerated(EnumType.STRING)
     private GameStatusEnum status;
 
     @Default
@@ -40,10 +57,7 @@ public class Lobby {
     private LocalDateTime updateAt = LocalDateTime.now();
 
     @ManyToMany
-    @JoinTable(
-        name = "lobby_participants",
-        joinColumns = @JoinColumn(name = "lobby_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "lobby_participants", joinColumns = @JoinColumn(name = "lobby_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> participants;
 
 }

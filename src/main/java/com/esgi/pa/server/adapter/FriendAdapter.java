@@ -1,22 +1,23 @@
 package com.esgi.pa.server.adapter;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.FriendsRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
-    
+public class FriendAdapter implements PersistenceSpi<Friend, Long> {
+
     private final FriendsRepository repository;
-    
+
     @Override
     public Friend save(Friend o) {
         return repository.save(o);
@@ -29,7 +30,7 @@ public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
     }
 
     @Override
-    public Optional<Friend> findById(UUID id) {
+    public Optional<Friend> findById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
@@ -53,13 +54,13 @@ public class FriendAdapter implements PersistenceSpi<Friend, UUID> {
     }
 
     @Override
-    public boolean removeById(UUID id) {
+    public boolean removeById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public boolean removeAll(List<UUID> ids) {
+    public boolean removeAll(List<Long> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }

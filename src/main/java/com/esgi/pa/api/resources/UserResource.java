@@ -1,7 +1,5 @@
 package com.esgi.pa.api.resources;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +25,12 @@ public class UserResource {
 
     @GetMapping("name/{name}")
     public ResponseEntity<?> getUserByUsername(@PathVariable String name) {
-            return ResponseEntity.ok(UserMapper.toGetUserResponse(
-                            userService.getByName(name)));
+        return ResponseEntity.ok(UserMapper.toGetUserResponse(
+                userService.getByName(name)));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(
                     UserMapper.toGetUserResponse(
@@ -46,7 +44,7 @@ public class UserResource {
     }
 
     @GetMapping("{id}/lobbies")
-    public ResponseEntity<?> getLobbies(@PathVariable UUID id) {
+    public ResponseEntity<?> getLobbies(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(
                     new GetlobbiesResponse(

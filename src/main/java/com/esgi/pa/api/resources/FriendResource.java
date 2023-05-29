@@ -1,7 +1,5 @@
 package com.esgi.pa.api.resources;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +32,7 @@ public class FriendResource {
     private final UserService userService;
 
     @GetMapping("sent/{senderId}")
-    public ResponseEntity<?> getRequestsSent(@PathVariable UUID senderId) {
+    public ResponseEntity<?> getRequestsSent(@PathVariable Long senderId) {
         try {
             return ResponseEntity.ok(
                     new GetFriendRequestsSentResponse(
@@ -50,7 +48,7 @@ public class FriendResource {
     }
 
     @GetMapping("received/{receiverId}")
-    public ResponseEntity<?> getRequestReceived(@PathVariable UUID receiverId) {
+    public ResponseEntity<?> getRequestReceived(@PathVariable Long receiverId) {
         try {
             return ResponseEntity.ok(
                     new GetFriendRequestsReceivedResponse(
@@ -66,7 +64,7 @@ public class FriendResource {
     }
 
     @PutMapping("{receiver}/answer")
-    public ResponseEntity<?> answerRequest(@PathVariable UUID receiver, @RequestBody AnswerFriendRequest request) {
+    public ResponseEntity<?> answerRequest(@PathVariable Long receiver, @RequestBody AnswerFriendRequest request) {
         try {
             return ResponseEntity.ok(
                     FriendMapper.toAnswerFriendRequestResponse(
@@ -83,7 +81,7 @@ public class FriendResource {
     }
 
     @PostMapping("{receiver}")
-    public ResponseEntity<?> add(@PathVariable UUID receiver, @RequestBody AddFriendRequest request) {
+    public ResponseEntity<?> add(@PathVariable Long receiver, @RequestBody AddFriendRequest request) {
         try {
             return ResponseEntity.ok(
                     FriendMapper.toAddFriendResponse(

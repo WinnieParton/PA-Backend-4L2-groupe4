@@ -1,10 +1,11 @@
 package com.esgi.pa.server.repositories;
 
-import com.esgi.pa.domain.entities.Game;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import com.esgi.pa.domain.entities.Game;
 
-public interface GamesRepository extends JpaRepository<Game, UUID> {
-    
+public interface GamesRepository extends JpaRepository<Game, Long> {
+    Optional<Game> findByName(String name);
 }

@@ -2,7 +2,6 @@ package com.esgi.pa.server.adapter;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MoveAdapter implements PersistenceSpi<Move, UUID> {
+public class MoveAdapter implements PersistenceSpi<Move, Long> {
 
     private final MovesRepository movesRepository;
 
@@ -31,7 +30,7 @@ public class MoveAdapter implements PersistenceSpi<Move, UUID> {
     }
 
     @Override
-    public Optional<Move> findById(UUID id) {
+    public Optional<Move> findById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
@@ -43,13 +42,13 @@ public class MoveAdapter implements PersistenceSpi<Move, UUID> {
     }
 
     @Override
-    public boolean removeById(UUID id) {
+    public boolean removeById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public boolean removeAll(List<UUID> ids) {
+    public boolean removeAll(List<Long> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }

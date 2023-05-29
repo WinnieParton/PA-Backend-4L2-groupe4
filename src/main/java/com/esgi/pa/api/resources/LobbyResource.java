@@ -1,7 +1,5 @@
 package com.esgi.pa.api.resources;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +31,7 @@ public class LobbyResource {
     private final GameService gameService;
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getOne(@PathVariable UUID id) {
+    public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(
                     LobbyMapper.toGetlobbyResponse(lobbyService.findOne(id)));

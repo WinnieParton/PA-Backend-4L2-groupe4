@@ -2,7 +2,6 @@ package com.esgi.pa.server.adapter;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InvitationAdapter implements PersistenceSpi<Invitation, UUID> {
+public class InvitationAdapter implements PersistenceSpi<Invitation, Long> {
 
     private final InvitationsRepository invitationsRepository;
 
@@ -31,7 +30,7 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, UUID> {
     }
 
     @Override
-    public Optional<Invitation> findById(UUID id) {
+    public Optional<Invitation> findById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
@@ -43,13 +42,13 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, UUID> {
     }
 
     @Override
-    public boolean removeById(UUID id) {
+    public boolean removeById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public boolean removeAll(List<UUID> ids) {
+    public boolean removeAll(List<Long> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }

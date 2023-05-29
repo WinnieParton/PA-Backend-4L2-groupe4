@@ -1,21 +1,22 @@
 package com.esgi.pa.server.adapter;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.LobbiesRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
-    
+public class LobbyAdapter implements PersistenceSpi<Lobby, Long> {
+
     private final LobbiesRepository lobbiesRepository;
-    
+
     @Override
     public Lobby save(Lobby o) {
         return lobbiesRepository.save(o);
@@ -28,7 +29,7 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
     }
 
     @Override
-    public Optional<Lobby> findById(UUID id) {
+    public Optional<Lobby> findById(Long id) {
         return lobbiesRepository.findById(id);
     }
 
@@ -38,15 +39,15 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, UUID> {
     }
 
     @Override
-    public boolean removeById(UUID id) {
+    public boolean removeById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public boolean removeAll(List<UUID> ids) {
+    public boolean removeAll(List<Long> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
-    
+
 }

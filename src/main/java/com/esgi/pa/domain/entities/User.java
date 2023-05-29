@@ -1,12 +1,27 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.RoleEnum;
-import lombok.*;
-import lombok.Builder.Default;
-
-import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import com.esgi.pa.domain.enums.RoleEnum;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
 @Builder
@@ -15,9 +30,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "USERS")
 public class User {
-    
-    @Id @Default
-    private UUID id = UUID.randomUUID();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -27,15 +43,14 @@ public class User {
 
     private String password;
 
-    @With @Enumerated(EnumType.STRING)
+    @With
+    @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @Default @With
+    @Default
+    @With
     @ManyToMany
-    @JoinTable(
-        name = "FRIENDS",
-        joinColumns = @JoinColumn(name = "user1_id"),
-        inverseJoinColumns = @JoinColumn(name = "user2_id"))
+    @JoinTable(name = "FRIENDS", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
     private List<User> friends = List.of();
 
     @ManyToMany(mappedBy = "players")
@@ -45,5 +60,5 @@ public class User {
     private List<Lobby> participatingLobbies;
 
     @ManyToMany(mappedBy = "participants")
-    private List<Chat> participatingChats; 
+    private List<Chat> participatingChats;
 }

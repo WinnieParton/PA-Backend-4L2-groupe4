@@ -1,21 +1,22 @@
 package com.esgi.pa.server.adapter;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.UsersRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class UserAdapter implements PersistenceSpi<User, UUID> {
-    
+public class UserAdapter implements PersistenceSpi<User, Long> {
+
     private final UsersRepository usersRepository;
-    
+
     @Override
     public User save(User user) {
         return usersRepository.save(user);
@@ -28,7 +29,7 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findById(Long id) {
         return usersRepository.findById(id);
     }
 
@@ -47,13 +48,13 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
     }
 
     @Override
-    public boolean removeById(UUID id) {
+    public boolean removeById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeById'");
     }
 
     @Override
-    public boolean removeAll(List<UUID> ids) {
+    public boolean removeAll(List<Long> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
