@@ -1,9 +1,11 @@
 package com.esgi.pa.server.repositories;
 
+import com.esgi.pa.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.esgi.pa.domain.entities.Lobby;
 
-public interface LobbiesRepository extends JpaRepository<Lobby, Long> {
+import java.util.List;
 
+public interface LobbiesRepository extends JpaRepository<Lobby, Long> {
 }

@@ -63,6 +63,21 @@ public class FriendResource {
         }
     }
 
+    @GetMapping("{myUserId}")
+    public ResponseEntity<?> getFriends(@PathVariable Long myUserId) {
+        try {
+            return ResponseEntity.ok(
+                    new GetFriendRequestsReceivedResponse(
+                            FriendMapper.toFriendRequestReceivedResponse(
+                                    friendService.getFriends(
+                                            userService.getById(myUserId)))));
+        } catch (TechnicalException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMap());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("An error occurred while processing the request.");
+        }
+    }
     @PutMapping("{receiver}/answer")
     public ResponseEntity<?> answerRequest(@PathVariable Long receiver, @RequestBody AnswerFriendRequest request) {
         try {

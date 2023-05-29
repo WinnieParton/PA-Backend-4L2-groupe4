@@ -17,7 +17,8 @@ public interface LobbyMapper {
             entity.isPrivate(),
             entity.getStatus(),
             entity.getCreatedAt(),
-            entity.getUpdateAt());
+            entity.getUpdateAt(),
+                UserMapper.toGetUserResponse(entity.getParticipants()));
     }   
     
     static List<GetlobbyResponse> toGetlobbyResponse(List<Lobby> entities) {

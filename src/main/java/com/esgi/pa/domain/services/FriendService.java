@@ -35,6 +35,10 @@ public class FriendService {
         return friendAdapter.findByUser2(receiver);
     }
 
+    public List<Friend> getFriends(User user) {
+        return friendAdapter.findByUser2orUser1(user);
+    }
+
     private boolean checkIfFriend(User sender, User receiver) {
         return sender.getFriends().contains(receiver);
     }

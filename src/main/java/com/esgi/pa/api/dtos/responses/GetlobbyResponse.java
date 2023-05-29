@@ -1,8 +1,10 @@
 package com.esgi.pa.api.dtos.responses;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.esgi.pa.api.dtos.GameDto;
+import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -16,5 +18,6 @@ public record GetlobbyResponse(
                 boolean isPrivate,
                 GameStatusEnum status,
                 LocalDateTime createdAt,
-                LocalDateTime updateAt) {
+                LocalDateTime updateAt,
+                List<GetUserResponse> participants) {
 }

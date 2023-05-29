@@ -23,10 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class UserResource {
     private final UserService userService;
 
-    @GetMapping("name/{name}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String name) {
+    @GetMapping("{id}/name/{name}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable Long id, @PathVariable String name) {
         return ResponseEntity.ok(UserMapper.toGetUserResponse(
-                userService.getByName(name)));
+                userService.getByName(id,name)));
     }
 
     @GetMapping("{id}")

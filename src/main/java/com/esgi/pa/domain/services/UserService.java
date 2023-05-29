@@ -41,8 +41,8 @@ public class UserService {
             throw new TechnicalException(HttpStatus.BAD_REQUEST, "Incorrect password : " + password);
     }
 
-    public List<User> getByName(String name) {
-        return adapter.findByName(name);
+    public List<User> getByName(Long id, String name) {
+        return adapter.findByName(id, name);
     }
 
     public User getById(Long id) throws TechnicalException {

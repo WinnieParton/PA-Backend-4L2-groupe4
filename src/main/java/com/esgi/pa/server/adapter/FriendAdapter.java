@@ -3,6 +3,7 @@ package com.esgi.pa.server.adapter;
 import java.util.List;
 import java.util.Optional;
 
+import com.esgi.pa.domain.enums.RequestStatus;
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Friend;
@@ -45,6 +46,9 @@ public class FriendAdapter implements PersistenceSpi<Friend, Long> {
 
     public List<Friend> findByUser2(User o) {
         return repository.findByUser2(o);
+    }
+    public List<Friend> findByUser2orUser1(User o) {
+        return repository.findByUser2AndStatusOrUser1AndStatus(o, RequestStatus.ACCEPTED, o, RequestStatus.ACCEPTED);
     }
 
     @Override

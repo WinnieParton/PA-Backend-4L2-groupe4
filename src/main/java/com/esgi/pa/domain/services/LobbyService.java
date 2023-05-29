@@ -1,7 +1,10 @@
 package com.esgi.pa.domain.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.esgi.pa.server.adapter.UserAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 public class LobbyService {
 
     private final LobbyAdapter lobbyAdapter;
+
+    private final UserAdapter userAdapter;
 
     public Lobby create(String name, User user, Game game, boolean isPrivate) {
         return lobbyAdapter.save(
@@ -39,5 +44,21 @@ public class LobbyService {
 
     public List<Lobby> findAll() {
         return lobbyAdapter.findAll();
+    }
+
+    public void addUserInLobby(ArrayList<Long> arrayUser, Long idUser, Long id) throws TechnicalException{
+        Lobby lobby = this.findOne(id);
+        List<User> participants = new ArrayList<User>();
+        User user = userAdapter.findById(idUser)
+               .orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
+        if(lobby.getCreator().getId()!=user.getId())
+            throw new TechnicalException(HttpStatus.BAD_REQUEST, "User not authorize to do this action. You are not creator ");
+        for (Long idArray: arrayUser) {
+            User participant = userAdapter.findById(idArray)
+                    .orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
+            participants.add(participant);
+        }
+        lobby.setParticipants(participants);
+        lobbyAdapter.save(lobby);
     }
 }
