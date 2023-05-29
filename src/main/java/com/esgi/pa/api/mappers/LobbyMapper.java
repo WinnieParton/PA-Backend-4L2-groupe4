@@ -1,28 +1,35 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.LobbyDto;
+import com.esgi.pa.api.dtos.responses.CreateLobbyResponse;
+import com.esgi.pa.api.dtos.responses.GetlobbyResponse;
 import com.esgi.pa.domain.entities.Lobby;
 
 import java.util.List;
 
 public interface LobbyMapper {
 
-    static LobbyDto toDto(Lobby entity) {
-        return new LobbyDto(
+    static GetlobbyResponse toGetlobbyResponse(Lobby entity) {
+        return new GetlobbyResponse(
             entity.getId(),
             entity.getName(),
-            entity.getCreator().getId(),
-            entity.getGame().getId(),
+            UserMapper.toNoFriendsUserResponse(entity.getCreator()),
+            GameMapper.toDto(entity.getGame()),
             entity.isPrivate(),
             entity.getStatus(),
             entity.getCreatedAt(),
             entity.getUpdateAt());
-    }
-
-    static List<LobbyDto> toDto(List<Lobby> lobbies) {
-        return lobbies.stream()
-            .map(LobbyMapper::toDto)
+    }   
+    
+    static List<GetlobbyResponse> toGetlobbyResponse(List<Lobby> entities) {
+        return entities.stream()
+            .map(LobbyMapper::toGetlobbyResponse)
             .toList();
     }
-    
+
+    static CreateLobbyResponse toCreateLobbyResponse(Lobby entity) {
+        return new CreateLobbyResponse(
+            entity.getId(),
+            entity.getCreatedAt());
+    }
+
 }

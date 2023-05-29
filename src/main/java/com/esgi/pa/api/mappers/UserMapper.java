@@ -1,24 +1,39 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.UserDto;
-import com.esgi.pa.domain.entities.User;
-
 import java.util.List;
+
+import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
+import com.esgi.pa.api.dtos.responses.CreateUserResponse;
+import com.esgi.pa.api.dtos.responses.GetUserResponse;
+import com.esgi.pa.domain.entities.User;
 
 public interface UserMapper {
 
-    static UserDto toDto(User user) {
-        return new UserDto(
+    static CreateUserResponse toCreateUserResponse(User entity) {
+        return new CreateUserResponse(entity.getId());
+    }
+    
+    static GetUserResponse toGetUserResponse(User user) {
+        return new GetUserResponse(
             user.getId(),
             user.getName(),
             user.getEmail(),
             user.getRole(),
-            user.getFriends().stream().map(User::getId).toList());
+            user.getFriends().stream().map(UserMapper::toNoFriendsUserResponse).toList());
     }
 
-    static List<UserDto> toDto(List<User> entities) {
+    static List<GetUserResponse> toGetUserResponse(List<User> entities) {
         return entities.stream()
-            .map(UserMapper::toDto)
+            .map(UserMapper::toGetUserResponse)
             .toList();
     }
+
+    static NoFriendsUserResponse toNoFriendsUserResponse(User user) {
+        return new NoFriendsUserResponse(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getRole());
+    }
+
 }

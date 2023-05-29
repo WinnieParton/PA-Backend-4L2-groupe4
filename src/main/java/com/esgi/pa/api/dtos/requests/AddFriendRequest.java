@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-public record AddFriendRequest(UUID receiver) {
+public record AddFriendRequest(UUID sender) {
     
-    @JsonCreator
-    public AddFriendRequest(@JsonProperty("receiver") UUID receiver) { this.receiver = receiver; }
+    // @JsonCreator
+    // public AddFriendRequest(@JsonProperty("receiver") UUID receiver) { this.receiver = receiver; }
 }
