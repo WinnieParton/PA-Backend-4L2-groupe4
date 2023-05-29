@@ -1,19 +1,21 @@
 package com.esgi.pa.server.adapter;
 
-import com.esgi.pa.domain.entities.Ranking;
-import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.RankingsRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
+import com.esgi.pa.domain.entities.Ranking;
+import com.esgi.pa.server.PersistenceSpi;
+import com.esgi.pa.server.repositories.RankingsRepository;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class RankingAdapter implements PersistenceSpi<Ranking, UUID> {
-    
+
     private final RankingsRepository rankingsRepository;
 
     @Override

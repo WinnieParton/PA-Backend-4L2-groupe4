@@ -1,8 +1,14 @@
 package com.esgi.pa.api.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,21 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.esgi.pa.api.dtos.requests.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.UserLoginRequest;
-import com.esgi.pa.api.dtos.responses.CreateUserResponse;
 import com.esgi.pa.api.dtos.responses.LoginResponse;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.AuthService;
 import com.esgi.pa.domain.services.UserService;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,13 +67,13 @@ public class AuthResource {
             return ResponseEntity.badRequest().body(errorMessages);
         }
         try {
-        return ResponseEntity.ok(
-                UserMapper.toCreateUserResponse(
-                        userService.create(
-                                request.name(),
-                                request.email(),
-                                request.password(),
-                                request.role())));
+            return ResponseEntity.ok(
+                    UserMapper.toCreateUserResponse(
+                            userService.create(
+                                    request.name(),
+                                    request.email(),
+                                    request.password(),
+                                    request.role())));
         } catch (TechnicalException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMap());
         } catch (Exception e) {

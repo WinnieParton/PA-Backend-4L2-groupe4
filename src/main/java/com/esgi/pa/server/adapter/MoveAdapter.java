@@ -1,21 +1,23 @@
 package com.esgi.pa.server.adapter;
 
-import com.esgi.pa.domain.entities.Move;
-import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.MovesRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
+import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.server.PersistenceSpi;
+import com.esgi.pa.server.repositories.MovesRepository;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class MoveAdapter implements PersistenceSpi<Move, UUID> {
-    
+
     private final MovesRepository movesRepository;
-    
+
     @Override
     public Move save(Move o) {
         // TODO Auto-generated method stub
@@ -51,5 +53,5 @@ public class MoveAdapter implements PersistenceSpi<Move, UUID> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
     }
-    
+
 }

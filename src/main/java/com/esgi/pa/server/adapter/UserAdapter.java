@@ -36,8 +36,8 @@ public class UserAdapter implements PersistenceSpi<User, UUID> {
         return usersRepository.findByEmail(email);
     }
 
-    public Optional<User> findByName(String name) {
-        return usersRepository.findByName(name);
+    public List<User> findByName(String name) {
+        return usersRepository.findByNameContaining(name);
     }
 
     @Override

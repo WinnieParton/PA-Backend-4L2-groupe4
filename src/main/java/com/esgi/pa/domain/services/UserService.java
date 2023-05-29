@@ -37,10 +37,8 @@ public class UserService {
         else throw new TechnicalException(HttpStatus.BAD_REQUEST,"Incorrect password : "+ password);
     }
 
-    public User getByName(String name) throws TechnicalException {
-        return adapter.findByName(name)
-            .orElseThrow(
-                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following name : " + name));
+    public List<User> getByName(String name) {
+        return adapter.findByName(name);
     }
 
     public User getById(UUID id) throws TechnicalException {
