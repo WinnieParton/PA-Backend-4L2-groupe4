@@ -10,6 +10,7 @@ import com.esgi.pa.api.mappers.FriendMapper;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.FriendService;
 import com.esgi.pa.domain.services.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/friend")
+@Api(tags = "Friend API")
 public class FriendResource {
 
     private final FriendService friendService;

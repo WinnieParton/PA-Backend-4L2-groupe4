@@ -1,10 +1,9 @@
 package com.esgi.pa.server.repositories;
 
-import java.util.UUID;
-
+import com.esgi.pa.domain.entities.Invitation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.esgi.pa.domain.entities.Invitation;
+import java.util.UUID;
 
 public interface InvitationsRepository extends JpaRepository<Invitation, UUID> {
     

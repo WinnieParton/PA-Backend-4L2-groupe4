@@ -6,6 +6,8 @@ import com.esgi.pa.server.adapter.UserAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -22,7 +24,7 @@ public class AuthService {
         try {
             return Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(user));
         } catch (JsonProcessingException exception) {
-            throw new TechnicalException("Json Parsing exception : %s", exception.getMessage());
+            throw new TechnicalException(HttpStatus.FORBIDDEN, "Json Parsing exception : "+ exception.getMessage());
         }
     }
     
@@ -32,7 +34,7 @@ public class AuthService {
             User user = objectMapper.readValue(encodeUserString, User.class);
             return adapter.findById(user.getId()).isPresent();
         } catch (JsonProcessingException exception) {
-            throw new TechnicalException("Json Processing exception", exception.getMessage());
+            throw new TechnicalException(HttpStatus.FORBIDDEN,"Json Processing exception: "+ exception.getMessage());
         }
     }
 }

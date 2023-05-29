@@ -24,7 +24,7 @@ public class FriendService {
                     .user1(sender)
                     .user2(receiver)
                     .build());
-        } else throw new TechnicalException("Sender already friend with user : %s", receiver);
+        } else throw new TechnicalException(HttpStatus.FOUND, "Sender already friend with user : "+ receiver);
     }
 
     public List<Friend> getFriendRequestSent(User sender) {
@@ -47,7 +47,7 @@ public class FriendService {
         return switch (status) {
             case ACCEPTED -> acceptRequest(sender, receiver);
             case REJECTED -> rejectRequest(sender, receiver);
-            default -> throw new TechnicalException("Unexpected error with friend request status : %s", status);
+            default -> throw new TechnicalException(HttpStatus.FORBIDDEN, "Unexpected error with friend request status : "+ status);
         };
     }
 

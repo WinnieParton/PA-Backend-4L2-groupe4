@@ -1,11 +1,10 @@
 package com.esgi.pa.server.repositories;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import com.esgi.pa.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.esgi.pa.domain.entities.User;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface UsersRepository extends JpaRepository<User, UUID> {
     

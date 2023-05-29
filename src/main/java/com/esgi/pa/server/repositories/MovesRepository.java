@@ -1,10 +1,9 @@
 package com.esgi.pa.server.repositories;
 
-import java.util.UUID;
-
+import com.esgi.pa.domain.entities.Move;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.esgi.pa.domain.entities.Move;
+import java.util.UUID;
 
 public interface MovesRepository extends JpaRepository<Move, UUID> {
     

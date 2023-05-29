@@ -9,6 +9,7 @@ import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/lobby")
+@Api(tags = "Lobby API")
 public class LobbyResource {
     
     private final LobbyService lobbyService;

@@ -1,16 +1,14 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Component;
-
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.UsersRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

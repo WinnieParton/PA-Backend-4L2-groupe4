@@ -18,7 +18,7 @@ public class GameService {
     public Game getById(UUID gameId) throws TechnicalException {
         return gameAdapter.findById(gameId)
             .orElseThrow(
-                () -> new TechnicalException(HttpStatus.NOT_FOUND, "Cannot find game with id : %s", gameId));
+                () -> new TechnicalException(HttpStatus.NOT_FOUND, "Cannot find game with id : "+ gameId));
     }
 
 }

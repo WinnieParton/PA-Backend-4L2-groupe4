@@ -1,27 +1,13 @@
 package com.esgi.pa.domain.entities;
 
+import com.esgi.pa.domain.enums.GameStatusEnum;
+import lombok.*;
+import lombok.Builder.Default;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.esgi.pa.domain.enums.GameStatusEnum;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
-import lombok.Builder.Default;
 
 @Data
 @Builder

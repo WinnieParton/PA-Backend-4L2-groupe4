@@ -3,7 +3,6 @@ package com.esgi.pa.domain.services;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.RoleEnum;
-import com.esgi.pa.domain.exceptions.FunctionalException;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.server.adapter.UserAdapter;
 import lombok.RequiredArgsConstructor;
@@ -28,32 +27,32 @@ public class UserService {
                     .password(password)
                     .role(role)
                     .build());
-        else throw new TechnicalException("Un compte existe Déjà avec cet email : %s", email);
+        else throw new TechnicalException(HttpStatus.FOUND, "Un compte existe Déjà avec cet email :"+ email);
     }
 
-    public User login(String email, String password) throws TechnicalException, FunctionalException {
-        User user = adapter.findByEmail(email).orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with email %s :", email));
+    public User login(String email, String password) throws TechnicalException {
+        User user = adapter.findByEmail(email).orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with email :"+ email));
         if (user.getPassword().equals(password))
             return user;
-        else throw new FunctionalException("Incorrect password : %s", password);
+        else throw new TechnicalException(HttpStatus.BAD_REQUEST,"Incorrect password : "+ password);
     }
 
     public User getByName(String name) throws TechnicalException {
         return adapter.findByName(name)
             .orElseThrow(
-                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following name : %s", name));
+                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following name : " + name));
     }
 
     public User getById(UUID id) throws TechnicalException {
         return adapter.findById(id)
             .orElseThrow(
-                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following id : %s", id));
+                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following id : "+ id));
     }
 
     public List<Lobby> getLobbiesByUserId(UUID id) throws TechnicalException {
         User user = adapter.findById(id)
             .orElseThrow(
-                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following id : %s", id));
+                () -> new TechnicalException(HttpStatus.NOT_FOUND, "No user found with following id : " + id));
         return user.getParticipatingLobbies();
     }
 }

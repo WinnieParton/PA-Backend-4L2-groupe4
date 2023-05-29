@@ -1,19 +1,14 @@
 package com.esgi.pa.domain.entities;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Builder.Default;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder

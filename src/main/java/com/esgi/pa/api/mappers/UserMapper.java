@@ -1,11 +1,11 @@
 package com.esgi.pa.api.mappers;
 
-import java.util.List;
-
-import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
 import com.esgi.pa.api.dtos.responses.CreateUserResponse;
 import com.esgi.pa.api.dtos.responses.GetUserResponse;
+import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
 import com.esgi.pa.domain.entities.User;
+
+import java.util.List;
 
 public interface UserMapper {
 

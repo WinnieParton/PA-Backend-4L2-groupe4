@@ -33,7 +33,7 @@ public class LobbyService {
 
     public Lobby findOne(UUID id) throws TechnicalException {
         return lobbyAdapter.findById(id)
-            .orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No Lobby found with id : %s", id));
+            .orElseThrow(() -> new TechnicalException(HttpStatus.NOT_FOUND, "No Lobby found with id : "+ id));
     }
 
     public List<Lobby> findAll() {

@@ -1,10 +1,10 @@
 package com.esgi.pa.api.dtos.responses;
 
-import java.util.UUID;
-
 import com.esgi.pa.domain.enums.RequestStatus;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+import java.util.UUID;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public record AnswerFriendRequestResponse(

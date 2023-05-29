@@ -8,6 +8,7 @@ import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalException;
 import com.esgi.pa.domain.services.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +19,9 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Api(tags = "User API")
 public class UserResource {
-
     private final UserService userService;
-
-    @PostMapping
-    public ResponseEntity<CreateUserResponse> create(@RequestBody CreateUserRequest request) throws TechnicalException {
-        return ResponseEntity.ok(
-            UserMapper.toCreateUserResponse(
-                userService.create(
-                    request.name(),
-                    request.email(),
-                    request.password(),
-                    request.role())));
-    }
 
     @GetMapping("name/{name}")
     public ResponseEntity<GetUserResponse> getUserByUsername(@PathVariable String name) throws TechnicalException {

@@ -1,10 +1,9 @@
 package com.esgi.pa.server.repositories;
 
-import java.util.UUID;
-
+import com.esgi.pa.domain.entities.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.esgi.pa.domain.entities.Game;
+import java.util.UUID;
 
 public interface GamesRepository extends JpaRepository<Game, UUID> {
     

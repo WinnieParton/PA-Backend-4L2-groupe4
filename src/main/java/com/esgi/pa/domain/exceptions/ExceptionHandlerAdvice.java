@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler({FunctionalException.class, TechnicalException.class})
-    public ResponseEntity handleException(FunctionalException e) {
+    @ExceptionHandler({ TechnicalException.class })
+    public ResponseEntity handleException(TechnicalException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }
