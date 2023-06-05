@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import javax.validation.Valid;
 
+import com.esgi.pa.domain.entities.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,11 +64,9 @@ public class FriendResource {
 
     @GetMapping("{myUserId}")
     public GetFriendRequestsReceivedResponse getFriends(@PathVariable Long myUserId) throws TechnicalNotFoundException {
-
+    User user = userService.getById(myUserId);
         return new GetFriendRequestsReceivedResponse(
-                FriendMapper.toFriendRequestReceivedResponse(
-                        friendService.getFriends(
-                                userService.getById(myUserId))));
+                FriendMapper.toFriendRequestResponse(friendService.getFriends(user), user));
     }
 
     @PutMapping("{receiver}/answer")

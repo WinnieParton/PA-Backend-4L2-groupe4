@@ -51,11 +51,4 @@ public class UserService {
                 .orElseThrow(
                         () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No user found with following id : " + id));
     }
-
-    public List<Lobby> getLobbiesByUserId(Long id) throws TechnicalNotFoundException {
-        User user = adapter.findById(id)
-                .orElseThrow(
-                        () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No user found with following id : " + id));
-        return user.getParticipatingLobbies();
-    }
 }

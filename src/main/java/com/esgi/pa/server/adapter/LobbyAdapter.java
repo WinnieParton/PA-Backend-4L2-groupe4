@@ -3,6 +3,7 @@ package com.esgi.pa.server.adapter;
 import java.util.List;
 import java.util.Optional;
 
+import com.esgi.pa.domain.entities.User;
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Lobby;
@@ -33,6 +34,9 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, Long> {
         return lobbiesRepository.findById(id);
     }
 
+    public List<Lobby> findByCreatorId(User id) {
+        return lobbiesRepository.findByCreator(id);
+    }
     @Override
     public List<Lobby> findAll() {
         return lobbiesRepository.findAll();

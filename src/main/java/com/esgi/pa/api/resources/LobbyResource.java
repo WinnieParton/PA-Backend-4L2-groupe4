@@ -53,7 +53,13 @@ public class LobbyResource {
                 LobbyMapper.toGetlobbyResponse(
                         lobbyService.findAll()));
     }
+    @GetMapping("user/{id}")
+    public GetlobbiesResponse getLobbiesByUser(@PathVariable Long id) throws TechnicalNotFoundException {
 
+        return new GetlobbiesResponse(
+                LobbyMapper.toGetlobbyResponse(
+                        lobbyService.getLobbiesByUserId(id)));
+    }
     @PostMapping
     @ResponseStatus(CREATED)
     public CreateLobbyResponse create(@Valid @RequestBody CreateLobbyRequest request, BindingResult bindingResult)

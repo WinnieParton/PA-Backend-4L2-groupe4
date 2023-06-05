@@ -12,7 +12,7 @@ import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record AnswerFriendRequest(@NotBlank(message = "sender Id is required") Long sender,
+public record AnswerFriendRequest(@NotNull(message = "sender Id is required") Long sender,
         @NotNull(message = "Status is required") RequestStatus status) {
 
 }

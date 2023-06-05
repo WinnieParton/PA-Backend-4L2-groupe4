@@ -1,7 +1,9 @@
 package com.esgi.pa.domain.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.esgi.pa.server.adapter.UserAdapter;
 import org.springframework.http.HttpStatus;
@@ -50,14 +52,32 @@ public class LobbyService {
         List<User> participants = new ArrayList<User>();
         User user = userAdapter.findById(idUser)
                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
-        if(lobby.getCreator().getId()!=user.getId())
+        if(lobby.getCreator().getId() != user.getId())
             throw new TechnicalNotFoundException(HttpStatus.BAD_REQUEST, "User not authorize to do this action. You are not creator ");
         for (Long idArray: arrayUser) {
+
             User participant = userAdapter.findById(idArray)
                     .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
-            participants.add(participant);
+            if(!lobby.getParticipants().contains(participant))
+                participants.add(participant);
         }
         lobby.setParticipants(participants);
         lobbyAdapter.save(lobby);
+    }
+
+    public List<Lobby> getLobbiesByUserId(Long userid) throws TechnicalNotFoundException {
+        User participant = userAdapter.findById(userid)
+                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + userid));
+
+        List<Lobby> l = lobbyAdapter.findByCreatorId(participant);
+        List<Lobby> l1 = new ArrayList<Lobby>();
+
+        lobbyAdapter.findAll().forEach(lobby ->{
+            if (lobby.getParticipants().contains(participant))
+                l1.add(lobby);
+        });
+
+        l1.addAll(l);
+        return l1;
     }
 }

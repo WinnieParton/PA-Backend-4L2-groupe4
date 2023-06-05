@@ -37,11 +37,5 @@ public class UserResource {
                 userService.getById(id));
     }
 
-    @GetMapping("{id}/lobbies")
-    public GetlobbiesResponse getLobbies(@PathVariable Long id) throws TechnicalNotFoundException {
 
-        return new GetlobbiesResponse(
-                LobbyMapper.toGetlobbyResponse(
-                        userService.getLobbiesByUserId(id)));
-    }
 }

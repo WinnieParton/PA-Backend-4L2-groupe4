@@ -5,7 +5,9 @@ import com.esgi.pa.api.dtos.responses.AnswerFriendRequestResponse;
 import com.esgi.pa.api.dtos.responses.GetFriendRequestReceivedResponse;
 import com.esgi.pa.api.dtos.responses.GetFriendRequestSentResponse;
 import com.esgi.pa.domain.entities.Friend;
+import com.esgi.pa.domain.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface FriendMapper {
@@ -32,12 +34,32 @@ public interface FriendMapper {
             entity.getStatus());
     }
 
+    static GetFriendRequestReceivedResponse toFriendRequestResponse(Friend entity, User user) {
+        return new GetFriendRequestReceivedResponse(
+                entity.getId(),
+                UserMapper.toNoFriendsUserResponse(entity.getUser1()),
+                entity.getUser2().getId(),
+                entity.getStatus());
+    }
+
     static List<GetFriendRequestReceivedResponse> toFriendRequestReceivedResponse(List<Friend> entities) {
         return entities.stream()
             .map(FriendMapper::toFriendRequestReceivedResponse)
             .toList();
     }
 
+    static List<GetFriendRequestReceivedResponse> toFriendRequestResponse(List<Friend> entities, User user) {
+        List<GetFriendRequestReceivedResponse> result = new ArrayList<>();
+        entities.forEach(friend -> {
+            result.add(new GetFriendRequestReceivedResponse(
+                    friend.getId(),
+                    UserMapper.toNoFriendsUserResponse(user == friend.getUser1() ? friend.getUser2() : friend.getUser1()),
+                    user == friend.getUser1() ?friend.getUser2().getId():friend.getUser1().getId(),
+                    friend.getStatus()));
+        });
+
+        return result;
+    }
     static AnswerFriendRequestResponse toAnswerFriendRequestResponse(Friend entity) {
         return new AnswerFriendRequestResponse(
             entity.getId(),
