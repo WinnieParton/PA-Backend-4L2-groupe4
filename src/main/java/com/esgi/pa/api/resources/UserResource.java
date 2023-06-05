@@ -1,16 +1,17 @@
 package com.esgi.pa.api.resources;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.esgi.pa.api.dtos.responses.GetUserResponse;
 import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.UserMapper;
-import com.esgi.pa.domain.exceptions.TechnicalException;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.UserService;
 
 import io.swagger.annotations.Api;
@@ -24,37 +25,23 @@ public class UserResource {
     private final UserService userService;
 
     @GetMapping("{id}/name/{name}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable Long id, @PathVariable String name) {
-        return ResponseEntity.ok(UserMapper.toGetUserResponse(
-                userService.getByName(id,name)));
+    public List<GetUserResponse> getUserByUsername(@PathVariable Long id, @PathVariable String name) {
+        return UserMapper.toGetUserResponse(
+                userService.getByName(id, name));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(
-                    UserMapper.toGetUserResponse(
-                            userService.getById(id)));
-        } catch (TechnicalException e) {
-            return ResponseEntity.status(e.getStatus()).body(e.getMap());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("An error occurred while processing the request.");
-        }
+    public GetUserResponse getUserById(@PathVariable Long id) throws TechnicalNotFoundException {
+
+        return UserMapper.toGetUserResponse(
+                userService.getById(id));
     }
 
     @GetMapping("{id}/lobbies")
-    public ResponseEntity<?> getLobbies(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(
-                    new GetlobbiesResponse(
-                            LobbyMapper.toGetlobbyResponse(
-                                    userService.getLobbiesByUserId(id))));
-        } catch (TechnicalException e) {
-            return ResponseEntity.status(e.getStatus()).body(e.getMap());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("An error occurred while processing the request.");
-        }
+    public GetlobbiesResponse getLobbies(@PathVariable Long id) throws TechnicalNotFoundException {
+
+        return new GetlobbiesResponse(
+                LobbyMapper.toGetlobbyResponse(
+                        userService.getLobbiesByUserId(id)));
     }
 }

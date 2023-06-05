@@ -4,9 +4,7 @@ import com.esgi.pa.domain.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Builder;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
@@ -19,9 +17,9 @@ public record CreateUserRequest(
     @Email(message = "Invalid email format")
     String email,
     @NotBlank(message = "Password is required")
-    @Min(5)
+    @Size(min = 5, message = "Password must be at least 5 characters long")
     String password,
-    @NotBlank(message = "Role is required")
+    @NotNull(message = "Role is required")
     RoleEnum role
 ) {
 
