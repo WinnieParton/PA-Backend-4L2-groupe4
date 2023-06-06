@@ -4,16 +4,15 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 import javax.validation.Valid;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
+import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.esgi.pa.api.dtos.requests.AddFriendInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.CreateLobbyRequest;
@@ -30,6 +29,13 @@ import com.esgi.pa.domain.services.UserService;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
@@ -86,5 +92,13 @@ public class LobbyResource {
         }
         lobbyService.addUserInLobby(request.arrayUser(), idUser, id);
         return LobbyMapper.toGetlobbyResponse(lobbyService.findOne(id));
+    }
+
+    @PatchMapping("/{idlobby}")
+    public GetlobbyResponse redirectOnLobby(@PathVariable Long idlobby) throws TechnicalNotFoundException {
+        Lobby lobby = lobbyService.findOne(idlobby);
+        lobby.setStatus(GameStatusEnum.PAUSED);
+        lobbyService.save(lobby);
+        return LobbyMapper.toGetlobbyResponse(lobbyService.findOne(idlobby));
     }
 }

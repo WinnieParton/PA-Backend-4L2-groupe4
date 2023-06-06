@@ -1,6 +1,7 @@
 package com.esgi.pa.domain.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -32,10 +33,10 @@ public class Chat {
 
     @ManyToMany
     @JoinTable(name = "chat_participants", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> participants;
+    private List<User> participants= new ArrayList<>();
 
     @OneToMany(mappedBy = "chat")
-    private List<Message> messages;
+    private List<Message> messages= new ArrayList<>();
 
     private LocalDateTime updatedAt;
 }

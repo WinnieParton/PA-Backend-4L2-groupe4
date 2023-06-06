@@ -1,5 +1,6 @@
 package com.esgi.pa.domain.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -40,10 +41,10 @@ public class Game {
     private int maxPlayers;
 
     @OneToMany(mappedBy = "game")
-    private List<Ranking> rankings;
+    private List<Ranking> rankings= new ArrayList<>();
 
     @ManyToMany
-    private List<User> players;
+    private List<User> players= new ArrayList<>();
 
     public Game(String name, String description, String gameFiles, String miniature, int minPlayers, int maxPlayers) {
         this.name = name;

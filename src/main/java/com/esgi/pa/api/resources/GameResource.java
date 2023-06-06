@@ -1,30 +1,42 @@
 package com.esgi.pa.api.resources;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
-import javax.validation.Valid;
-
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.esgi.pa.api.dtos.GameDto;
 import com.esgi.pa.api.dtos.requests.AddGameRequest;
 import com.esgi.pa.api.dtos.responses.GetGamesResponse;
 import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.domain.exceptions.MethodArgumentNotValidException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.ErrorFormatService;
 import com.esgi.pa.domain.services.GameService;
-
+import com.esgi.pa.domain.services.LobbyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,9 +44,10 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "Game API")
 public class GameResource {
     private final GameService gameService;
+    private final LobbyService lobbyService;
     private final ErrorFormatService errorFormatService;
 
-    @PostMapping()
+    @PostMapping("/save")
     @ResponseStatus(CREATED)
     public GameDto saveGame(@RequestBody @Valid AddGameRequest request, BindingResult bindingResult)
             throws TechnicalNotFoundException, TechnicalFoundException {
@@ -56,6 +69,34 @@ public class GameResource {
         return new GetGamesResponse(
                 GameMapper.toDto(
                         gameService.findAll()));
-
     }
+
+    @PatchMapping("/{id}/lobby/{idlobby}/status/{status}")
+    @ResponseStatus(OK)
+    public Response redirectPost(@PathVariable Long id,@PathVariable Boolean status, @PathVariable Long idlobby, @RequestBody String requestBody) throws TechnicalNotFoundException, IOException, InterruptedException {
+        System.out.println("okkkk");
+        Game game = gameService.getById(id);
+        Lobby lobby = lobbyService.findOne(idlobby);
+
+        lobby.setStatus(status?GameStatusEnum.STARTED:GameStatusEnum.PAUSED);
+        lobbyService.save(lobby);
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        URI springBootUrl = UriComponentsBuilder.fromUriString(game.getGameFiles()).build().toUri();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(springBootUrl)
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
+                .build();
+        HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        int statusCode = httpResponse.statusCode();
+        String responseBody = httpResponse.body();
+        System.out.println("hello "+statusCode+" "+requestBody);
+        return Response.status(statusCode)
+                .entity(responseBody)
+                .type(MediaType.APPLICATION_JSON)
+                .build();
+    }
+
+
 }

@@ -80,4 +80,8 @@ public class LobbyService {
         l1.addAll(l);
         return l1;
     }
+
+    public Lobby save(Lobby lobby) {
+        return lobbyAdapter.save(lobby);
+    }
 }

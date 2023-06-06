@@ -1,6 +1,7 @@
 package com.esgi.pa.domain.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -48,6 +49,6 @@ public class Lobby {
 
     @ManyToMany
     @JoinTable(name = "lobby_participants", joinColumns = @JoinColumn(name = "lobby_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> participants;
+    private List<User> participants= new ArrayList<>();
 
 }

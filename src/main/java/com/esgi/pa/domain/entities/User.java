@@ -1,5 +1,6 @@
 package com.esgi.pa.domain.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -51,14 +52,14 @@ public class User {
     @With
     @ManyToMany
     @JoinTable(name = "FRIENDS", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
-    private List<User> friends = List.of();
+    private List<User> friends = new ArrayList<>();
 
     @ManyToMany(mappedBy = "players")
-    private List<Game> games;
+    private List<Game> games= new ArrayList<>();
 
     @ManyToMany(mappedBy = "participants")
-    private List<Lobby> participatingLobbies;
+    private List<Lobby> participatingLobbies= new ArrayList<>();
 
     @ManyToMany(mappedBy = "participants")
-    private List<Chat> participatingChats;
+    private List<Chat> participatingChats= new ArrayList<>();
 }
