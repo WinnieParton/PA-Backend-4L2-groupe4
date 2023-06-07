@@ -8,14 +8,12 @@ import javax.persistence.*;
 
 import com.esgi.pa.domain.enums.GameStatusEnum;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import lombok.Builder.Default;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
 
-@Data
+@Getter
+@Setter
 @Builder
 @Entity
 @NoArgsConstructor
@@ -47,6 +45,7 @@ public class Lobby {
     @Default
     private LocalDateTime updateAt = LocalDateTime.now();
 
+    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
     @ManyToMany
     @JoinTable(name = "lobby_participants", joinColumns = @JoinColumn(name = "lobby_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> participants= new ArrayList<>();

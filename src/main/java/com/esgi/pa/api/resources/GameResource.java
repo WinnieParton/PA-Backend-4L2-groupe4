@@ -13,6 +13,8 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.ErrorFormatService;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -84,17 +86,13 @@ public class GameResource {
                         gameService.findAll()));
     }
 
-    @PatchMapping("/{id}/lobby/{idlobby}/status/{status}")
+    @PatchMapping("/{id}/lobby/{idlobby}")
     @ResponseBody
-    public ResponseEntity<String> redirectPost(@PathVariable Long id, @PathVariable Boolean status,
+    public ResponseEntity<String> redirectPost(@PathVariable Long id,
                                                @PathVariable Long idlobby, @RequestBody String requestBody)
             throws TechnicalNotFoundException, IOException, InterruptedException {
         Game game = gameService.getById(id);
         Lobby lobby = lobbyService.findOne(idlobby);
-
-        lobby.setStatus(status?GameStatusEnum.STARTED:GameStatusEnum.PAUSED);
-        lobbyService.save(lobby);
-
         HttpClient httpClient = HttpClient.newHttpClient();
         URI springBootUrl = UriComponentsBuilder.fromUriString(game.getGameFiles()).build().toUri();
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -103,7 +101,10 @@ public class GameResource {
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
+        lobby.setStatus(GameStatusEnum.valueOf(jsonNode.get("statusGame").asText()));
+        lobbyService.save(lobby);
         return ResponseEntity.status(httpResponse.statusCode()).body(httpResponse.body());
     }
 
