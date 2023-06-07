@@ -15,11 +15,11 @@ import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
@@ -33,8 +33,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -72,9 +85,10 @@ public class GameResource {
     }
 
     @PatchMapping("/{id}/lobby/{idlobby}/status/{status}")
-    @ResponseStatus(OK)
-    public Response redirectPost(@PathVariable Long id,@PathVariable Boolean status, @PathVariable Long idlobby, @RequestBody String requestBody) throws TechnicalNotFoundException, IOException, InterruptedException {
-        System.out.println("okkkk");
+    @ResponseBody
+    public ResponseEntity<String> redirectPost(@PathVariable Long id, @PathVariable Boolean status,
+                                               @PathVariable Long idlobby, @RequestBody String requestBody)
+            throws TechnicalNotFoundException, IOException, InterruptedException {
         Game game = gameService.getById(id);
         Lobby lobby = lobbyService.findOne(idlobby);
 
@@ -89,13 +103,8 @@ public class GameResource {
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        int statusCode = httpResponse.statusCode();
-        String responseBody = httpResponse.body();
-        System.out.println("hello "+statusCode+" "+requestBody);
-        return Response.status(statusCode)
-                .entity(responseBody)
-                .type(MediaType.APPLICATION_JSON)
-                .build();
+
+        return ResponseEntity.status(httpResponse.statusCode()).body(httpResponse.body());
     }
 
 
