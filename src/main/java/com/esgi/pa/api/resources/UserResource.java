@@ -1,21 +1,17 @@
 package com.esgi.pa.api.resources;
 
-import java.util.List;
-
+import com.esgi.pa.api.dtos.responses.GetUserResponse;
+import com.esgi.pa.api.mappers.UserMapper;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.UserService;
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esgi.pa.api.dtos.responses.GetUserResponse;
-import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
-import com.esgi.pa.api.mappers.LobbyMapper;
-import com.esgi.pa.api.mappers.UserMapper;
-import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.UserService;
-
-import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +28,6 @@ public class UserResource {
 
     @GetMapping("{id}")
     public GetUserResponse getUserById(@PathVariable Long id) throws TechnicalNotFoundException {
-
         return UserMapper.toGetUserResponse(
                 userService.getById(id));
     }

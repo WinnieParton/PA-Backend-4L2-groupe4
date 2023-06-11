@@ -1,17 +1,15 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.esgi.pa.domain.enums.RequestStatus;
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.RequestStatus;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.FriendsRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +45,7 @@ public class FriendAdapter implements PersistenceSpi<Friend, Long> {
     public List<Friend> findByUser2(User o) {
         return repository.findByUser2AndStatus(o, RequestStatus.PENDING);
     }
+
     public List<Friend> findByUser2orUser1(User o) {
         return repository.findByUser2AndStatusOrUser1AndStatus(o, RequestStatus.ACCEPTED, o, RequestStatus.ACCEPTED);
     }
@@ -54,6 +53,7 @@ public class FriendAdapter implements PersistenceSpi<Friend, Long> {
     public boolean existsByUser1AndUser2(User o, User o1) {
         return repository.existsByUser1AndUser2(o, o1) || repository.existsByUser1AndUser2(o1, o);
     }
+
     @Override
     public List<Friend> findAll() {
         // TODO Auto-generated method stub

@@ -1,23 +1,14 @@
 package com.esgi.pa.domain.entities;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,10 +24,10 @@ public class Chat {
 
     @ManyToMany
     @JoinTable(name = "chat_participants", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> participants= new ArrayList<>();
+    private List<User> participants = new ArrayList<>();
 
     @OneToMany(mappedBy = "chat")
-    private List<Message> messages= new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime updatedAt;
 }

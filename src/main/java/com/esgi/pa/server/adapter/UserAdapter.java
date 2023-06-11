@@ -1,15 +1,13 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.UsersRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public class UserAdapter implements PersistenceSpi<User, Long> {
     }
 
     public List<User> findByName(Long id, String name) {
-        return usersRepository.findByNameContainingOrEmailContainingAndIdNot( name, name, id);
+        return usersRepository.findByNameContainingOrEmailContainingAndIdNot(name, name, id);
     }
 
     @Override

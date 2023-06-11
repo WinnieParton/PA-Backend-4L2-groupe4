@@ -2,7 +2,7 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.GameDto;
 import com.esgi.pa.api.dtos.requests.AddGameRequest;
-import com.esgi.pa.api.dtos.responses.GetGamesResponse;
+import com.esgi.pa.api.dtos.responses.GetAllGameResponse;
 import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
@@ -20,10 +20,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -31,66 +30,52 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/game")
 @Api(tags = "Game API")
 public class GameResource {
+
     private final GameService gameService;
     private final LobbyService lobbyService;
     private final ErrorFormatService errorFormatService;
 
-    @PostMapping("/save")
+    @PostMapping("/create")
     @ResponseStatus(CREATED)
-    public GameDto saveGame(@RequestBody @Valid AddGameRequest request, BindingResult bindingResult)
-            throws TechnicalNotFoundException, TechnicalFoundException {
+    public GameDto createGame(@RequestBody @Valid AddGameRequest request, BindingResult bindingResult) throws TechnicalFoundException {
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(
                     errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
         }
-        Game game = gameService.createGame(new Game(request.name(), request.description(), request.gameFiles(),
-                request.miniature(), request.minPlayers(), request.maxPlayers()));
-
-        return new GameDto(game.getId(), game.getName(),
-                game.getDescription(), game.getGameFiles(), game.getMiniature(), game.getMinPlayers(),
-                game.getMaxPlayers());
+        return GameMapper.toDto(
+                gameService.createGame(
+                        request.name(),
+                        request.description(),
+                        request.gameFiles(),
+                        request.miniature(),
+                        request.minPlayers(),
+                        request.maxPlayers()));
     }
 
     @GetMapping()
-    public GetGamesResponse getGames() {
-
-        return new GetGamesResponse(
+    public GetAllGameResponse getAllGame() {
+        return new GetAllGameResponse(
                 GameMapper.toDto(
                         gameService.findAll()));
+    }
+
+    @GetMapping("/{id}")
+    public GameDto getGame(@PathVariable Long id) throws TechnicalNotFoundException {
+        return GameMapper.toDto(gameService.getById(id));
     }
 
     @PatchMapping("/{id}/lobby/{idlobby}")
     @ResponseBody
     public ResponseEntity<String> redirectPost(@PathVariable Long id,
-                                               @PathVariable Long idlobby, @RequestBody String requestBody)
-            throws TechnicalNotFoundException, IOException, InterruptedException {
+                                               @PathVariable Long idlobby, @RequestBody String requestBody) throws TechnicalNotFoundException, IOException, InterruptedException {
+        // ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
         Game game = gameService.getById(id);
         Lobby lobby = lobbyService.findOne(idlobby);
         HttpClient httpClient = HttpClient.newHttpClient();

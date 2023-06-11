@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
-public record GetGamesResponse(List<GameDto> games) {
+public record GetAllGameResponse(List<GameDto> games) {
 }

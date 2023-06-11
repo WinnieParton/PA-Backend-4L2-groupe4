@@ -1,25 +1,13 @@
 package com.esgi.pa.domain.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
 import com.esgi.pa.domain.enums.RoleEnum;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.Builder.Default;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,13 +43,13 @@ public class User {
 
     @JsonIgnoreProperties({"players", "participants"})
     @ManyToMany(mappedBy = "players")
-    private List<Game> games= new ArrayList<>();
+    private List<Game> games = new ArrayList<>();
 
     @JsonIgnoreProperties({"players", "participants"})
     @ManyToMany(mappedBy = "participants")
-    private List<Lobby> participatingLobbies= new ArrayList<>();
+    private List<Lobby> participatingLobbies = new ArrayList<>();
 
     @JsonIgnoreProperties("participants")
     @ManyToMany(mappedBy = "participants")
-    private List<Chat> participatingChats= new ArrayList<>();
+    private List<Chat> participatingChats = new ArrayList<>();
 }

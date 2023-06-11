@@ -2,7 +2,7 @@ package com.esgi.pa.domain.exceptions;
 
 import java.util.Map;
 
-public class MethodArgumentNotValidException extends RuntimeException{
+public class MethodArgumentNotValidException extends RuntimeException {
     private final Map<String, Object> errors;
 
     public MethodArgumentNotValidException(Map<String, Object> errors) {

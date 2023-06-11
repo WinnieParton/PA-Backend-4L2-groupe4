@@ -13,17 +13,17 @@ import java.util.stream.Collectors;
 public class ErrorFormatService {
 
     public Map<String, Object> ErrorFormatExceptionHandle(List<ObjectError> errors) {
-         Map<String, Object> map = new LinkedHashMap<String, Object>();
+        Map<String, Object> map = new LinkedHashMap<>();
         List<FieldError> fieldErrors = errors.stream()
                 .filter(FieldError.class::isInstance)
                 .map(FieldError.class::cast)
-                .collect(Collectors.toList());
+                .toList();
 
         List<String> errorMessages = fieldErrors.stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.toList());
         map.put("message", "Validation Failed");
         map.put("data", errorMessages);
-        return  map;
+        return map;
     }
 }

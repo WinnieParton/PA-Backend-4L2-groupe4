@@ -1,18 +1,15 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.UserAdapter;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,7 @@ public class UserService {
                             .role(role)
                             .build());
         else
-            throw new TechnicalFoundException( "Un compte existe Déjà avec cet email :" + email);
+            throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
     }
 
     public User login(String email, String password) throws TechnicalNotFoundException {
