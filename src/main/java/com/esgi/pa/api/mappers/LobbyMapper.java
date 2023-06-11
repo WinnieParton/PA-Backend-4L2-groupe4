@@ -10,15 +10,15 @@ public interface LobbyMapper {
 
     static GetlobbyResponse toGetlobbyResponse(Lobby entity) {
         return new GetlobbyResponse(
-            entity.getId(),
-            entity.getName(),
-            UserMapper.toNoFriendsUserResponse(entity.getCreator()),
-            GameMapper.toDto(entity.getGame()),
-            entity.isPrivate(),
-            entity.getStatus(),
-            entity.getCreatedAt(),
-            entity.getUpdateAt(),
-                UserMapper.toGetUserResponse(entity.getParticipants()));
+                entity.getId(),
+                entity.getName(),
+                UserMapper.toNoFriendsUserResponse(entity.getCreator()),
+                GameMapper.toDto(entity.getGame()),
+                entity.isPrivate(),
+                entity.getStatus(),
+                entity.getCreatedAt(),
+                entity.getUpdateAt(),
+                UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
     }   
     
     static List<GetlobbyResponse> toGetlobbyResponse(List<Lobby> entities) {

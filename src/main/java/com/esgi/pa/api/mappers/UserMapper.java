@@ -25,15 +25,21 @@ public interface UserMapper {
     static List<GetUserResponse> toGetUserResponse(List<User> entities) {
         return entities.stream()
             .map(UserMapper::toGetUserResponse)
-            .toList();
+                .toList();
     }
 
     static NoFriendsUserResponse toNoFriendsUserResponse(User user) {
         return new NoFriendsUserResponse(
-            user.getId(),
-            user.getName(),
-            user.getEmail(),
-            user.getRole());
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole());
+    }
+
+    static List<NoFriendsUserResponse> toNoFriendsUserResponse(List<User> entities) {
+        return entities.stream()
+                .map(UserMapper::toNoFriendsUserResponse)
+                .toList();
     }
 
 }
