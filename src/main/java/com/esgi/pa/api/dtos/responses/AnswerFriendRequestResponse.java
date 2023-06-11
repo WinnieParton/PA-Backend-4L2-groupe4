@@ -8,6 +8,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public record AnswerFriendRequestResponse(
         Long id,
         NoFriendsUserResponse friend,
-        RequestStatus stauts) {
+        RequestStatus status) {
 
 }

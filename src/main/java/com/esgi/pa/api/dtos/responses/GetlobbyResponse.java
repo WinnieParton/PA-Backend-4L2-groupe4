@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.esgi.pa.api.dtos.GameDto;
-import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.entities.Use0r;
 import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -19,5 +19,5 @@ public record GetlobbyResponse(
                 GameStatusEnum status,
                 LocalDateTime createdAt,
                 LocalDateTime updateAt,
-                List<GetUserResponse> participants) {
+                List<NoFriendsUserResponse> participants) {
 }
