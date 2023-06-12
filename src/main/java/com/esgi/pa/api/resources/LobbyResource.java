@@ -6,15 +6,12 @@ import com.esgi.pa.api.dtos.responses.CreateLobbyResponse;
 import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
 import com.esgi.pa.api.dtos.responses.GetlobbyResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
-import com.esgi.pa.domain.exceptions.MethodArgumentNotValidException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.ErrorFormatService;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +28,6 @@ public class LobbyResource {
     private final LobbyService lobbyService;
     private final UserService userService;
     private final GameService gameService;
-    private final ErrorFormatService errorFormatService;
 
     @GetMapping("{id}")
     public GetlobbyResponse getOne(@PathVariable Long id) throws TechnicalNotFoundException {
@@ -54,11 +50,7 @@ public class LobbyResource {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public CreateLobbyResponse create(@Valid @RequestBody CreateLobbyRequest request, BindingResult bindingResult) throws TechnicalNotFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
+    public CreateLobbyResponse create(@Valid @RequestBody CreateLobbyRequest request) throws TechnicalNotFoundException {
         return LobbyMapper.toCreateLobbyResponse(
                 lobbyService.create(
                         request.name(),
@@ -69,12 +61,7 @@ public class LobbyResource {
 
     @PatchMapping("{id}/user/{idUser}")
     @ResponseStatus(OK)
-    public GetlobbyResponse addUserInLobby(@Valid @RequestBody AddFriendInLobbyRequest request, @PathVariable Long id, @PathVariable Long idUser, BindingResult bindingResult) throws TechnicalNotFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
-
+    public GetlobbyResponse addUserInLobby(@Valid @RequestBody AddFriendInLobbyRequest request, @PathVariable Long id, @PathVariable Long idUser) throws TechnicalNotFoundException {
         return LobbyMapper.toGetlobbyResponse(
                 lobbyService.addUserInLobby(request.arrayUser(), idUser, id));
     }

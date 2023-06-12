@@ -8,15 +8,12 @@ import com.esgi.pa.api.dtos.responses.GetFriendRequestsReceivedResponse;
 import com.esgi.pa.api.dtos.responses.GetFriendRequestsSentResponse;
 import com.esgi.pa.api.mappers.FriendMapper;
 import com.esgi.pa.domain.entities.User;
-import com.esgi.pa.domain.exceptions.MethodArgumentNotValidException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.ErrorFormatService;
 import com.esgi.pa.domain.services.FriendService;
 import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,7 +29,6 @@ public class FriendResource {
 
     private final FriendService friendService;
     private final UserService userService;
-    private final ErrorFormatService errorFormatService;
 
     @GetMapping("sent/{senderId}")
     public GetFriendRequestsSentResponse getRequestsSent(@PathVariable Long senderId) throws TechnicalNotFoundException {
@@ -44,7 +40,6 @@ public class FriendResource {
 
     @GetMapping("received/{receiverId}")
     public GetFriendRequestsReceivedResponse getRequestReceived(@PathVariable Long receiverId) throws TechnicalNotFoundException {
-
         return new GetFriendRequestsReceivedResponse(
                 FriendMapper.toFriendRequestReceivedResponse(
                         friendService.getFriendRequestReceived(
@@ -60,12 +55,7 @@ public class FriendResource {
 
     @PutMapping("{receiver}/answer")
     @ResponseStatus(OK)
-    public AnswerFriendRequestResponse answerRequest(@PathVariable Long receiver,
-                                                     @Valid @RequestBody AnswerFriendRequest request, BindingResult bindingResult) throws TechnicalNotFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
+    public AnswerFriendRequestResponse answerRequest(@PathVariable Long receiver, @Valid @RequestBody AnswerFriendRequest request) throws TechnicalNotFoundException {
         return FriendMapper.toAnswerFriendRequestResponse(
                 friendService.handleRequest(
                         userService.getById(request.sender()),
@@ -75,11 +65,7 @@ public class FriendResource {
 
     @PostMapping("{receiver}")
     @ResponseStatus(CREATED)
-    public AddFriendResponse add(@PathVariable Long receiver, @Valid @RequestBody AddFriendRequest request, BindingResult bindingResult) throws TechnicalFoundException, TechnicalNotFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
+    public AddFriendResponse add(@PathVariable Long receiver, @Valid @RequestBody AddFriendRequest request) throws TechnicalFoundException, TechnicalNotFoundException {
         return FriendMapper.toAddFriendResponse(
                 friendService.sendRequest(
                         userService.getById(request.sender()),

@@ -33,6 +33,7 @@ public class User {
     @With
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+
     @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
     @Default
     @With

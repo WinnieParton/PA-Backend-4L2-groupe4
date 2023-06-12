@@ -2,10 +2,11 @@ package com.esgi.pa.domain.exceptions;
 
 import java.util.Map;
 
-public class MethodArgumentNotValidException extends RuntimeException {
+public class ArgumentNotValidException extends RuntimeException {
+
     private final Map<String, Object> errors;
 
-    public MethodArgumentNotValidException(Map<String, Object> errors) {
+    public ArgumentNotValidException(Map<String, Object> errors) {
         super("Validation failed");
         this.errors = errors;
     }
@@ -13,4 +14,5 @@ public class MethodArgumentNotValidException extends RuntimeException {
     public Map<String, Object> getErrors() {
         return errors;
     }
+
 }

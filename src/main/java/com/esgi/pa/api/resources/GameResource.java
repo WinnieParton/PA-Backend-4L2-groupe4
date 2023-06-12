@@ -7,10 +7,8 @@ import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.enums.GameStatusEnum;
-import com.esgi.pa.domain.exceptions.MethodArgumentNotValidException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.ErrorFormatService;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -40,15 +37,10 @@ public class GameResource {
 
     private final GameService gameService;
     private final LobbyService lobbyService;
-    private final ErrorFormatService errorFormatService;
 
     @PostMapping("/create")
     @ResponseStatus(CREATED)
-    public GameDto createGame(@RequestBody @Valid AddGameRequest request, BindingResult bindingResult) throws TechnicalFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
+    public GameDto createGame(@RequestBody @Valid AddGameRequest request) throws TechnicalFoundException {
         return GameMapper.toDto(
                 gameService.createGame(
                         request.name(),
