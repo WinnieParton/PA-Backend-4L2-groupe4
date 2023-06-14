@@ -1,16 +1,13 @@
 package com.esgi.pa.api.dtos;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-
+import com.esgi.pa.api.dtos.responses.LobbyInvitationResponse;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-import lombok.Builder;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-@Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record InvitationDto(
         Long id,
-        Long user,
-        Long lobby,
+        LobbyInvitationResponse lobby,
         boolean accepted) {
 }

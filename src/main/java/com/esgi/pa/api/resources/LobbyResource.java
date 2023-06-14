@@ -1,6 +1,5 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.requests.AddFriendInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.CreateLobbyRequest;
 import com.esgi.pa.api.dtos.responses.CreateLobbyResponse;
 import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
@@ -16,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,11 +28,13 @@ public class LobbyResource {
     private final GameService gameService;
 
     @GetMapping("{id}")
+    @ResponseStatus(OK)
     public GetlobbyResponse getOne(@PathVariable Long id) throws TechnicalNotFoundException {
-        return LobbyMapper.toGetlobbyResponse(lobbyService.findOne(id));
+        return LobbyMapper.toGetlobbyResponse(lobbyService.getById(id));
     }
 
     @GetMapping
+    @ResponseStatus(OK)
     public GetlobbiesResponse getAll() {
         return new GetlobbiesResponse(
                 LobbyMapper.toGetlobbyResponse(
@@ -42,10 +42,12 @@ public class LobbyResource {
     }
 
     @GetMapping("user/{id}")
+    @ResponseStatus(OK)
     public GetlobbiesResponse getLobbiesByUser(@PathVariable Long id) throws TechnicalNotFoundException {
         return new GetlobbiesResponse(
                 LobbyMapper.toGetlobbyResponse(
-                        lobbyService.getLobbiesByUserId(id)));
+                        userService.getLobbiesByUser(
+                                userService.getById(id))));
     }
 
     @PostMapping
@@ -59,16 +61,11 @@ public class LobbyResource {
                         request.isPrivate()));
     }
 
-    @PatchMapping("{id}/user/{idUser}")
-    @ResponseStatus(OK)
-    public GetlobbyResponse addUserInLobby(@Valid @RequestBody AddFriendInLobbyRequest request, @PathVariable Long id, @PathVariable Long idUser) throws TechnicalNotFoundException {
-        return LobbyMapper.toGetlobbyResponse(
-                lobbyService.addUserInLobby(request.arrayUser(), idUser, id));
+    @PatchMapping("/{idlobby}")
+    @ResponseStatus(NO_CONTENT)
+    public void pauseGame(@PathVariable Long idlobby) throws TechnicalNotFoundException {
+        lobbyService.pauseGame(
+                lobbyService.getById(idlobby));
     }
 
-    @PatchMapping("/{idlobby}")
-    public GetlobbyResponse redirectOnLobby(@PathVariable Long idlobby) throws TechnicalNotFoundException {
-        return LobbyMapper.toGetlobbyResponse(
-                lobbyService.redirectOnLobby(idlobby));
-    }
 }

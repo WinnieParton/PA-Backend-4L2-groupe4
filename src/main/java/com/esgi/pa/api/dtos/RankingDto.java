@@ -1,16 +1,16 @@
 package com.esgi.pa.api.dtos;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-
+import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import lombok.Builder;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record RankingDto(
         Long id,
-        Long game,
-        Long player,
+        GameDto game,
+        NoFriendsUserResponse player,
         double score) {
 }

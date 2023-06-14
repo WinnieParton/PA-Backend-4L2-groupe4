@@ -30,7 +30,7 @@ public class Lobby {
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 
-    private boolean isPrivate;
+    private boolean invitationOnly;
 
     @With
     @Enumerated(EnumType.STRING)

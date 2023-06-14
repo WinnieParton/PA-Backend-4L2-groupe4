@@ -6,36 +6,32 @@ import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.LobbyAdapter;
-import com.esgi.pa.server.adapter.UserAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class LobbyService {
 
     private final LobbyAdapter lobbyAdapter;
+    private final UserService userService;
 
-    private final UserAdapter userAdapter;
-
-    public Lobby create(String name, User user, Game game, boolean isPrivate) {
+    public Lobby create(String name, User user, Game game, boolean isInvitationOnly) {
         return lobbyAdapter.save(
                 Lobby.builder()
                         .name(name)
                         .creator(user)
                         .game(game)
-                        .isPrivate(isPrivate)
+                        .invitationOnly(isInvitationOnly)
                         .participants(List.of(user))
                         .status(GameStatusEnum.PENDING)
                         .build());
     }
 
-    public Lobby findOne(Long id) throws TechnicalNotFoundException {
+    public Lobby getById(Long id) throws TechnicalNotFoundException {
         return lobbyAdapter.findById(id)
                 .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No Lobby found with id : " + id));
     }
@@ -44,44 +40,18 @@ public class LobbyService {
         return lobbyAdapter.findAll();
     }
 
-    public Lobby addUserInLobby(ArrayList<Long> arrayUser, Long idUser, Long id) throws TechnicalNotFoundException {
-        Lobby lobby = this.findOne(id);
-        List<User> participants = new ArrayList<>();
-        User user = userAdapter.findById(idUser)
-                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
-        if (!Objects.equals(lobby.getCreator().getId(), user.getId()))
-            throw new TechnicalNotFoundException(HttpStatus.BAD_REQUEST, "User not authorize to do this action. You are not creator ");
-        for (Long idArray : arrayUser) {
-
-            User participant = userAdapter.findById(idArray)
-                    .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + idUser));
-            if (!lobby.getParticipants().contains(participant))
-                participants.add(participant);
-        }
-        return lobbyAdapter.save(lobby.withParticipants(participants));
-    }
-
-    public List<Lobby> getLobbiesByUserId(Long userid) throws TechnicalNotFoundException {
-        User participant = userAdapter.findById(userid)
-                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No User found with id : " + userid));
-
-        List<Lobby> l = lobbyAdapter.findByCreatorId(participant);
-        List<Lobby> l1 = new ArrayList<>();
-
-        lobbyAdapter.findAll().forEach(lobby -> {
-            if (lobby.getParticipants().contains(participant))
-                l1.add(lobby);
-        });
-
-        l1.addAll(l);
-        return l1;
-    }
-
     public Lobby save(Lobby lobby) {
         return lobbyAdapter.save(lobby);
     }
 
-    public Lobby redirectOnLobby(Long id) throws TechnicalNotFoundException {
-        return save(findOne(id).withStatus(GameStatusEnum.PAUSED));
+    public Lobby pauseGame(Lobby lobby) {
+        return save(lobby.withStatus(GameStatusEnum.PAUSED));
+    }
+
+    public Lobby addUserToLobby(User user, Lobby lobby) {
+        user.getParticipatingLobbies().add(lobby);
+        lobby.getParticipants().add(user);
+        userService.save(user);
+        return save(lobby);
     }
 }

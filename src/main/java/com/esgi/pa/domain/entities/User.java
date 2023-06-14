@@ -45,6 +45,9 @@ public class User {
     @ManyToMany(mappedBy = "players")
     private List<Game> games = new ArrayList<>();
 
+    @OneToMany
+    private List<Ranking> rankings = new ArrayList<>();
+
     @JsonIgnoreProperties({"players", "participants"})
     @ManyToMany(mappedBy = "participants")
     private List<Lobby> participatingLobbies = new ArrayList<>();
