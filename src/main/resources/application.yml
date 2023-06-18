@@ -1,4 +1,3 @@
-
 server:
   address: 0.0.0.0
   port: 8080
@@ -15,7 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pa
     username: postgres
-    password: root
+    password: postgres
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
@@ -23,3 +22,9 @@ spring:
       idle-timeout: 60000
       max-lifetime: 1800000
       pool-name: pa-hikari-pool
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-yni0fuggpgpn1rfz.eu.auth0.com/
+          audiences: https://esgi.pa/

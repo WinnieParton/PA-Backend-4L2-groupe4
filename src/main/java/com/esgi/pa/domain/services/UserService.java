@@ -8,6 +8,7 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.UserAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserService {
 
     private final UserAdapter userAdapter;
+    private final PasswordEncoder passwordEncoder;
 
     public User create(String name, String email, String password, RoleEnum role) throws TechnicalFoundException {
         if (userAdapter.findByEmail(email).isEmpty())
@@ -24,7 +26,7 @@ public class UserService {
                     User.builder()
                             .name(name)
                             .email(email)
-                            .password(password)
+                            .password(passwordEncoder.encode(password))
                             .role(role)
                             .build());
         else

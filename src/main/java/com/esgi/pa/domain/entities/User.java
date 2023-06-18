@@ -34,10 +34,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
     @Default
     @With
     @ManyToMany
+    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
     @JoinTable(name = "FRIENDS", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
     private List<User> friends = new ArrayList<>();
 
@@ -48,8 +48,8 @@ public class User {
     @OneToMany
     private List<Ranking> rankings = new ArrayList<>();
 
-    @JsonIgnoreProperties({"players", "participants"})
     @ManyToMany(mappedBy = "participants")
+    @JsonIgnoreProperties({"players", "participants"})
     private List<Lobby> participatingLobbies = new ArrayList<>();
 
     @JsonIgnoreProperties("participants")
