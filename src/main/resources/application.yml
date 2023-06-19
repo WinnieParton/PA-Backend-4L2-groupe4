@@ -22,9 +22,10 @@ spring:
       idle-timeout: 60000
       max-lifetime: 1800000
       pool-name: pa-hikari-pool
+application:
   security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://dev-yni0fuggpgpn1rfz.eu.auth0.com/
-          audiences: https://esgi.pa/
+    jwt:
+      secret-key: 719650a6094eb3d68b1765ef97d1400bdf12cde09874681b351346225c90c5f6
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

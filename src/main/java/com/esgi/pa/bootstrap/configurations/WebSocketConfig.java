@@ -1,4 +1,4 @@
-package com.esgi.pa.bootstrap;
+package com.esgi.pa.bootstrap.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

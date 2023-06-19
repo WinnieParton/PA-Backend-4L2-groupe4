@@ -1,39 +1,49 @@
 package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.RoleEnum;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.security.JwtService;
 import com.esgi.pa.server.adapter.UserAdapter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Base64;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final ObjectMapper objectMapper;
-    private final UserAdapter adapter;
+    private final JwtService jwtService;
+    private final UserAdapter userAdapter;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public String createBase64Token(User user) throws TechnicalNotFoundException {
-        try {
-            return Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(user));
-        } catch (JsonProcessingException exception) {
-            throw new TechnicalNotFoundException(HttpStatus.FORBIDDEN, "Json Parsing exception : "+ exception.getMessage());
+    public String create(String name, String email, String password, RoleEnum role) throws TechnicalFoundException {
+        if (userAdapter.findByEmail(email).isEmpty()) {
+            return jwtService.generateToken(userAdapter.save(
+                    User.builder()
+                            .name(name)
+                            .email(email)
+                            .password(passwordEncoder.encode(password))
+                            .role(role)
+                            .build()));
+        } else {
+            throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
         }
     }
-    
-    public boolean validateBase64Token(String token) throws TechnicalNotFoundException {
-        try {
-            String encodeUserString = Arrays.toString(Base64.getDecoder().decode(token));
-            User user = objectMapper.readValue(encodeUserString, User.class);
-            return adapter.findById(user.getId()).isPresent();
-        } catch (JsonProcessingException exception) {
-            throw new TechnicalNotFoundException(HttpStatus.FORBIDDEN,"Json Processing exception: "+ exception.getMessage());
-        }
+
+    public String login(String email, String password) throws TechnicalNotFoundException {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        password));
+        User user = userAdapter.findByEmail(email)
+                .orElseThrow(() -> new TechnicalNotFoundException(NOT_FOUND, "Username not found with email : " + email));
+        return jwtService.generateToken(user);
     }
 }

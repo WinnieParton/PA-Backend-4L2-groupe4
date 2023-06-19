@@ -1,4 +1,4 @@
-package com.esgi.pa.bootstrap;
+package com.esgi.pa.bootstrap.configurations;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;

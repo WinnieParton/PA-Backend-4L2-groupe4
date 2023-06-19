@@ -1,6 +1,6 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.responses.CreateUserResponse;
+import com.esgi.pa.api.dtos.responses.AuthenticationUserResponse;
 import com.esgi.pa.api.dtos.responses.GetUserResponse;
 import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
 import com.esgi.pa.domain.entities.User;
@@ -9,10 +9,6 @@ import java.util.List;
 
 public interface UserMapper {
 
-    static CreateUserResponse toCreateUserResponse(User entity) {
-        return new CreateUserResponse(entity.getId());
-    }
-    
     static GetUserResponse toGetUserResponse(User user) {
         return new GetUserResponse(
             user.getId(),
@@ -42,4 +38,7 @@ public interface UserMapper {
                 .toList();
     }
 
+    static AuthenticationUserResponse toAuthenticationUserResponse(String token) {
+        return new AuthenticationUserResponse(token);
+    }
 }
