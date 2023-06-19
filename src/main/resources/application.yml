@@ -13,8 +13,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pa
-    username: arthur
-    password: arthur
+    username: postgres
+    password: postgres
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
@@ -22,4 +22,10 @@ spring:
       idle-timeout: 60000
       max-lifetime: 1800000
       pool-name: pa-hikari-pool
+application:
   security:
+    jwt:
+      secret-key: 719650a6094eb3d68b1765ef97d1400bdf12cde09874681b351346225c90c5f6
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

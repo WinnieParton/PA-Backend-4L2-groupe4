@@ -1,20 +1,49 @@
 package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.RoleEnum;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.security.JwtService;
+import com.esgi.pa.server.adapter.UserAdapter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    public Object authorize(User user) throws TechnicalNotFoundException {
-        if (Objects.nonNull(user)) {
-            return null;
-        } else throw new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Authentication failed user not found");
+    private final JwtService jwtService;
+    private final UserAdapter userAdapter;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    public String create(String name, String email, String password, RoleEnum role) throws TechnicalFoundException {
+        if (userAdapter.findByEmail(email).isEmpty()) {
+            return jwtService.generateToken(userAdapter.save(
+                    User.builder()
+                            .name(name)
+                            .email(email)
+                            .password(passwordEncoder.encode(password))
+                            .role(role)
+                            .build()));
+        } else {
+            throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
+        }
+    }
+
+    public String login(String email, String password) throws TechnicalNotFoundException {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        password));
+        User user = userAdapter.findByEmail(email)
+                .orElseThrow(() -> new TechnicalNotFoundException(NOT_FOUND, "Username not found with email : " + email));
+        return jwtService.generateToken(user);
     }
 }

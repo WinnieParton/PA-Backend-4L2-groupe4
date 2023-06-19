@@ -2,12 +2,11 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.UserLoginRequest;
-import com.esgi.pa.api.dtos.responses.CreateUserResponse;
+import com.esgi.pa.api.dtos.responses.AuthenticationUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.AuthService;
-import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,21 +22,19 @@ import static org.springframework.http.HttpStatus.OK;
 @Api(tags = "Authentication API")
 public class AuthResource {
 
-    private final UserService userService;
     private final AuthService authService;
 
     @PostMapping(value = "login")
     @ResponseStatus(OK)
     public Object login(@RequestBody @Valid UserLoginRequest request) throws TechnicalNotFoundException {
-        return authService.authorize(
-            userService.login(request.email(), request.password()));
+        return authService.login(request.email(), request.password());
     }
 
     @PostMapping(value = "signup")
     @ResponseStatus(CREATED)
-    public CreateUserResponse signup(@Valid @RequestBody CreateUserRequest request) throws TechnicalFoundException {
-        return UserMapper.toCreateUserResponse(
-                userService.create(
+    public AuthenticationUserResponse signup(@Valid @RequestBody CreateUserRequest request) throws TechnicalFoundException {
+        return UserMapper.toAuthenticationUserResponse(
+                authService.create(
                         request.name(),
                         request.email(),
                         request.password(),
