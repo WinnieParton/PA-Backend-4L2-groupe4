@@ -13,8 +13,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pa
-    username: postgres
-    password: postgres
+    username: arthur
+    password: arthur
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
@@ -23,8 +23,3 @@ spring:
       max-lifetime: 1800000
       pool-name: pa-hikari-pool
   security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://dev-yni0fuggpgpn1rfz.eu.auth0.com/
-          audiences: https://esgi.pa/
