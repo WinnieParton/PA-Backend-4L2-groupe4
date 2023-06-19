@@ -23,7 +23,7 @@ public class UserResource {
     @GetMapping("{id}/name/{name}")
     public List<GetUserResponse> getUserByUsername(@PathVariable Long id, @PathVariable String name) {
         return UserMapper.toGetUserResponse(
-                userService.getByName(id, name));
+            userService.getByNameAndId(id, name));
     }
 
     @GetMapping("{id}")

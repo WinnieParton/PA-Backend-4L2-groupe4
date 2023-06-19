@@ -42,7 +42,7 @@ public class UserService {
             throw new TechnicalNotFoundException(HttpStatus.BAD_REQUEST, "Incorrect password : " + password);
     }
 
-    public List<User> getByName(Long id, String name) {
+    public List<User> getByNameAndId(Long id, String name) {
         return userAdapter.findByName(id, name);
     }
 
