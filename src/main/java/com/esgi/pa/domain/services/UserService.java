@@ -36,7 +36,7 @@ public class UserService {
     public User login(String email, String password) throws TechnicalNotFoundException {
         User user = userAdapter.findByEmail(email)
                 .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "No user found with email :" + email));
-        if (user.getPassword().equals(password))
+        if (passwordEncoder.matches(password, user.getPassword()))
             return user;
         else
             throw new TechnicalNotFoundException(HttpStatus.BAD_REQUEST, "Incorrect password : " + password);

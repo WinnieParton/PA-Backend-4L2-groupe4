@@ -35,9 +35,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/auth").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
-                .and().oauth2ResourceServer().jwt();
+                .and().csrf().disable()
+                .oauth2ResourceServer().jwt();
         return http.build();
     }
 
