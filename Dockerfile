@@ -1,5 +1,5 @@
 # Utilisez une image de base avec Java préinstallé
-FROM openjdk:11
+FROM openjdk:19-jdk-alpine
 
 # Définissez le répertoire de travail
 WORKDIR /app
