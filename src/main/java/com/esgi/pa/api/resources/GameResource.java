@@ -1,8 +1,8 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.GameDto;
-import com.esgi.pa.api.dtos.requests.AddGameRequest;
-import com.esgi.pa.api.dtos.responses.GetAllGameResponse;
+import com.esgi.pa.api.dtos.responses.game.GameDto;
+import com.esgi.pa.api.dtos.requests.game.AddGameRequest;
+import com.esgi.pa.api.dtos.responses.game.GetAllGameResponse;
 import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;

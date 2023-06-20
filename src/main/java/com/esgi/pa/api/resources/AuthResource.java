@@ -1,8 +1,8 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.requests.CreateUserRequest;
-import com.esgi.pa.api.dtos.requests.UserLoginRequest;
-import com.esgi.pa.api.dtos.responses.AuthenticationUserResponse;
+import com.esgi.pa.api.dtos.requests.auth.CreateUserRequest;
+import com.esgi.pa.api.dtos.requests.auth.UserLoginRequest;
+import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;

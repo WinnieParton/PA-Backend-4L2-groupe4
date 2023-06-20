@@ -1,8 +1,8 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.responses.AuthenticationUserResponse;
-import com.esgi.pa.api.dtos.responses.GetUserResponse;
-import com.esgi.pa.api.dtos.responses.NoFriendsUserResponse;
+import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
+import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
+import com.esgi.pa.api.dtos.responses.user.NoFriendsUserResponse;
 import com.esgi.pa.domain.entities.User;
 
 import java.util.List;

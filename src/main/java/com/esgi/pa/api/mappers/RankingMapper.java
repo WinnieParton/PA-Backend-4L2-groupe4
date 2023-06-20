@@ -1,9 +1,9 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.RankingDto;
-import com.esgi.pa.api.dtos.responses.GlobalRankingResponse;
-import com.esgi.pa.api.dtos.responses.NoGameRankingResponse;
-import com.esgi.pa.api.dtos.responses.UserRankingsResponse;
+import com.esgi.pa.api.dtos.responses.ranking.RankingDto;
+import com.esgi.pa.api.dtos.responses.ranking.GlobalRankingResponse;
+import com.esgi.pa.api.dtos.responses.ranking.NoGameRankingResponse;
+import com.esgi.pa.api.dtos.responses.ranking.UserRankingsResponse;
 import com.esgi.pa.domain.entities.Ranking;
 
 import java.util.List;

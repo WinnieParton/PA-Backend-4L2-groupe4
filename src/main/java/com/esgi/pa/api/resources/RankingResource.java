@@ -1,8 +1,8 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.responses.GlobalRankingResponse;
-import com.esgi.pa.api.dtos.responses.NoGameRankingResponse;
-import com.esgi.pa.api.dtos.responses.UserRankingsResponse;
+import com.esgi.pa.api.dtos.responses.ranking.GlobalRankingResponse;
+import com.esgi.pa.api.dtos.responses.ranking.NoGameRankingResponse;
+import com.esgi.pa.api.dtos.responses.ranking.UserRankingsResponse;
 import com.esgi.pa.api.mappers.RankingMapper;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;

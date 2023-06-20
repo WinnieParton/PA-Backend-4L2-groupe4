@@ -1,9 +1,9 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.responses.AddFriendResponse;
-import com.esgi.pa.api.dtos.responses.AnswerFriendRequestResponse;
-import com.esgi.pa.api.dtos.responses.GetFriendRequestReceivedResponse;
-import com.esgi.pa.api.dtos.responses.GetFriendRequestSentResponse;
+import com.esgi.pa.api.dtos.responses.friend.AddFriendResponse;
+import com.esgi.pa.api.dtos.responses.friend.AnswerFriendRequestResponse;
+import com.esgi.pa.api.dtos.responses.friend.GetFriendRequestReceivedResponse;
+import com.esgi.pa.api.dtos.responses.friend.GetFriendRequestSentResponse;
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
 

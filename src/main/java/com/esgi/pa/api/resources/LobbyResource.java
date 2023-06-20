@@ -1,9 +1,9 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.requests.CreateLobbyRequest;
-import com.esgi.pa.api.dtos.responses.CreateLobbyResponse;
-import com.esgi.pa.api.dtos.responses.GetlobbiesResponse;
-import com.esgi.pa.api.dtos.responses.GetlobbyResponse;
+import com.esgi.pa.api.dtos.requests.lobby.CreateLobbyRequest;
+import com.esgi.pa.api.dtos.responses.lobby.CreateLobbyResponse;
+import com.esgi.pa.api.dtos.responses.lobby.GetlobbiesResponse;
+import com.esgi.pa.api.dtos.responses.lobby.GetlobbyResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;

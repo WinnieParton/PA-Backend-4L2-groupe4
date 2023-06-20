@@ -1,6 +1,6 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.responses.GetUserResponse;
+import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.UserService;

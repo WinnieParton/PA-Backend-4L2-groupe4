@@ -1,8 +1,8 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.InvitationDto;
-import com.esgi.pa.api.dtos.requests.AnswerInvitationRequest;
-import com.esgi.pa.api.dtos.requests.InviteFriendToLobbyRequest;
+import com.esgi.pa.api.dtos.responses.invitation.InvitationDto;
+import com.esgi.pa.api.dtos.requests.invitation.AnswerInvitationRequest;
+import com.esgi.pa.api.dtos.requests.invitation.InviteFriendToLobbyRequest;
 import com.esgi.pa.api.mappers.InvitationMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;

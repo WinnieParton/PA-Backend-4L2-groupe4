@@ -1,11 +1,11 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.requests.AddFriendRequest;
-import com.esgi.pa.api.dtos.requests.AnswerFriendRequest;
-import com.esgi.pa.api.dtos.responses.AddFriendResponse;
-import com.esgi.pa.api.dtos.responses.AnswerFriendRequestResponse;
-import com.esgi.pa.api.dtos.responses.GetFriendRequestsReceivedResponse;
-import com.esgi.pa.api.dtos.responses.GetFriendRequestsSentResponse;
+import com.esgi.pa.api.dtos.requests.friend.AddFriendRequest;
+import com.esgi.pa.api.dtos.requests.friend.AnswerFriendRequest;
+import com.esgi.pa.api.dtos.responses.friend.AddFriendResponse;
+import com.esgi.pa.api.dtos.responses.friend.AnswerFriendRequestResponse;
+import com.esgi.pa.api.dtos.responses.friend.GetFriendRequestsReceivedResponse;
+import com.esgi.pa.api.dtos.responses.friend.GetFriendRequestsSentResponse;
 import com.esgi.pa.api.mappers.FriendMapper;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
