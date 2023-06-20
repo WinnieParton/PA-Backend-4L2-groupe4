@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: pagroupe4
+      POSTGRES_PASSWORD: BcYW8Z6RvhydQ9Ya
+      POSTGRES_DB: projetannuel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
