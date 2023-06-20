@@ -9,6 +9,7 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.AuthService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -26,19 +28,20 @@ public class AuthResource {
 
     @PostMapping(value = "login")
     @ResponseStatus(OK)
-    public Object login(@RequestBody @Valid UserLoginRequest request) throws TechnicalNotFoundException {
-        return authService.login(request.email(), request.password());
+    public AuthenticationUserResponse login(@RequestBody @Valid UserLoginRequest request) throws TechnicalNotFoundException {
+        return UserMapper.toAuthenticationUserResponse(
+            authService.login(request.email(), request.password()));
     }
 
     @PostMapping(value = "signup")
     @ResponseStatus(CREATED)
     public AuthenticationUserResponse signup(@Valid @RequestBody CreateUserRequest request) throws TechnicalFoundException {
         return UserMapper.toAuthenticationUserResponse(
-                authService.create(
-                        request.name(),
-                        request.email(),
-                        request.password(),
-                        request.role()));
+            authService.create(
+                request.name(),
+                request.email(),
+                request.password(),
+                request.role()));
     }
 
 }

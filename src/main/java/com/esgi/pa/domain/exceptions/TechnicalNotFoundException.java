@@ -1,17 +1,16 @@
 package com.esgi.pa.domain.exceptions;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 public class TechnicalNotFoundException extends Exception {
 
     private HttpStatus status;
-    private final Map<String, Object> map = new LinkedHashMap<String, Object>();
+    private final Map<String, Object> map = new HashMap<>();
 
     public TechnicalNotFoundException(String message) {
         super(message);

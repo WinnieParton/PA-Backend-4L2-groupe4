@@ -33,6 +33,6 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(TechnicalFoundException.class)
     public ErrorDto handleNotFoundException(TechnicalFoundException ex) {
-        return new ErrorDto(ex.getMessage());
+        return new ErrorDto(ex.getMap());
     }
 }
