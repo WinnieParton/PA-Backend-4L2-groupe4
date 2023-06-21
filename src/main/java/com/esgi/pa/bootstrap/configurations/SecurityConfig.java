@@ -24,7 +24,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
-    private final CorsConfig corsConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,7 +47,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
-                .cors().configurationSource(corsConfig.corsConfiguration())
+                .cors()
                 .and().authorizeHttpRequests()
                 .antMatchers("/auth/**",
                         "/swagger-ui/*",
