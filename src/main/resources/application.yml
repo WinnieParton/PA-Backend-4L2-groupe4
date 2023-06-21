@@ -14,8 +14,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/projetannuel
-    username: pagroupe4
-    password: BcYW8Z6RvhydQ9Ya
+    username: postgres
+    password: postgres
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
