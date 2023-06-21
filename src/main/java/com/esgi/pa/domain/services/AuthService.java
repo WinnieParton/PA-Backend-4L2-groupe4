@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -25,13 +27,18 @@ public class AuthService {
 
     public String create(String name, String email, String password, RoleEnum role) throws TechnicalFoundException {
         if (userAdapter.findByEmail(email).isEmpty()) {
-            return jwtService.generateToken(userAdapter.save(
-                    User.builder()
-                            .name(name)
-                            .email(email)
-                            .password(passwordEncoder.encode(password))
-                            .role(role)
-                            .build()));
+            User savedUser = userAdapter.save(
+                User.builder()
+                    .name(name)
+                    .email(email)
+                    .password(passwordEncoder.encode(password))
+                    .role(role)
+                    .build());
+            User user = userAdapter.findByEmail(savedUser.getEmail()).orElseThrow();
+            return jwtService.generateToken(
+                Map.of("id", user.getId(),
+                    "name", user.getName()),
+                user);
         } else {
             throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
         }
@@ -39,11 +46,14 @@ public class AuthService {
 
     public String login(String email, String password) throws TechnicalNotFoundException {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        email,
-                        password));
+            new UsernamePasswordAuthenticationToken(
+                email,
+                password));
         User user = userAdapter.findByEmail(email)
-                .orElseThrow(() -> new TechnicalNotFoundException(NOT_FOUND, "Username not found with email : " + email));
-        return jwtService.generateToken(user);
+            .orElseThrow(() -> new TechnicalNotFoundException(NOT_FOUND, "Username not found with email : " + email));
+        return jwtService.generateToken(
+            Map.of("id", user.getId(),
+                "name", user.getName()),
+            user);
     }
 }
