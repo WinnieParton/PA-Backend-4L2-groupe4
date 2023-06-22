@@ -1,6 +1,7 @@
 package com.esgi.pa.api.mappers;
 
 import com.esgi.pa.api.dtos.responses.lobby.CreateLobbyResponse;
+import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyResponse;
 import com.esgi.pa.api.dtos.responses.invitation.LobbyInvitationResponse;
 import com.esgi.pa.domain.entities.Lobby;
@@ -40,5 +41,11 @@ public interface LobbyMapper {
                 lobby.getName(),
                 UserMapper.toNoFriendsUserResponse(lobby.getCreator()),
                 GameMapper.toDto(lobby.getGame()));
+    }
+
+    static GetlobbyMessageResponse toGetlobbyMessageResponse(Lobby entity) {
+        return new GetlobbyMessageResponse(
+                entity.getId(),
+                UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
     }
 }

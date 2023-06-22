@@ -1,17 +1,24 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import lombok.Builder.Default;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.*;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.esgi.pa.domain.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
 @Builder
@@ -41,7 +48,7 @@ public class User implements UserDetails {
     @Default
     @With
     @ManyToMany
-    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
+    @JsonIgnoreProperties({"friends", "games", "participatingLobbies"})
     @JoinTable(name = "FRIENDS", joinColumns = @JoinColumn(name = "user1_id"), inverseJoinColumns = @JoinColumn(name = "user2_id"))
     private List<User> friends = new ArrayList<>();
 
@@ -56,9 +63,9 @@ public class User implements UserDetails {
     @JsonIgnoreProperties({"players", "participants"})
     private List<Lobby> participatingLobbies = new ArrayList<>();
 
-    @JsonIgnoreProperties("participants")
+    /*@JsonIgnoreProperties("participants")
     @ManyToMany(mappedBy = "participants")
-    private List<Chat> participatingChats = new ArrayList<>();
+    private List<Chat> participatingChats = new ArrayList<>();*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

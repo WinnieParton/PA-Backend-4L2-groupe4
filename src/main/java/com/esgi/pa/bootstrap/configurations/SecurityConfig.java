@@ -63,8 +63,9 @@ public class SecurityConfig {
                         "/swagger-ui/*",
                         "/swagger-ui.html",
                         "/webjars/**",
-                        "/v2/**",
-                        "/swagger-resources/**").permitAll()
+                        "/v2/**", "/ws/**",
+                        "/swagger-resources/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -88,10 +89,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfiguration() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:5173")); // Set the allowed origin pattern here
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader("*");
         corsConfiguration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;

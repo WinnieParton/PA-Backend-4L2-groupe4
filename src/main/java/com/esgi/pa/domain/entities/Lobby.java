@@ -43,9 +43,11 @@ public class Lobby {
     private LocalDateTime updateAt = LocalDateTime.now();
 
     @With
-    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
-    @ManyToMany
+    @JsonIgnoreProperties({ "friends", "games", "participatingLobbies" })
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lobby_participants", joinColumns = @JoinColumn(name = "lobby_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> participants = new ArrayList<>();
 
+    @OneToOne(mappedBy = "lobby", cascade = CascadeType.ALL)
+    private Chat chat;
 }

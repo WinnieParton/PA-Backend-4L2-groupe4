@@ -38,4 +38,11 @@ public class Message {
     private String content;
 
     private LocalDateTime sentAt;
+
+    public Message(Chat chat, User creator, String content) {
+        this.chat = chat;
+        this.creator = creator;
+        this.content = content;
+    }
+
 }
