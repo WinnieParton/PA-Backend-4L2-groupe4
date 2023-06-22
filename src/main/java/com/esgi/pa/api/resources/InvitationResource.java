@@ -64,7 +64,7 @@ public class InvitationResource {
     }
 
     /**
-     * Récupère l'ensemble des invitations d'un utilisateur
+     * Récupère l'ensemble des invitations d'un utilisateur qui n'ont pas eu de réponses
      *
      * @param userId id de l'utilisateur
      * @return List de l'ensemble invitations qu'il a reçu

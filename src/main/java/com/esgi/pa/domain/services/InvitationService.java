@@ -57,6 +57,9 @@ public class InvitationService {
     }
 
     public List<Invitation> getAllByReceiver(User user) {
-        return invitationAdapter.findAllByUser(user);
+        return invitationAdapter.findAllByUser(user)
+                .stream()
+                .filter(invitation -> RequestStatus.PENDING.equals(invitation.getAccepted()))
+                .toList();
     }
 }
