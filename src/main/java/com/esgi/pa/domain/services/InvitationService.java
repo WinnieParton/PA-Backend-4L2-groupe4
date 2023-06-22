@@ -10,6 +10,8 @@ import com.esgi.pa.server.adapter.InvitationAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class InvitationService {
@@ -52,5 +54,9 @@ public class InvitationService {
                 .orElseThrow(() -> new TechnicalNotFoundException(String.format("Cannot find invitation for user id : %s and lobby id : %s", user.getId(), lobby.getId())));
         lobbyService.addUserToLobby(user, lobby);
         return invitationAdapter.save(invitation.withAccepted(RequestStatus.ACCEPTED));
+    }
+
+    public List<Invitation> getAllByReceiver(User user) {
+        return invitationAdapter.findAllByUser(user);
     }
 }
