@@ -1,6 +1,6 @@
 package com.esgi.pa.api.dtos.responses.invitation;
 
-import com.esgi.pa.api.dtos.responses.invitation.LobbyInvitationResponse;
+import com.esgi.pa.domain.enums.RequestStatus;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -9,5 +9,5 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 public record InvitationDto(
         Long id,
         LobbyInvitationResponse lobby,
-        boolean accepted) {
+        RequestStatus accepted) {
 }
