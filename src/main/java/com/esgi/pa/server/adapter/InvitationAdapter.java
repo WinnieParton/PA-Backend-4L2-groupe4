@@ -39,6 +39,10 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, Long> {
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
 
+    public List<Invitation> findAllByUser(User user) {
+        return invitationsRepository.findAllByUser(user);
+    }
+
     @Override
     public boolean removeById(Long id) {
         // TODO Auto-generated method stub
