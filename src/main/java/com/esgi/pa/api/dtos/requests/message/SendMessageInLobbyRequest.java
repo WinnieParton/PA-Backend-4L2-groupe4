@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import com.esgi.pa.domain.enums.StatusMessageEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+import java.time.LocalDateTime;
+
 @JsonAutoDetect(fieldVisibility = ANY)
 public record SendMessageInLobbyRequest(
         @NotBlank(message = "Sender Id is required") Long senderUser,
@@ -15,5 +17,6 @@ public record SendMessageInLobbyRequest(
         @NotNull(message = "Message Id is required") String message,
         @NotBlank(message = "Sender Name is required") String senderName,
         @NotBlank(message = "Receiver Name is required") String receiverName,
-        StatusMessageEnum status) {
+        StatusMessageEnum status,
+        String currentDate) {
 }

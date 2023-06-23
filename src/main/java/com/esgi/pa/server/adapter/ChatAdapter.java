@@ -54,5 +54,7 @@ public class ChatAdapter implements PersistenceSpi<Chat, Long> {
     public Optional<Chat> findChatByLobby(Lobby lobby) {
         return chatsRepository.findByLobby(lobby);
     }
-
+    public Optional<Chat> findChatByLobbyWithMessages(Lobby lobby) {
+        return chatsRepository.findByLobbyWithMessages(lobby);
+    }
 }

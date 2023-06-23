@@ -14,6 +14,8 @@ import com.esgi.pa.server.adapter.MessageAdapter;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Service
@@ -31,7 +33,10 @@ public class MessageService {
             }
         });
         Chat chat = chatService.saveChat(lobbyService.getById(lobby.id()));
-        Message message2 = new Message(chat, user, message.message());
+        String dateString = message.currentDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+        Message message2 = new Message(chat, user, message.message(), dateTime);
         messageAdapter.save(message2);
     }
 }
