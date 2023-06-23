@@ -11,16 +11,19 @@ public interface UserMapper {
 
     static GetUserResponse toGetUserResponse(User user) {
         return new GetUserResponse(
-            user.getId(),
-            user.getName(),
-            user.getEmail(),
-            user.getRole(),
-            user.getFriends().stream().map(UserMapper::toNoFriendsUserResponse).toList());
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole(),
+                user.getFriends().stream().map(UserMapper::toNoFriendsUserResponse)
+                        .distinct()
+                        .toList());
     }
 
     static List<GetUserResponse> toGetUserResponse(List<User> entities) {
         return entities.stream()
-            .map(UserMapper::toGetUserResponse)
+                .map(UserMapper::toGetUserResponse)
+                .distinct()
                 .toList();
     }
 
@@ -35,6 +38,7 @@ public interface UserMapper {
     static List<NoFriendsUserResponse> toNoFriendsUserResponse(List<User> entities) {
         return entities.stream()
                 .map(UserMapper::toNoFriendsUserResponse)
+                .distinct()
                 .toList();
     }
 

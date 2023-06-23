@@ -23,6 +23,7 @@ public interface FriendMapper {
     static List<GetFriendRequestSentResponse> toGetFriendRequestSentResponse(List<Friend> entities) {
         return entities.stream()
             .map(FriendMapper::toGetFriendRequestSentResponse)
+            .distinct()
             .toList();
     }
     
@@ -45,6 +46,7 @@ public interface FriendMapper {
     static List<GetFriendRequestReceivedResponse> toFriendRequestReceivedResponse(List<Friend> entities) {
         return entities.stream()
             .map(FriendMapper::toFriendRequestReceivedResponse)
+            .distinct()
             .toList();
     }
 

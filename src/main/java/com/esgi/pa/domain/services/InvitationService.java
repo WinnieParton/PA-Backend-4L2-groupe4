@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +27,13 @@ public class InvitationService {
 
     public Invitation inviteFriendToLobby(User receiver, Lobby lobby) throws TechnicalFoundException {
         if (!receiver.equals(lobby.getCreator())) {
-            return invitationAdapter.save(Invitation.builder()
-                    .user(receiver)
-                    .lobby(lobby)
-                    .build());
+            Optional<Invitation> invitation = invitationAdapter.getInvitationByUserAndLobby(receiver, lobby);
+            if(invitation.isEmpty())
+                return invitationAdapter.save(Invitation.builder()
+                        .user(receiver)
+                        .lobby(lobby)
+                        .build());
+            else return invitation.get();
         } else
             throw new TechnicalFoundException(String.format("Cannot invite the creator %s to it's own lobby.", receiver.getId()));
     }
@@ -60,6 +64,7 @@ public class InvitationService {
         return invitationAdapter.findAllByUser(user)
                 .stream()
                 .filter(invitation -> RequestStatus.PENDING.equals(invitation.getAccepted()))
+                .distinct()
                 .toList();
     }
 }

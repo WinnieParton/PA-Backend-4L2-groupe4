@@ -14,6 +14,7 @@ public interface RankingMapper {
         return new GlobalRankingResponse(
                 rankings.stream()
                         .map(RankingMapper::toNoGameRankingRespsonse)
+                        .distinct()
                         .toList());
     }
 
@@ -28,6 +29,7 @@ public interface RankingMapper {
         return new UserRankingsResponse(
                 rankings.stream()
                         .map(RankingMapper::toRankingDto)
+                        .distinct()
                         .toList());
     }
 
