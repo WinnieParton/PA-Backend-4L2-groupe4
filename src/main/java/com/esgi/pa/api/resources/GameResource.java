@@ -14,9 +14,13 @@ import com.esgi.pa.domain.services.LobbyService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -38,9 +42,11 @@ public class GameResource {
     private final GameService gameService;
     private final LobbyService lobbyService;
 
-    @PostMapping("/create")
+    @PostMapping(value  = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public GameDto createGame(@RequestBody @Valid AddGameRequest request) throws TechnicalFoundException {
+    public GameDto createGame(@Valid AddGameRequest request) throws TechnicalFoundException, IOException {
+
         return GameMapper.toDto(
                 gameService.createGame(
                         request.name(),
@@ -50,7 +56,6 @@ public class GameResource {
                         request.minPlayers(),
                         request.maxPlayers()));
     }
-
     @GetMapping()
     public GetAllGameResponse getAllGame() {
         return new GetAllGameResponse(
