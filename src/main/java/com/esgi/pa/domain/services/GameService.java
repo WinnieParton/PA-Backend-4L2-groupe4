@@ -1,34 +1,46 @@
 package com.esgi.pa.domain.services;
 
-import com.esgi.pa.domain.entities.Game;
-import com.esgi.pa.domain.exceptions.TechnicalFoundException;
-import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.server.adapter.GameAdapter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.server.adapter.GameAdapter;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class GameService {
 
     private final GameAdapter gameAdapter;
+    private static Process process;
+    private static BufferedWriter writer;
+    private static BufferedReader reader;
+    private static StringBuilder outputBuilder;
 
     public Game getById(Long gameId) throws TechnicalNotFoundException {
         return gameAdapter.findById(gameId)
                 .orElseThrow(
-                        () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Cannot find game with id : " + gameId));
+                        () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND,
+                                "Cannot find game with id : " + gameId));
     }
 
-    public Game createGame(String name, String description, MultipartFile  gameFiles, String miniature, int minPlayers, int maxPlayers) throws TechnicalFoundException, IOException {
+    public Game createGame(String name, String description, MultipartFile gameFiles, String miniature, int minPlayers,
+            int maxPlayers) throws TechnicalFoundException, IOException {
         if (gameAdapter.findByName(name))
             throw new TechnicalFoundException("A game using this name already exist : " + name);
         String fileName = saveFile(gameFiles);
@@ -42,6 +54,7 @@ public class GameService {
                         .maxPlayers(maxPlayers)
                         .build());
     }
+
     private String saveFile(MultipartFile file) throws IOException {
         // Get the file name
         String fileName = file.getOriginalFilename();
@@ -56,8 +69,68 @@ public class GameService {
 
         return fileName;
     }
+
     public List<Game> findAll() {
         return gameAdapter.findAll();
     }
 
+    public String runEngine(Lobby lobby, String jsonData) {
+        String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
+
+        if ("py".equals(extension)) {
+            return runScriptPython(lobby.getGame().getGameFiles(), jsonData);
+        } else {
+            return "The file is not a Python file.";
+        }
+    }
+
+    public String runScriptPython(String fileName, String jsonData) {
+        try {
+            if (process == null || writer == null || reader == null) {
+                // Execute the Python script as a process
+                ProcessBuilder pb = new ProcessBuilder("python", "src/main/resources/files/" + fileName);
+                pb.redirectErrorStream(true);
+                process = pb.start();
+
+                // Get the input/output streams of the Python process
+                writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+                reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                // Start a separate thread to continuously read and store the output from the
+                // Python process
+                Thread outputThread = new Thread(() -> {
+                    try {
+                        // Initialize the outputBuilder
+
+                        outputBuilder = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            outputBuilder.append(line).append("\n");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                outputThread.start();
+            }
+
+            // Send the JSON data to the input of the Python script
+            writer.write(jsonData);
+            writer.newLine();
+            writer.flush();
+
+            // Wait for a brief moment to allow the output to be captured
+            Thread.sleep(500);
+
+            // Get the output generated by the Python script
+            String output = outputBuilder.toString();
+            // Clear the outputBuilder for the next request
+            outputBuilder.setLength(0);
+            // Return the output as the response
+            return output;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return "{ \"error\": \"Erreur lors de l'exécution du script Python\" }";
+        }
+    }
 }
