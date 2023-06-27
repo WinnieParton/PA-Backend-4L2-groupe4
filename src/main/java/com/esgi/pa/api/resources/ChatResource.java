@@ -1,15 +1,18 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.mappers.LobbyMapper;
-import com.esgi.pa.api.mappers.MessageMapper;
-import com.esgi.pa.domain.entities.Chat;
-import org.hibernate.Hibernate;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
+import com.esgi.pa.api.mappers.LobbyMapper;
+import com.esgi.pa.api.mappers.MessageMapper;
+import com.esgi.pa.domain.entities.Chat;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
@@ -19,10 +22,6 @@ import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
