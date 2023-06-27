@@ -14,17 +14,15 @@ import com.esgi.pa.domain.services.LobbyService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -90,5 +88,34 @@ public class GameResource {
         return ResponseEntity.status(httpResponse.statusCode()).body(httpResponse.body());
     }
 
+    @PostMapping("/run-script")
+    public ResponseEntity<String> executeMorpion(@RequestBody String requestBody) throws IOException {
+        String pythonScriptPath = "src/main/resources/files/morpion.py.py";
 
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("python", pythonScriptPath);
+            Process process = processBuilder.start();
+
+            BufferedWriter outputWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+            outputWriter.write(requestBody);
+            outputWriter.newLine();
+            outputWriter.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("The code: " );
+                output.append(line).append("\n");
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("The Python script exited with code: " + exitCode);
+
+            return ResponseEntity.ok(output.toString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while running the script.");
+        }
+    }
 }
