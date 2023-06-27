@@ -101,7 +101,6 @@ public class GameService {
                 Thread outputThread = new Thread(() -> {
                     try {
                         // Initialize the outputBuilder
-
                         outputBuilder = new StringBuilder();
                         String line;
                         while ((line = reader.readLine()) != null) {

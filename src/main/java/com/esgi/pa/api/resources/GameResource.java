@@ -76,27 +76,4 @@ public class GameResource {
         return GameMapper.toDto(gameService.getById(id));
     }
 
-    // TODO GROSSE REFACTO => PAS DE LOGIQUE DANS LES RESOURCES
-    @PatchMapping("/{id}/lobby/{idlobby}")
-    @ResponseBody
-    public ResponseEntity<String> redirectPost(@PathVariable Long id,
-            @PathVariable Long idlobby, @RequestBody String requestBody)
-            throws TechnicalNotFoundException, IOException, InterruptedException {
-        Game game = gameService.getById(id);
-        Lobby lobby = lobbyService.getById(idlobby);
-        HttpClient httpClient = HttpClient.newHttpClient();
-        URI springBootUrl = UriComponentsBuilder.fromUriString(game.getGameFiles()).build().toUri();
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(springBootUrl)
-                .header("Content-Type", "application/json")
-                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
-                .build();
-        HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
-        lobby.setStatus(GameStatusEnum.valueOf(jsonNode.get("statusGame").asText()));
-        lobbyService.save(lobby);
-        return ResponseEntity.status(httpResponse.statusCode()).body(httpResponse.body());
-    }
-
 }
