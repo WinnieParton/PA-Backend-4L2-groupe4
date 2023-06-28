@@ -1,17 +1,15 @@
 package com.esgi.pa.domain.services;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -26,6 +24,9 @@ import com.esgi.pa.server.adapter.GameAdapter;
 import lombok.RequiredArgsConstructor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.script.*;
+
 @Service
 @RequiredArgsConstructor
 public class GameService {
@@ -85,6 +86,8 @@ public class GameService {
 
         if ("py".equals(extension)) {
             return runScriptPython(lobby.getGame().getGameFiles(), jsonData);
+        } else if ("js".equals(extension)) {
+            return runScriptJavaScript(lobby.getGame().getGameFiles(), jsonData);
         } else {
             return "The file is not a Python file.";
         }
@@ -101,7 +104,7 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance(fileName);
+                createNewInstance("python", "src/main/resources/files/"+fileName);
             }
             // Send the JSON data to the input of the Python script
             writer.write(jsonData);
@@ -129,9 +132,9 @@ public class GameService {
         }
     }
 
-    private void createNewInstance(String fileName) throws IOException {
+    private void createNewInstance( String type, String fileName) throws IOException {
         // Execute the Python script as a process
-        ProcessBuilder pb = new ProcessBuilder("python", "src/main/resources/files/"+fileName);
+        ProcessBuilder pb = new ProcessBuilder(type,fileName);
         pb.redirectErrorStream(true);
         process = pb.start();
 
@@ -163,5 +166,46 @@ public class GameService {
 
         isNewInstance = false; // Set the flag to false indicating that a new instance is created
 
+    }
+    public String runScriptJavaScript(String fileName, String jsonData) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            // Check if jsonData is equal to {"init":{"players":2}}
+            JsonNode jsonNode = objectMapper.readTree(jsonData);
+            JsonNode initNode = jsonNode.get("init");
+            if (initNode != null && initNode.toString().equals("{\"players\":2}")) {
+                isNewInstance = true;
+            }
+            if (isNewInstance || process == null || writer == null || reader == null) {
+                // Create a new instance only if jsonData matches the expected JSON structure
+                createNewInstance("node", "src/main/resources/files/"+fileName);
+            }
+
+            // Read the JSON data as a Map
+            Map<String, Object> dataMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {});
+
+            // Convert the Map back to JSON string in a single-line format
+            String formattedJsonData = objectMapper.writeValueAsString(dataMap);
+
+            // Send the JSON data to the input of the Python script
+            writer.write(formattedJsonData);
+            writer.newLine();
+            writer.flush();
+
+            // Wait for a brief moment to allow the output to be captured
+            Thread.sleep(500);
+
+            // Retrieve the output from the JS process
+            String output = outputBuilder.toString().trim();
+
+            // Clear the outputBuilder for the next request
+            outputBuilder.setLength(0);
+
+            // Return the output as the response
+            return output;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return "{ \"error\": \"Erreur lors de l'exécution du script javascript\" }";
+        }
     }
 }

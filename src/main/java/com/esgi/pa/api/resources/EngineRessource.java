@@ -36,7 +36,7 @@ public class EngineRessource {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String output =gameService.runEngine(lobby, jsonData);
-        // Retourner la réponse JSON renvoyée par le script Python avec les en-têtes appropriés
+        // Retourner la réponse JSON renvoyée par le engine Python avec les en-têtes appropriés
         return new ResponseEntity<>(output, headers, HttpStatus.OK);
     }
 }
