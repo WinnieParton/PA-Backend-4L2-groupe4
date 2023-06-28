@@ -1,6 +1,8 @@
 package com.esgi.pa.api.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +16,10 @@ import com.esgi.pa.domain.services.LobbyService;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/engine")
 @RequiredArgsConstructor
@@ -24,9 +29,14 @@ public class EngineRessource {
     private final GameService gameService;
 
     @PostMapping(value = "/{idlobby}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String runMorpion(@PathVariable Long idlobby, @RequestBody String jsonData)
+    public ResponseEntity<String> runEngine(@PathVariable Long idlobby, @RequestBody String jsonData)
             throws TechnicalNotFoundException {
         Lobby lobby = lobbyService.getById(idlobby);
-        return gameService.runEngine(lobby, jsonData);
+        // Construire les en-têtes de la réponse avec le type de contenu JSON
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String output =gameService.runEngine(lobby, jsonData);
+        // Retourner la réponse JSON renvoyée par le script Python avec les en-têtes appropriés
+        return new ResponseEntity<>(output, headers, HttpStatus.OK);
     }
 }
