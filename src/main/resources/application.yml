@@ -12,9 +12,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/pa1
+    url: jdbc:postgresql://localhost:5432/projetannuel
     username: postgres
-    password: root
+    password: postgres
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
