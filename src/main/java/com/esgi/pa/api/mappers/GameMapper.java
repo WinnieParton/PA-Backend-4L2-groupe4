@@ -25,6 +25,7 @@ public interface GameMapper {
     static List<GameDto> toDto(List<Game> entities) {
         return entities.stream()
                 .map(GameMapper::toDto)
+                .distinct()
                 .toList();
     }
 }

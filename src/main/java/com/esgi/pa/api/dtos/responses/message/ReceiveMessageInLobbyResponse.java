@@ -5,7 +5,6 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.esgi.pa.domain.enums.StatusMessageEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)

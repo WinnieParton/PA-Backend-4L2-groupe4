@@ -19,6 +19,7 @@ public interface InvitationMapper {
         return new AllUserInvitationsResponse(
                 invitationList.stream()
                         .map(InvitationMapper::toDto)
+                        .distinct()
                         .toList());
     }
 }

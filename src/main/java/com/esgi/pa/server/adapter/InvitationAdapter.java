@@ -21,7 +21,6 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, Long> {
     public Invitation save(Invitation o) {
         return invitationsRepository.save(o);
     }
-
     @Override
     public List<Invitation> saveAll(List<Invitation> oList) {
         // TODO Auto-generated method stub

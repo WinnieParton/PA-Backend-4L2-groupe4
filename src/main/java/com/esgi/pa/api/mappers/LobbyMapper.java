@@ -26,6 +26,7 @@ public interface LobbyMapper {
     static List<GetlobbyResponse> toGetlobbyResponse(List<Lobby> entities) {
         return entities.stream()
                 .map(LobbyMapper::toGetlobbyResponse)
+                .distinct()
                 .toList();
     }
 
