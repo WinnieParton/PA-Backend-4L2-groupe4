@@ -38,7 +38,7 @@ public class AuthService {
             return jwtService.generateToken(
                 Map.of("id", user.getId(),
                     "name", user.getName(),
-                        "role", user.getRole()),
+                    "role", user.getRole()),
                 user);
         } else {
             throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
@@ -55,7 +55,7 @@ public class AuthService {
         return jwtService.generateToken(
             Map.of("id", user.getId(),
                 "name", user.getName(),
-                    "role", user.getRole()),
+                "role", user.getRole()),
             user);
     }
 }

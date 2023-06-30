@@ -1,37 +1,32 @@
 package com.esgi.pa.domain.services;
 
-import java.io.*;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.GameAdapter;
-
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.script.*;
+import java.io.*;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class GameService {
 
     private final GameAdapter gameAdapter;
+    private final MoveService moveService;
     private static Process process;
     private static BufferedWriter writer;
     private static BufferedReader reader;
@@ -41,25 +36,25 @@ public class GameService {
 
     public Game getById(Long gameId) throws TechnicalNotFoundException {
         return gameAdapter.findById(gameId)
-                .orElseThrow(
-                        () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND,
-                                "Cannot find game with id : " + gameId));
+            .orElseThrow(
+                () -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND,
+                    "Cannot find game with id : " + gameId));
     }
 
     public Game createGame(String name, String description, MultipartFile gameFiles, String miniature, int minPlayers,
-            int maxPlayers) throws TechnicalFoundException, IOException {
+                           int maxPlayers) throws TechnicalFoundException, IOException {
         if (gameAdapter.findByName(name))
             throw new TechnicalFoundException("A game using this name already exist : " + name);
         String fileName = saveFile(gameFiles);
         return gameAdapter.save(
-                Game.builder()
-                        .name(name)
-                        .description(description)
-                        .gameFiles(fileName)
-                        .miniature(miniature)
-                        .minPlayers(minPlayers)
-                        .maxPlayers(maxPlayers)
-                        .build());
+            Game.builder()
+                .name(name)
+                .description(description)
+                .gameFiles(fileName)
+                .miniature(miniature)
+                .minPlayers(minPlayers)
+                .maxPlayers(maxPlayers)
+                .build());
     }
 
     private String saveFile(MultipartFile file) throws IOException {
@@ -85,15 +80,15 @@ public class GameService {
         String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
 
         if ("py".equals(extension)) {
-            return runScriptPython(lobby.getGame().getGameFiles(), jsonData);
+            return runScriptPython(lobby, jsonData);
         } else if ("js".equals(extension)) {
-            return runScriptJavaScript(lobby.getGame().getGameFiles(), jsonData);
+            return runScriptJavaScript(lobby, jsonData);
         } else {
             return "The file is not a Python file.";
         }
     }
 
-    public String runScriptPython(String fileName, String jsonData) {
+    public String runScriptPython(Lobby lobby, String jsonData) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // Check if jsonData is equal to {"init":{"players":2}}
@@ -104,7 +99,7 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance("python", "src/main/resources/files/"+fileName);
+                createNewInstance("python", "src/main/resources/files/" + lobby.getGame().getGameFiles());
             }
             // Send the JSON data to the input of the Python script
             writer.write(jsonData);
@@ -125,6 +120,7 @@ public class GameService {
             outputBuilder.setLength(0);
 
             // Return the output as the response
+            moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -132,9 +128,9 @@ public class GameService {
         }
     }
 
-    private void createNewInstance( String type, String fileName) throws IOException {
+    private void createNewInstance(String type, String fileName) throws IOException {
         // Execute the Python script as a process
-        ProcessBuilder pb = new ProcessBuilder(type,fileName);
+        ProcessBuilder pb = new ProcessBuilder(type, fileName);
         pb.redirectErrorStream(true);
         process = pb.start();
 
@@ -167,7 +163,8 @@ public class GameService {
         isNewInstance = false; // Set the flag to false indicating that a new instance is created
 
     }
-    public String runScriptJavaScript(String fileName, String jsonData) {
+
+    public String runScriptJavaScript(Lobby lobby, String jsonData) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // Check if jsonData is equal to {"init":{"players":2}}
@@ -178,11 +175,12 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance("node", "src/main/resources/files/"+fileName);
+                createNewInstance("node", "src/main/resources/files/" + lobby.getGame().getGameFiles());
             }
 
             // Read the JSON data as a Map
-            Map<String, Object> dataMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> dataMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+            });
 
             // Convert the Map back to JSON string in a single-line format
             String formattedJsonData = objectMapper.writeValueAsString(dataMap);
@@ -202,6 +200,7 @@ public class GameService {
             outputBuilder.setLength(0);
 
             // Return the output as the response
+            moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
