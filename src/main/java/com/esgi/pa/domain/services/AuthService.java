@@ -37,7 +37,8 @@ public class AuthService {
             User user = userAdapter.findByEmail(savedUser.getEmail()).orElseThrow();
             return jwtService.generateToken(
                 Map.of("id", user.getId(),
-                    "name", user.getName()),
+                    "name", user.getName(),
+                        "role", user.getRole()),
                 user);
         } else {
             throw new TechnicalFoundException("Un compte existe Déjà avec cet email :" + email);
@@ -53,7 +54,8 @@ public class AuthService {
             .orElseThrow(() -> new TechnicalNotFoundException(NOT_FOUND, "Username not found with email : " + email));
         return jwtService.generateToken(
             Map.of("id", user.getId(),
-                "name", user.getName()),
+                "name", user.getName(),
+                    "role", user.getRole()),
             user);
     }
 }
