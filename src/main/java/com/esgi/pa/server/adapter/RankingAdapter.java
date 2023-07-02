@@ -1,15 +1,13 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Ranking;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.RankingsRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +17,7 @@ public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
 
     @Override
     public Ranking save(Ranking o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        return rankingsRepository.save(o);
     }
 
     @Override
@@ -31,8 +28,7 @@ public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
 
     @Override
     public Optional<Ranking> findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return rankingsRepository.findById(id);
     }
 
     @Override
