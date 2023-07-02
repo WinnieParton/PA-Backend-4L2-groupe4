@@ -30,6 +30,9 @@ public class Lobby {
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 
+    @OneToMany
+    private List<Move> moves = new ArrayList<>();
+
     private boolean invitationOnly;
 
     @With

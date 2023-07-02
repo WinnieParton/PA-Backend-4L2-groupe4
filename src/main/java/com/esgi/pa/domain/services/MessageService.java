@@ -1,7 +1,11 @@
 package com.esgi.pa.domain.services;
 
+import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
+import com.esgi.pa.domain.entities.MessagePrivate;
+import com.esgi.pa.domain.enums.StatusMessage;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.server.adapter.MessagePrivateAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -21,9 +25,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final MessageAdapter messageAdapter;
+    private final MessagePrivateAdapter messagePrivateAdapter;
     private final ChatService chatService;
     private final LobbyService lobbyService;
     public void dispatchMessage(GetlobbyMessageResponse lobby, User user, SendMessageInLobbyRequest message) throws TechnicalNotFoundException {
@@ -38,5 +42,14 @@ public class MessageService {
         LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
         Message message2 = new Message(chat, user, message.message(), dateTime);
         messageAdapter.save(message2);
+    }
+
+    public void dispatchMessagePrivate(User senderUser, User receiverUser, SendMessageInPrivate message) throws TechnicalNotFoundException {
+        simpMessagingTemplate.convertAndSendToUser(receiverUser.getName(), "/private", message);
+        String dateString = message.currentDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessage.UNREAD);
+        messagePrivateAdapter.save(message2);
     }
 }

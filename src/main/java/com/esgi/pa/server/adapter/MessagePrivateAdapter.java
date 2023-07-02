@@ -1,9 +1,10 @@
 package com.esgi.pa.server.adapter;
 
-import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.entities.Message;
+import com.esgi.pa.domain.entities.MessagePrivate;
 import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.MovesRepository;
+import com.esgi.pa.server.repositories.MessagesPrivateRepository;
+import com.esgi.pa.server.repositories.MessagesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,35 +13,28 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MoveAdapter implements PersistenceSpi<Move, Long> {
-
-    private final MovesRepository movesRepository;
+public class MessagePrivateAdapter implements PersistenceSpi<MessagePrivate, Long> {
+    private final MessagesPrivateRepository messagesRepository;
 
     @Override
-    public Move save(Move o) {
-        return movesRepository.save(o);
+    public MessagePrivate save(MessagePrivate o) {
+        return messagesRepository.save(o);
     }
 
     @Override
-    public List<Move> saveAll(List<Move> oList) {
+    public List<MessagePrivate> saveAll(List<MessagePrivate> oList) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
     }
 
     @Override
-    public Optional<Move> findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    public Optional<MessagePrivate> findById(Long id) {
+        return messagesRepository.findById(id);
     }
 
     @Override
-    public List<Move> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-    }
-
-    public List<Move> findAllByLobby(Lobby lobby) {
-        return movesRepository.findAllByLobby(lobby);
+    public List<MessagePrivate> findAll() {
+        return messagesRepository.findAll();
     }
 
     @Override
