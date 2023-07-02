@@ -25,8 +25,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final MessageAdapter messageAdapter;
     private final MessagePrivateAdapter messagePrivateAdapter;
     private final ChatService chatService;

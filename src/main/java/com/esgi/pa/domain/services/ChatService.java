@@ -60,10 +60,17 @@ public class ChatService {
         return privateChats;
     }
 
-    public Map<Long, List<SendMessageInPrivate>> chatPrivateResponse(User senderUser){
+    public Map<Long, List<SendMessageInPrivate>> chatPrivateResponse(User senderUser, User receiveUser){
         Map<Long, List<SendMessageInPrivate>> privateChats = new HashMap<>();
         List<SendMessageInPrivate> messages = new ArrayList<>();
-        List<MessagePrivate> messagePrivateList= messagesPrivateRepository.findBySenderOrReceiverOrderByDateDesc(senderUser);
+        List<MessagePrivate> messageSenderPrivateList= messagesPrivateRepository.findBySenderOrReceiverOrderByDateDesc(senderUser, senderUser);
+        List<MessagePrivate> messageReceiverPrivateList= messagesPrivateRepository.findBySenderOrReceiverOrderByDateDesc(receiveUser, receiveUser);
+        List<MessagePrivate> mergedList = new ArrayList<>();
+        mergedList.addAll(messageSenderPrivateList);
+        mergedList.addAll(messageReceiverPrivateList);
+
+        Set<MessagePrivate> uniqueMessages = new HashSet<>(mergedList);
+        List<MessagePrivate> messagePrivateList = new ArrayList<>(uniqueMessages);
 
         messagePrivateList.forEach(msg ->{
             messages.add(new SendMessageInPrivate(

@@ -52,11 +52,12 @@ public class ChatResource {
     @SendTo("/chat/private")
     public  Map<Long, List<SendMessageInPrivate>> processGetPrivateMessage(SendMessageInPrivate message) throws TechnicalNotFoundException {
         User senderUser = userService.getById(message.senderUser());
-        return  chatService.chatPrivateResponse(senderUser);
+        User receiveUser = userService.getById(message.receiverUser());
+        return  chatService.chatPrivateResponse(senderUser, receiveUser);
     }
 
     @MessageMapping("/private-chat-message")
-    public SendMessageInPrivate processPrivateMessage(@Payload SendMessageInPrivate message) throws TechnicalNotFoundException {
+    public SendMessageInPrivate processSendPrivateMessage(@Payload SendMessageInPrivate message) throws TechnicalNotFoundException {
         User senderUser = userService.getById(message.senderUser());
         User receiverUser = userService.getById(message.receiverUser());
         messageService.dispatchMessagePrivate(senderUser, receiverUser, message);

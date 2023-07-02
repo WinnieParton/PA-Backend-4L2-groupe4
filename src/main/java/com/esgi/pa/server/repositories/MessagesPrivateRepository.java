@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface MessagesPrivateRepository extends JpaRepository<MessagePrivate, Long> {
 
-    List<MessagePrivate> findBySenderOrReceiverOrderByDateDesc(User user);
+    List<MessagePrivate> findBySenderOrReceiverOrderByDateDesc(User user, User sender);
 }
