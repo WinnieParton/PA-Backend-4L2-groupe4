@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -31,12 +32,6 @@ public class ChatResource {
     private final MessageService messageService;
     private final ChatService chatService;
 
-    @MessageMapping("/privateChatMessage")
-    @SendTo("/chat/private")
-    public Object processPrivateMessage(Object message) {
-        return new Object();
-    }
-
     @MessageMapping("/message")
     @SendTo("/chat/lobby")
     public Map<Long, List<SendMessageInLobbyRequest>> processLobbyMessage(SendMessageInLobbyRequest message) throws TechnicalNotFoundException {
@@ -50,6 +45,21 @@ public class ChatResource {
         Lobby lobby = lobbyService.getById(message.lobby());
         User user = userService.getById(message.senderUser());
         messageService.dispatchMessage(LobbyMapper.toGetlobbyMessageResponse(lobby), user, message);
+        return message;
+    }
+
+    @MessageMapping("/private")
+    @SendTo("/chat/private")
+    public  Map<Long, List<SendMessageInPrivate>> processGetPrivateMessage(SendMessageInPrivate message) throws TechnicalNotFoundException {
+        User senderUser = userService.getById(message.senderUser());
+        return  chatService.chatPrivateResponse(senderUser);
+    }
+
+    @MessageMapping("/private-chat-message")
+    public SendMessageInPrivate processPrivateMessage(@Payload SendMessageInPrivate message) throws TechnicalNotFoundException {
+        User senderUser = userService.getById(message.senderUser());
+        User receiverUser = userService.getById(message.receiverUser());
+        messageService.dispatchMessagePrivate(senderUser, receiverUser, message);
         return message;
     }
 }
