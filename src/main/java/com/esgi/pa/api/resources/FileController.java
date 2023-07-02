@@ -47,7 +47,7 @@ public class FileController {
                 byte[] fileBytes = Files.readAllBytes(filePath);
 
                 HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+                headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
                 headers.setContentDisposition(ContentDisposition.attachment().filename(resource.getFilename()).build());
                 headers.setContentLength(fileBytes.length);
 
