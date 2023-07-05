@@ -12,12 +12,16 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +35,9 @@ public class GameService {
     private static BufferedWriter writer;
     private static BufferedReader reader;
     private static StringBuilder outputBuilder;
-
     private static boolean isNewInstance = true; // Flag to track if a new instance needs to be created
-
+    private static final String UPLOAD_DIR = "src/main/resources/files/";
+    private final ResourceLoader resourceLoader;
     public Game getById(Long gameId) throws TechnicalNotFoundException {
         return gameAdapter.findById(gameId)
             .orElseThrow(
@@ -45,7 +49,7 @@ public class GameService {
                            int maxPlayers) throws TechnicalFoundException, IOException {
         if (gameAdapter.findByName(name))
             throw new TechnicalFoundException("A game using this name already exist : " + name);
-        String fileName = saveFile(gameFiles);
+        String fileName = saveFile(gameFiles, gameFiles.getOriginalFilename());
         return gameAdapter.save(
             Game.builder()
                 .name(name)
@@ -57,11 +61,9 @@ public class GameService {
                 .build());
     }
 
-    private String saveFile(MultipartFile file) throws IOException {
-        // Get the file name
-        String fileName = file.getOriginalFilename();
+    public String saveFile(MultipartFile file, String fileName) throws IOException {
         // Set the file path where you want to save the file
-        String filePath = "src/main/resources/files/" + fileName;
+        String filePath = UPLOAD_DIR + fileName;
 
         // Convert the MultipartFile to a byte array
         byte[] fileBytes = file.getBytes();
@@ -99,7 +101,7 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance("python", "src/main/resources/files/" + lobby.getGame().getGameFiles());
+                createNewInstance("python", UPLOAD_DIR + lobby.getGame().getGameFiles());
             }
             // Send the JSON data to the input of the Python script
             writer.write(jsonData);
@@ -175,7 +177,7 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance("node", "src/main/resources/files/" + lobby.getGame().getGameFiles());
+                createNewInstance("node", UPLOAD_DIR + lobby.getGame().getGameFiles());
             }
 
             // Read the JSON data as a Map
@@ -206,5 +208,25 @@ public class GameService {
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script javascript\" }";
         }
+    }
+
+    public String getLanguageFromExtension(String fileName ) {
+        String extension = FilenameUtils.getExtension(fileName);
+        switch (extension.toLowerCase()) {
+            case "py":
+                return "Python";
+            case "js":
+                return "JavaScript";
+            case "java":
+                return "Java";
+            default:
+                return "Unknown";
+        }
+    }
+
+    public String getFileContent(String fileName) throws IOException {
+        Resource resource = new ClassPathResource("files/" + fileName);
+        byte[] fileBytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
+        return new String(fileBytes, StandardCharsets.UTF_8);
     }
 }
