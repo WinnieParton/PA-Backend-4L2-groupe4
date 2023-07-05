@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
+import com.esgi.pa.api.dtos.responses.friend.GetFriendRequestsReceivedResponse;
+import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
+import com.esgi.pa.api.mappers.FriendMapper;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -23,6 +26,8 @@ import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RequiredArgsConstructor
 @Controller
@@ -53,7 +58,7 @@ public class ChatResource {
     public  Map<Long, List<SendMessageInPrivate>> processGetPrivateMessage(SendMessageInPrivate message) throws TechnicalNotFoundException {
         User senderUser = userService.getById(message.senderUser());
         User receiveUser = userService.getById(message.receiverUser());
-        return  chatService.chatPrivateResponse(senderUser, receiveUser);
+        return chatService.chatPrivateResponse(senderUser, receiveUser);
     }
 
     @MessageMapping("/private-chat-message")

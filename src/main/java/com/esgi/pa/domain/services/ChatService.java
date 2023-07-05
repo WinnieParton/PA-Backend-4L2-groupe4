@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
+import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
 import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInLobbyResponse;
 import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInPrivateResponse;
 import com.esgi.pa.domain.entities.MessagePrivate;
@@ -87,4 +88,25 @@ public class ChatService {
 
         return privateChats;
     }
+
+    public  List<ListMessageInPrivateResponse> ListchatPrivateResponse(User user){
+        List<ListMessageInPrivateResponse> messages = new ArrayList<>();
+        List<MessagePrivate> messageSenderPrivateList= messagesPrivateRepository.findLastMessagesForUser(user);
+
+        messageSenderPrivateList.forEach(msg ->{
+            messages.add(new ListMessageInPrivateResponse(
+                    msg.getSender().getId(),
+                    msg.getMessage(),
+                    msg.getSender().getName(),
+                    msg.getReceiver().getName(),
+                    msg.getReceiver().getId(),
+                    msg.getReceiver().getId() == user.getId() ? msg.getSender().getName() : msg.getReceiver().getName(),
+                    msg.getStatus(),
+                    msg.getDate().toString()
+            ));
+        });
+
+        return messages;
+    }
+
 }
