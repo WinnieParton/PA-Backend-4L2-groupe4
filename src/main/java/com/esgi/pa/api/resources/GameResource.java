@@ -4,8 +4,10 @@ import com.esgi.pa.api.dtos.MoveDto;
 import com.esgi.pa.api.dtos.requests.game.AddGameRequest;
 import com.esgi.pa.api.dtos.responses.game.GameDto;
 import com.esgi.pa.api.dtos.responses.game.GetAllGameResponse;
+import com.esgi.pa.api.dtos.responses.game.GetFileGameDtoResponse;
 import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.api.mappers.MoveMapper;
+import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;
@@ -13,11 +15,16 @@ import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.MoveService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -31,7 +38,7 @@ public class GameResource {
     private final GameService gameService;
     private final LobbyService lobbyService;
     private final MoveService moveService;
-
+    private static final String UPLOAD_DIR = "src/main/resources/files/";
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public GameDto createGame(@Valid AddGameRequest request) throws TechnicalFoundException, IOException {
@@ -63,5 +70,19 @@ public class GameResource {
         return MoveMapper.toMovesForOneLobby(
             moveService.getAllMovesForLobby(
                 lobbyService.getById(id)));
+    }
+
+    @GetMapping("/file/{id}")
+    public ResponseEntity<?> downloadFile(@PathVariable Long id) throws TechnicalNotFoundException {
+        Game game = gameService.getById(id);
+        try {
+            String fileName = game.getGameFiles();
+            String language = gameService.getLanguageFromExtension(fileName);
+            String fileContent = gameService.getFileContent(fileName);
+
+            return new ResponseEntity<>(new GetFileGameDtoResponse(language, fileContent), HttpStatus.OK);
+        } catch (IOException e) {
+            throw new RuntimeException("File not found", e);
+        }
     }
 }

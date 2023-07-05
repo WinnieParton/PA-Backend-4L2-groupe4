@@ -1,5 +1,7 @@
 package com.esgi.pa.api.resources;
 
+import com.esgi.pa.domain.services.GameService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.util.FileCopyUtils;
@@ -9,28 +11,22 @@ import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/files")
+@RequiredArgsConstructor
 public class FileController {
     private static final String UPLOAD_DIR = "src/main/resources/files/";
-
+    private final GameService gameService;
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadFile(MultipartFile audio) {
         try {
             String fileName = UUID.randomUUID().toString() + "_" + audio.getOriginalFilename();
-            String filePath = UPLOAD_DIR + fileName;
-            // Convert the MultipartFile to a byte array
-            byte[] fileBytes = audio.getBytes();
-            // Save the file to the target location
-            FileCopyUtils.copy(fileBytes, new File(filePath));
-            return fileName;
+            return gameService.saveFile(audio, fileName);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to upload file");
