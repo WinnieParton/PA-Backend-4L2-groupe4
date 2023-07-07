@@ -17,5 +17,6 @@ public record ListMessageInPrivateResponse(
         @NotBlank(message = "Receiver Id is required") Long receiverUser,
         @NotBlank(message = "Name Name is required") String name,
         StatusMessage status,
-        String currentDate) {
+        String currentDate,
+        Boolean send) {
 }
