@@ -37,6 +37,7 @@ class Game {
                     Object.assign({}, displayOutput, {
                         message: `Félicitations, vous avez trouvé le nombre en ${this.attempts} tentative(s)!`,
                         gam_over: true,
+                        score: Math.round(100/this.attempts)
                     })
                 )
             );
@@ -44,7 +45,7 @@ class Game {
             console.log(
                 JSON.stringify(
                     Object.assign({}, displayOutput, {
-                        message: "Le nombre est plus petit"+this.randomNumber+" number"+number,
+                        message: "Le nombre est plus petit "+this.randomNumber,
                         gam_over: false,
                     })
                 )

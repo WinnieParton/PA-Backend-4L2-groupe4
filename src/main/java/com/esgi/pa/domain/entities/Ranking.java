@@ -27,4 +27,9 @@ public class Ranking {
 
     @With
     private double gamePlayed;
+
+    public Ranking(Game game, User player) {
+        this.game = game;
+        this.player = player;
+    }
 }

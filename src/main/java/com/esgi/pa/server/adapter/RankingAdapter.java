@@ -1,6 +1,8 @@
 package com.esgi.pa.server.adapter;
 
+import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Ranking;
+import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.RankingsRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,15 @@ public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
+
+    public Optional<Ranking> findByGameAndPlayer(Game game, User user){
+        return rankingsRepository.findByGameAndPlayer(game, user);
+    }
+
+    public List<Ranking> findRankingPlayer(User user){
+        return rankingsRepository.findByPlayer(user);
+    }
+
 
     @Override
     public boolean removeById(Long id) {
