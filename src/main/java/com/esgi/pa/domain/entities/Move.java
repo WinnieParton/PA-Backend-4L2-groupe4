@@ -21,6 +21,6 @@ public class Move {
 
     @ManyToOne
     private Lobby lobby;
-
+    @Column(columnDefinition = "text")
     private String gameState;
 }

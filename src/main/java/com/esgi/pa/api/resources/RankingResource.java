@@ -10,11 +10,16 @@ import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.RankingService;
 import com.esgi.pa.domain.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -52,12 +57,23 @@ public class RankingResource {
                 gameService.getById(idGame)));
     }
 
-    @PostMapping("lobby/{idLobby}/endgame")
-    public List<NoGameRankingResponse> updateParticipantsRanking(@PathVariable Long idLobby, @RequestBody UpdateRankingsRequest updateRankingsRequest) throws TechnicalNotFoundException {
+    @PostMapping("/lobby/{idLobby}/endgame")
+    public List<NoGameRankingResponse> updateParticipantsRanking(@PathVariable Long idLobby, @RequestBody UpdateRankingsRequest updateRankingsRequest) throws TechnicalNotFoundException, JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        TypeReference<List<List<Double>>> typeReference = new TypeReference<List<List<Double>>>() {};
+        List<List<Double>> dataList = objectMapper.readValue(updateRankingsRequest.scoresByPlayers(), typeReference);
+
+        Map<Long, Double> scoresByPlayers = new LinkedHashMap<>();
+        for (List<Double> entry : dataList) {
+            Long key = entry.get(0).longValue();
+            Double value = entry.get(1);
+            scoresByPlayers.put(key, value);
+        }
+
         return RankingMapper.toNoGameRankingRespsonse(
             rankingService.updateRankings(
                 lobbyService.getById(idLobby),
                 userService.getById(updateRankingsRequest.winnerId()),
-                updateRankingsRequest.scoresByPlayers()));
+                    scoresByPlayers));
     }
 }

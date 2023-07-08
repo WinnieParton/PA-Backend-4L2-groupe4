@@ -1,6 +1,7 @@
 package com.esgi.pa.bootstrap.configurations;
 
 import com.esgi.pa.domain.services.security.JwtAuthenticationFilter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,79 +25,99 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
-
 @Configuration
 @EnableWebMvc
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UserDetailsService userDetailsService;
+  private final JwtAuthenticationFilter jwtAuthFilter;
+  private final UserDetailsService userDetailsService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+    return authProvider;
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(
+    AuthenticationConfiguration configuration
+  ) throws Exception {
+    return configuration.getAuthenticationManager();
+  }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .cors().configurationSource(corsConfiguration())
-                .and().csrf().disable()
-                .authorizeHttpRequests()
-                .antMatchers("/auth/**",
-                        "/swagger-ui/*",
-                        "/swagger-ui.html",
-                        "/webjars/**",
-                        "/v2/**", "/ws/**",
-                        "/swagger-resources/**")
-                .permitAll()
-                .anyRequest().authenticated()
-                .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
+    throws Exception {
+    httpSecurity
+      .cors()
+      .configurationSource(corsConfiguration())
+      .and()
+      .csrf()
+      .disable()
+      .authorizeHttpRequests()
+      .antMatchers(
+        "/auth/**",
+        "/swagger-ui/*",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/v2/**",
+        "/ws/**",
+        "/swagger-resources/**"
+      )
+      .permitAll()
+      .anyRequest()
+      .authenticated()
+      .and()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .and()
+      .authenticationProvider(authenticationProvider())
+      .addFilterBefore(
+        jwtAuthFilter,
+        UsernamePasswordAuthenticationFilter.class
+      );
 
-        return httpSecurity.build();
-    }
+    return httpSecurity.build();
+  }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(@NonNull CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
-            }
-        };
-    }
+  @Bean
+  public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry
+          .addMapping("/**")
+          .allowedMethods("*")
+          .allowedHeaders("*")
+          .allowCredentials(false)
+          .maxAge(3600L)
+          .allowedOrigins("*");
+      }
+    };
+  }
 
-    @Bean
-    public CorsConfigurationSource corsConfiguration() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:5173")); // Set the allowed origin pattern here
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addExposedHeader("*");
-        corsConfiguration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        corsConfiguration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
-    }
+  @Bean
+  public CorsConfigurationSource corsConfiguration() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.addAllowedHeader("*");
+    configuration.addExposedHeader("Authorization");
+    configuration.setAllowedMethods(
+      List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+    );
+    configuration.setAllowCredentials(true);
+    configuration.setAllowedOriginPatterns(List.of("http://*", "https://*"));
 
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }

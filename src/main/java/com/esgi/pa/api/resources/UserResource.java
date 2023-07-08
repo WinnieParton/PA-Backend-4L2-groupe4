@@ -1,8 +1,11 @@
 package com.esgi.pa.api.resources;
 
+import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
 import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
+import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.ChatService;
 import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +22,7 @@ import java.util.List;
 @Api(tags = "User API")
 public class UserResource {
     private final UserService userService;
-
+    private final ChatService chatService;
     @GetMapping("{id}/name/{name}")
     public List<GetUserResponse> getUserByUsername(@PathVariable Long id, @PathVariable String name) {
         return UserMapper.toGetUserResponse(
@@ -32,5 +35,9 @@ public class UserResource {
                 userService.getById(id));
     }
 
-
+    @GetMapping("/chat/list/{myUserId}")
+    public List<ListMessageInPrivateResponse> getFriends(@PathVariable Long myUserId) throws TechnicalNotFoundException {
+        User user = userService.getById(myUserId);
+        return chatService.ListchatPrivateResponse(user);
+    }
 }

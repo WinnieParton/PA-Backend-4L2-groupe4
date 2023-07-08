@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,20 @@ public class RankingService {
     }
 
     public List<Ranking> getAllUserRankings(User user) {
-        return user.getRankings();
+        return rankingAdapter.findRankingPlayer(user);
     }
 
     public Ranking getRankingForUserOnGame(User user, Game game) throws TechnicalNotFoundException {
-        return user.getRankings().stream()
+        return rankingAdapter.findByGameAndPlayer(game, user).orElseThrow(() -> new TechnicalNotFoundException(String.format("No ranking found for user %s on game %s.", user.getId(), game.getId())));
+
+        /*user.getRankings().stream()
             .filter(ranking -> ranking.getGame().equals(game))
             .findFirst()
             .orElseThrow(() -> new TechnicalNotFoundException(String.format("No ranking found for user %s on game %s.", user.getId(), game.getId())));
+   */ }
+
+    public Optional<Ranking> getRankingForUserOnGameEnoughException(User user, Game game) {
+        return rankingAdapter.findByGameAndPlayer(game, user);
     }
 
     public List<Ranking> getLobbyParticipantsRanking(Lobby lobby) {
@@ -39,19 +46,21 @@ public class RankingService {
             .toList();
     }
 
-    public List<Ranking> updateRankings(Lobby lobby, User winner, Map<Long, Double> scores) throws TechnicalNotFoundException {
+    public List<Ranking> updateRankings(Lobby lobby, User winner, Map<Long, Double> scores) {
         for (User participant : lobby.getParticipants()) {
-            Ranking ranking = getRankingForUserOnGame(participant, lobby.getGame());
+            Optional<Ranking> ranking = getRankingForUserOnGameEnoughException(participant, lobby.getGame());
+            if(ranking.isEmpty())
+                ranking = Optional.of(new Ranking(lobby.getGame(), participant));
             if (participant.equals(winner)) {
                 rankingAdapter.save(
-                    ranking
-                        .withScore(ranking.getScore() + scores.get(winner.getId()))
-                        .withGamePlayed(ranking.getGamePlayed() + 1));
+                    ranking.get()
+                        .withScore(ranking.get().getScore() + scores.get(winner.getId()))
+                        .withGamePlayed(ranking.get().getGamePlayed() + 1));
             } else {
                 rankingAdapter.save(
-                    ranking
-                        .withScore(ranking.getScore() + scores.get(participant.getId()))
-                        .withGamePlayed(ranking.getGamePlayed() + 1));
+                    ranking.get()
+                        .withScore(ranking.get().getScore() + scores.get(participant.getId()))
+                        .withGamePlayed(ranking.get().getGamePlayed() + 1));
             }
         }
         return getLobbyParticipantsRanking(lobby);
