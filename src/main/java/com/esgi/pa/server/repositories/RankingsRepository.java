@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface RankingsRepository extends JpaRepository<Ranking, Long> {
     Optional<Ranking> findByGameAndPlayer(Game game, User user);
-    List<Ranking> findByPlayer(User user);
+    List<Ranking> findByPlayerOrderByScoreDesc(User user);
 }

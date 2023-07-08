@@ -44,7 +44,7 @@ public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
     }
 
     public List<Ranking> findRankingPlayer(User user){
-        return rankingsRepository.findByPlayer(user);
+        return rankingsRepository.findByPlayerOrderByScoreDesc(user);
     }
 
 

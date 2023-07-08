@@ -28,11 +28,13 @@ public class RankingService {
     }
 
     public Ranking getRankingForUserOnGame(User user, Game game) throws TechnicalNotFoundException {
-        return user.getRankings().stream()
+        return rankingAdapter.findByGameAndPlayer(game, user).orElseThrow(() -> new TechnicalNotFoundException(String.format("No ranking found for user %s on game %s.", user.getId(), game.getId())));
+
+        /*user.getRankings().stream()
             .filter(ranking -> ranking.getGame().equals(game))
             .findFirst()
             .orElseThrow(() -> new TechnicalNotFoundException(String.format("No ranking found for user %s on game %s.", user.getId(), game.getId())));
-    }
+   */ }
 
     public Optional<Ranking> getRankingForUserOnGameEnoughException(User user, Game game) {
         return rankingAdapter.findByGameAndPlayer(game, user);
