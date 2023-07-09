@@ -101,7 +101,11 @@ public class GameService {
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
                 // Create a new instance only if jsonData matches the expected JSON structure
-                createNewInstance("python", UPLOAD_DIR + lobby.getGame().getGameFiles());
+                String pythonCommand = getPythonCommand();
+                  if (pythonCommand == null) {
+                      throw new IOException("Python or Python3 not found in the environment");
+                  }
+                createNewInstance(pythonCommand, UPLOAD_DIR + lobby.getGame().getGameFiles());
             }
             // Send the JSON data to the input of the Python script
             writer.write(jsonData);
@@ -229,4 +233,34 @@ public class GameService {
         byte[] fileBytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
         return new String(fileBytes, StandardCharsets.UTF_8);
     }
+    
+    private String getPythonCommand() {
+    // Try executing "python3" command first
+    try {
+        ProcessBuilder pb = new ProcessBuilder("python3", "--version");
+        Process process = pb.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = reader.readLine();
+        if (line != null && line.startsWith("Python 3")) {
+            return "python3";
+        }
+    } catch (IOException e) {
+        // Ignore exception
+    }
+
+    // If "python3" command failed or not found, try "python" command
+    try {
+        ProcessBuilder pb = new ProcessBuilder("python", "--version");
+        Process process = pb.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = reader.readLine();
+        if (line != null && line.startsWith("Python 2")) {
+            return "python";
+        }
+    } catch (IOException e) {
+        // Ignore exception
+    }
+
+    return null; // Python or Python3 not found
+}
 }
