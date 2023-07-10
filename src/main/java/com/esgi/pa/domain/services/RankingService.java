@@ -20,7 +20,7 @@ public class RankingService {
     private final RankingAdapter rankingAdapter;
 
     public List<Ranking> getGameGlobalRanking(Game game) {
-        return game.getRankings();
+        return rankingAdapter.findRankingGame(game);
     }
 
     public List<Ranking> getAllUserRankings(User user) {
