@@ -45,7 +45,7 @@ class Game {
             console.log(
                 JSON.stringify(
                     Object.assign({}, displayOutput, {
-                        message: "Le nombre est plus petit "+this.randomNumber,
+                        message: "Le nombre est plus petit ",
                         gam_over: false,
                     })
                 )
@@ -54,7 +54,7 @@ class Game {
             console.log(
                 JSON.stringify(
                     Object.assign({}, displayOutput, {
-                        message: "Le nombre est plus grand"+this.randomNumber+" number"+number,
+                        message: "Le nombre est plus grand",
                         gam_over: false,
                     })
                 )

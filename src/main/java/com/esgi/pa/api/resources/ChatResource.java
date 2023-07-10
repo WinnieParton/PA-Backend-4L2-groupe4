@@ -2,20 +2,24 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
+import com.esgi.pa.api.dtos.requests.move.GetLobbyRequest;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.MessageMapper;
 import com.esgi.pa.domain.entities.Chat;
 import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.Move;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.ChatService;
-import com.esgi.pa.domain.services.LobbyService;
-import com.esgi.pa.domain.services.MessageService;
-import com.esgi.pa.domain.services.UserService;
+import com.esgi.pa.domain.services.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -29,6 +33,8 @@ public class ChatResource {
   private final UserService userService;
   private final MessageService messageService;
   private final ChatService chatService;
+
+  private final MoveService moveService;
 
   @MessageMapping("/message")
   @SendTo("/chat/lobby")
@@ -81,5 +87,16 @@ public class ChatResource {
     User receiverUser = userService.getById(message.receiverUser());
     messageService.dispatchMessagePrivate(senderUser, receiverUser, message);
     return message;
+  }
+
+  @MessageMapping("/game")
+  @SendTo("/game/lobby")
+  public String processGamePlayer(GetLobbyRequest getLobbyRequest ) throws TechnicalNotFoundException {
+    Lobby lobby = lobbyService.getById(getLobbyRequest.lobby());
+    Optional<Move> move= moveService.findLastMove(lobby);
+    if(move.isPresent())
+      return move.get().getGameState();
+    else
+      return "";
   }
 }

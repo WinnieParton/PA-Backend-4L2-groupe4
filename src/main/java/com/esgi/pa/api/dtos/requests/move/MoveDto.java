@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos;
+package com.esgi.pa.api.dtos.requests.move;
 
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyResponse;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

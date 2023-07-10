@@ -2,11 +2,13 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.server.adapter.MoveAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,9 @@ public class MoveService {
                 .gameState(gameState)
                 .build());
     }
-
+    public Optional<Move> findLastMove(Lobby lobby) {
+        return moveAdapter.findByLobby(lobby);
+    }
     public List<Move> getAllMovesForLobby(Lobby lobby) {
         return moveAdapter.findAllByLobby(lobby);
     }

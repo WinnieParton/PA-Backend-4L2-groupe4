@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esgi.pa.api.dtos.MoveDto;
+import com.esgi.pa.api.dtos.requests.move.MoveDto;
 import com.esgi.pa.api.dtos.requests.game.AddGameRequest;
 import com.esgi.pa.api.dtos.responses.game.GameDto;
 import com.esgi.pa.api.dtos.responses.game.GetAllGameResponse;

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -23,4 +24,7 @@ public class Move {
     private Lobby lobby;
     @Column(columnDefinition = "text")
     private String gameState;
+    @Column(name = "move_date")
+    private LocalDateTime moveDate;;
+
 }

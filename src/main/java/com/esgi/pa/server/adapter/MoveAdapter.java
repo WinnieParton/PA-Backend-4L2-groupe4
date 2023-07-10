@@ -2,11 +2,14 @@ package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MovesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,7 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
 
     @Override
     public Move save(Move o) {
+        o.setMoveDate(LocalDateTime.now());
         return movesRepository.save(o);
     }
 
@@ -31,6 +35,10 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
     public Optional<Move> findById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+    public Optional<Move> findByLobby(Lobby lobby) {
+        LocalDateTime oneMinuteAgo = LocalDateTime.now().minus(1, ChronoUnit.MINUTES);
+        return movesRepository.findFirstByLobbyAndMoveDateAfterOrderByMoveDateDesc(lobby, oneMinuteAgo);
     }
 
     @Override

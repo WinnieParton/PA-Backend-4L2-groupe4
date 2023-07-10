@@ -1,6 +1,6 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.MoveDto;
+import com.esgi.pa.api.dtos.requests.move.MoveDto;
 import com.esgi.pa.domain.entities.Move;
 
 import java.util.List;

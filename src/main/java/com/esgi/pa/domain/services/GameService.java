@@ -78,7 +78,7 @@ public class GameService {
         return gameAdapter.findAll();
     }
 
-    public String runEngine(Lobby lobby, String jsonData) {
+    public String runEngine(Lobby lobby, String jsonData) throws IOException {
         String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
 
         if ("py".equals(extension)) {
@@ -90,7 +90,7 @@ public class GameService {
         }
     }
 
-    public String runScriptPython(Lobby lobby, String jsonData) {
+    public String runScriptPython(Lobby lobby, String jsonData) throws IOException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // Check if jsonData is equal to {"init":{"players":2}}
@@ -128,7 +128,8 @@ public class GameService {
             // Return the output as the response
             moveService.saveGameState(lobby, output);
             return output;
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException  | InterruptedException e) {
+            writer.close();
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script Python\" }";
         }
@@ -170,7 +171,7 @@ public class GameService {
 
     }
 
-    public String runScriptJavaScript(Lobby lobby, String jsonData) {
+    public String runScriptJavaScript(Lobby lobby, String jsonData) throws IOException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // Check if jsonData is equal to {"init":{"players":2}}
@@ -209,6 +210,7 @@ public class GameService {
             moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
+            writer.close();
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script javascript\" }";
         }
@@ -254,7 +256,7 @@ public class GameService {
         Process process = pb.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = reader.readLine();
-        if (line != null && line.startsWith("Python 2")) {
+        if (line != null && (line.startsWith("Python 2") || line.startsWith("Python 3"))) {
             return "python";
         }
     } catch (IOException e) {
