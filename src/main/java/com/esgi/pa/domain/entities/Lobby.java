@@ -1,19 +1,16 @@
 package com.esgi.pa.domain.entities;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.esgi.pa.domain.enums.GameStatusEnum;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.Builder.Default;
 
-@Getter
-@Setter
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
 @Builder
 @Entity
 @NoArgsConstructor
@@ -33,7 +30,10 @@ public class Lobby {
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 
-    private boolean isPrivate;
+    @OneToMany
+    private List<Move> moves = new ArrayList<>();
+
+    private boolean invitationOnly;
 
     @With
     @Enumerated(EnumType.STRING)
@@ -45,9 +45,12 @@ public class Lobby {
     @Default
     private LocalDateTime updateAt = LocalDateTime.now();
 
-    @JsonIgnoreProperties({"friends", "games", "participatingLobbies", "participatingChats"})
-    @ManyToMany
+    @With
+    @JsonIgnoreProperties({ "friends", "games", "participatingLobbies" })
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lobby_participants", joinColumns = @JoinColumn(name = "lobby_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> participants= new ArrayList<>();
+    private List<User> participants = new ArrayList<>();
 
+    @OneToOne(mappedBy = "lobby", cascade = CascadeType.ALL)
+    private Chat chat;
 }

@@ -1,112 +1,103 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.api.dtos.GameDto;
-import com.esgi.pa.api.dtos.requests.AddGameRequest;
-import com.esgi.pa.api.dtos.responses.GetGamesResponse;
-import com.esgi.pa.api.mappers.GameMapper;
-import com.esgi.pa.domain.entities.Game;
-import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.enums.GameStatusEnum;
-import com.esgi.pa.domain.exceptions.MethodArgumentNotValidException;
-import com.esgi.pa.domain.exceptions.TechnicalFoundException;
-import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.ErrorFormatService;
-import com.esgi.pa.domain.services.GameService;
-import com.esgi.pa.domain.services.LobbyService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import static org.springframework.http.HttpStatus.CREATED;
+
+import java.io.IOException;
+import java.util.List;
 
 import javax.validation.Valid;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.esgi.pa.api.dtos.requests.move.MoveDto;
+import com.esgi.pa.api.dtos.requests.game.AddGameRequest;
+import com.esgi.pa.api.dtos.responses.game.GameDto;
+import com.esgi.pa.api.dtos.responses.game.GetAllGameResponse;
+import com.esgi.pa.api.dtos.responses.game.GetFileGameDtoResponse;
+import com.esgi.pa.api.mappers.GameMapper;
+import com.esgi.pa.api.mappers.MoveMapper;
+import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.GameService;
+import com.esgi.pa.domain.services.LobbyService;
+import com.esgi.pa.domain.services.MoveService;
+
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/game")
 @Api(tags = "Game API")
 public class GameResource {
-    private final GameService gameService;
-    private final LobbyService lobbyService;
-    private final ErrorFormatService errorFormatService;
 
-    @PostMapping("/save")
-    @ResponseStatus(CREATED)
-    public GameDto saveGame(@RequestBody @Valid AddGameRequest request, BindingResult bindingResult)
-            throws TechnicalNotFoundException, TechnicalFoundException {
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(
-                    errorFormatService.ErrorFormatExceptionHandle(bindingResult.getAllErrors()));
-        }
-        Game game = gameService.createGame(new Game(request.name(), request.description(), request.gameFiles(),
-                request.miniature(), request.minPlayers(), request.maxPlayers()));
+  private final GameService gameService;
+  private final LobbyService lobbyService;
+  private final MoveService moveService;
 
-        return new GameDto(game.getId(), game.getName(),
-                game.getDescription(), game.getGameFiles(), game.getMiniature(), game.getMinPlayers(),
-                game.getMaxPlayers());
+  @PostMapping(
+    value = "/create",
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseStatus(CREATED)
+  public GameDto createGame(@Valid AddGameRequest request)
+    throws TechnicalFoundException, IOException {
+    return GameMapper.toDto(
+      gameService.createGame(
+        request.name(),
+        request.description(),
+        request.gameFiles(),
+        request.miniature(),
+        request.minPlayers(),
+        request.maxPlayers()
+      )
+    );
+  }
+
+  @GetMapping
+  public GetAllGameResponse getAllGame() {
+    return new GetAllGameResponse(GameMapper.toDto(gameService.findAll()));
+  }
+
+  @GetMapping("/{id}")
+  public GameDto getGame(@PathVariable Long id)
+    throws TechnicalNotFoundException {
+    return GameMapper.toDto(gameService.getById(id));
+  }
+
+  @GetMapping("moves/{id}")
+  public List<MoveDto> getMovesForGame(@PathVariable Long id)
+    throws TechnicalNotFoundException {
+    return MoveMapper.toMovesForOneLobby(
+      moveService.getAllMovesForLobby(lobbyService.getById(id))
+    );
+  }
+
+  @GetMapping("/file/{id}")
+  public ResponseEntity<?> downloadFile(@PathVariable Long id)
+    throws TechnicalNotFoundException {
+    Game game = gameService.getById(id);
+    try {
+      String fileName = game.getGameFiles();
+      String language = gameService.getLanguageFromExtension(fileName);
+      String fileContent = gameService.getFileContent(fileName);
+
+      return new ResponseEntity<>(
+        new GetFileGameDtoResponse(language, fileContent),
+        HttpStatus.OK
+      );
+    } catch (IOException e) {
+      throw new RuntimeException("File not found", e);
     }
-
-    @GetMapping()
-    public GetGamesResponse getGames() {
-
-        return new GetGamesResponse(
-                GameMapper.toDto(
-                        gameService.findAll()));
-    }
-
-    @PatchMapping("/{id}/lobby/{idlobby}")
-    @ResponseBody
-    public ResponseEntity<String> redirectPost(@PathVariable Long id,
-                                               @PathVariable Long idlobby, @RequestBody String requestBody)
-            throws TechnicalNotFoundException, IOException, InterruptedException {
-        Game game = gameService.getById(id);
-        Lobby lobby = lobbyService.findOne(idlobby);
-        HttpClient httpClient = HttpClient.newHttpClient();
-        URI springBootUrl = UriComponentsBuilder.fromUriString(game.getGameFiles()).build().toUri();
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(springBootUrl)
-                .header("Content-Type", "application/json")
-                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
-                .build();
-        HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
-        lobby.setStatus(GameStatusEnum.valueOf(jsonNode.get("statusGame").asText()));
-        lobbyService.save(lobby);
-        return ResponseEntity.status(httpResponse.statusCode()).body(httpResponse.body());
-    }
-
-
+  }
 }

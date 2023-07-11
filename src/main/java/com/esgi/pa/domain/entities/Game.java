@@ -1,20 +1,13 @@
 package com.esgi.pa.domain.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -41,18 +34,9 @@ public class Game {
     private int maxPlayers;
 
     @OneToMany(mappedBy = "game")
-    private List<Ranking> rankings= new ArrayList<>();
+    private List<Ranking> rankings = new ArrayList<>();
 
     @ManyToMany
-    private List<User> players= new ArrayList<>();
-
-    public Game(String name, String description, String gameFiles, String miniature, int minPlayers, int maxPlayers) {
-        this.name = name;
-        this.description = description;
-        this.gameFiles = gameFiles;
-        this.miniature = miniature;
-        this.minPlayers = minPlayers;
-        this.maxPlayers = maxPlayers;
-    }
+    private List<User> players = new ArrayList<>();
 
 }

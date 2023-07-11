@@ -1,15 +1,17 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
+import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MovesRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +21,8 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
 
     @Override
     public Move save(Move o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        o.setMoveDate(LocalDateTime.now());
+        return movesRepository.save(o);
     }
 
     @Override
@@ -34,11 +36,19 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
+    public Optional<Move> findByLobby(Lobby lobby) {
+        LocalDateTime oneMinuteAgo = LocalDateTime.now().minus(1, ChronoUnit.MINUTES);
+        return movesRepository.findFirstByLobbyAndMoveDateAfterOrderByMoveDateDesc(lobby, oneMinuteAgo);
+    }
 
     @Override
     public List<Move> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    public List<Move> findAllByLobby(Lobby lobby) {
+        return movesRepository.findAllByLobby(lobby);
     }
 
     @Override

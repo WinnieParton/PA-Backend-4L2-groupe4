@@ -1,16 +1,8 @@
 package com.esgi.pa.domain.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -30,6 +22,14 @@ public class Ranking {
     @ManyToOne
     private User player;
 
+    @With
     private double score;
 
+    @With
+    private double gamePlayed;
+
+    public Ranking(Game game, User player) {
+        this.game = game;
+        this.player = player;
+    }
 }

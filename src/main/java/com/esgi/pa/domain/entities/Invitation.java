@@ -1,19 +1,10 @@
 package com.esgi.pa.domain.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.esgi.pa.domain.enums.RequestStatus;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import lombok.Builder.Default;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -34,6 +25,7 @@ public class Invitation {
     private Lobby lobby;
 
     @Default
+    @With
     private RequestStatus accepted = RequestStatus.PENDING;
 
 }

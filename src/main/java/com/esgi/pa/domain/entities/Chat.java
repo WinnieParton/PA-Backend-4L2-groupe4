@@ -4,15 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,12 +23,17 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(name = "chat_participants", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> participants= new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "lobby_id")
+    private Lobby lobby;
 
-    @OneToMany(mappedBy = "chat")
-    private List<Message> messages= new ArrayList<>();
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
 
     private LocalDateTime updatedAt;
+
+    public Chat(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
 }

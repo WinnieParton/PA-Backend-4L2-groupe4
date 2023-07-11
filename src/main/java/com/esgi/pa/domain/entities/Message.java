@@ -2,13 +2,7 @@ package com.esgi.pa.domain.entities;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +29,16 @@ public class Message {
     @JoinColumn(name = "creator_id")
     private User creator;
 
+    @Column(columnDefinition = "text")
     private String content;
 
     private LocalDateTime sentAt;
+
+    public Message(Chat chat, User creator, String content, LocalDateTime sentAt) {
+        this.chat = chat;
+        this.creator = creator;
+        this.content = content;
+        this.sentAt = sentAt;
+    }
+
 }
