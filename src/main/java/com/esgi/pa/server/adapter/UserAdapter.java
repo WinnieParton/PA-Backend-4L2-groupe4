@@ -15,7 +15,6 @@ public class UserAdapter implements PersistenceSpi<User, Long> {
 
     private final UsersRepository usersRepository;
 
-    @Override
     public User save(User user) {
         return usersRepository.save(user);
     }

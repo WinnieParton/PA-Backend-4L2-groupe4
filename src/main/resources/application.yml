@@ -12,7 +12,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/pa1
+    url: jdbc:postgresql://localhost:5432/pa
     username: postgres
     password: root
     hikari:
