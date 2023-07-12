@@ -1,9 +1,6 @@
 package com.esgi.pa.domain.services;
 
-import com.esgi.pa.domain.entities.Game;
-import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.entities.Ranking;
-import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.entities.*;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.RankingAdapter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +15,7 @@ import java.util.Optional;
 public class RankingService {
 
     private final RankingAdapter rankingAdapter;
-
+    private final MoveService moveService;
     public List<Ranking> getGameGlobalRanking(Game game) {
         return rankingAdapter.findRankingGame(game);
     }
@@ -63,6 +60,10 @@ public class RankingService {
                         .withGamePlayed(ranking.get().getGamePlayed() + 1));
             }
         }
+        Optional<Move> move = moveService.findLastMove(lobby);
+        move.get().setEndPart(Boolean.TRUE);
+        moveService.saveEndMove(move.get());
+
         return getLobbyParticipantsRanking(lobby);
     }
 }

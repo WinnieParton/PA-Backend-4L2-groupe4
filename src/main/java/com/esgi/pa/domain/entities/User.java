@@ -63,10 +63,6 @@ public class User implements UserDetails {
     @JsonIgnoreProperties({"players", "participants"})
     private List<Lobby> participatingLobbies = new ArrayList<>();
 
-    /*@JsonIgnoreProperties("participants")
-    @ManyToMany(mappedBy = "participants")
-    private List<Chat> participatingChats = new ArrayList<>();*/
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

@@ -25,6 +25,7 @@ public class Move {
     @Column(columnDefinition = "text")
     private String gameState;
     @Column(name = "move_date")
-    private LocalDateTime moveDate;;
+    private LocalDateTime moveDate;
+    private Boolean endPart = Boolean.FALSE;
 
 }

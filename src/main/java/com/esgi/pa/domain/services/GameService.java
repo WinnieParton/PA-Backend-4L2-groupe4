@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,6 @@ public class GameService {
     private static StringBuilder outputBuilder;
     private static boolean isNewInstance = true; // Flag to track if a new instance needs to be created
     private static final String UPLOAD_DIR = "src/main/resources/files/";
-    private final ResourceLoader resourceLoader;
     public Game getById(Long gameId) throws TechnicalNotFoundException {
         return gameAdapter.findById(gameId)
             .orElseThrow(
@@ -129,12 +129,13 @@ public class GameService {
             moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException  | InterruptedException e) {
-            writer.close();
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script Python\" }";
         }
     }
-
+    public void closeWriter() throws IOException {
+        writer.close();
+    }
     private void createNewInstance(String type, String fileName) throws IOException {
         // Execute the Python script as a process
         ProcessBuilder pb = new ProcessBuilder(type, fileName);
@@ -200,8 +201,12 @@ public class GameService {
             // Wait for a brief moment to allow the output to be captured
             Thread.sleep(500);
 
-            // Retrieve the output from the JS process
-            String output = outputBuilder.toString().trim();
+            // Retirer les caractères null et autres caractères indésirables
+            String output = outputBuilder.toString().replaceAll("\\p{Cntrl}", "");
+
+            // Use ObjectWriter to serialize the output with indentation
+            ObjectWriter writer = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
+            output = writer.writeValueAsString(objectMapper.readTree(output));
 
             // Clear the outputBuilder for the next request
             outputBuilder.setLength(0);
@@ -210,7 +215,6 @@ public class GameService {
             moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
-            writer.close();
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script javascript\" }";
         }
@@ -231,8 +235,8 @@ public class GameService {
     }
 
     public String getFileContent(String fileName) throws IOException {
-        Resource resource = new ClassPathResource("files/" + fileName);
-        byte[] fileBytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
+        File file = new File("src/main/resources/files/" + fileName);
+        byte[] fileBytes = Files.readAllBytes(file.toPath());
         return new String(fileBytes, StandardCharsets.UTF_8);
     }
     

@@ -12,6 +12,7 @@ import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,8 +34,8 @@ public class ChatResource {
   private final UserService userService;
   private final MessageService messageService;
   private final ChatService chatService;
-
   private final MoveService moveService;
+  private final GameService gameService;
 
   @MessageMapping("/message")
   @SendTo("/chat/lobby")
@@ -91,11 +92,15 @@ public class ChatResource {
 
   @MessageMapping("/game")
   @SendTo("/game/lobby")
-  public String processGamePlayer(GetLobbyRequest getLobbyRequest ) throws TechnicalNotFoundException {
+  public String processGamePlayer(GetLobbyRequest getLobbyRequest ) throws TechnicalNotFoundException, IOException {
     Lobby lobby = lobbyService.getById(getLobbyRequest.lobby());
     Optional<Move> move= moveService.findLastMove(lobby);
-    if(move.isPresent())
-      return move.get().getGameState();
+    if(move.isPresent()) {
+      if(!move.get().getEndPart())
+        return move.get().getGameState();
+      gameService.closeWriter();
+      return "";
+    }
     else
       return "";
   }

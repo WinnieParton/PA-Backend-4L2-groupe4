@@ -18,7 +18,7 @@ public class LobbyService {
 
     private final LobbyAdapter lobbyAdapter;
     private final UserService userService;
-
+    private final GameService gameService;
     public Lobby create(String name, User user, Game game, boolean isInvitationOnly) {
         return lobbyAdapter.save(
                 Lobby.builder()

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -63,7 +65,8 @@ public class LobbyResource {
 
     @PatchMapping("/{idlobby}")
     @ResponseStatus(NO_CONTENT)
-    public void pauseGame(@PathVariable Long idlobby) throws TechnicalNotFoundException {
+    public void pauseGame(@PathVariable Long idlobby) throws TechnicalNotFoundException, IOException {
+        gameService.closeWriter();
         lobbyService.pauseGame(
                 lobbyService.getById(idlobby));
     }

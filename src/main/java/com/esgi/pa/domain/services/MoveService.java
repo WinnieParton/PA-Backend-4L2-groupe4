@@ -22,6 +22,7 @@ public class MoveService {
             Move.builder()
                 .lobby(lobby)
                 .gameState(gameState)
+                    .endPart(Boolean.FALSE)
                 .build());
     }
     public Optional<Move> findLastMove(Lobby lobby) {
@@ -29,5 +30,8 @@ public class MoveService {
     }
     public List<Move> getAllMovesForLobby(Lobby lobby) {
         return moveAdapter.findAllByLobby(lobby);
+    }
+    public void saveEndMove(Move move){
+        moveAdapter.save(move);
     }
 }

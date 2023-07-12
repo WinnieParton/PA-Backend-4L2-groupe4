@@ -22,7 +22,7 @@ public class Game {
     private Long id;
 
     private String name;
-
+    @Column(columnDefinition = "text")
     private String description;
 
     private String gameFiles;
