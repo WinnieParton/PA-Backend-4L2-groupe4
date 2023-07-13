@@ -59,11 +59,6 @@ public class MessageService {
     User receiverUser,
     SendMessageInPrivate message
   )  {
-    simpMessagingTemplate.convertAndSendToUser(
-      receiverUser.getName(),
-      "/private/user",
-      message
-    );
     String dateString = message.currentDate();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
       "dd/MM/yyyy HH:mm:ss"

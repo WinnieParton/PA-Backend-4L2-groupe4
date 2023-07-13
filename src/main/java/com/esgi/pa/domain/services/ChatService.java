@@ -11,13 +11,9 @@ import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.StatusMessageEnum;
 import com.esgi.pa.server.adapter.ChatAdapter;
 import com.esgi.pa.server.repositories.MessagesPrivateRepository;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -83,12 +79,8 @@ public class ChatService {
     return privateChats;
   }
 
-  public Map<Long, List<SendMessageInPrivate>> chatPrivateResponse(
-    User senderUser,
-    User receiveUser
-  ) {
-    Map<Long, List<SendMessageInPrivate>> privateChats = new HashMap<>();
-    List<SendMessageInPrivate> messages = new ArrayList<>();
+  public List<ListMessageInPrivateResponse> chatPrivateResponse( User senderUser, User receiveUser ) {
+    List<ListMessageInPrivateResponse> messages = new ArrayList<>();
     List<MessagePrivate> messageSenderPrivateList = messagesPrivateRepository.findBySenderOrReceiverOrderByDateDesc(
       senderUser,
       senderUser
@@ -106,23 +98,34 @@ public class ChatService {
 
     messagePrivateList.forEach(msg -> {
       messages.add(
-        new SendMessageInPrivate(
+        new ListMessageInPrivateResponse(
           msg.getSender().getId(),
           msg.getMessage(),
           msg.getSender().getName(),
           msg.getReceiver().getName(),
           msg.getReceiver().getId(),
+          msg.getReceiver().getId() ==  senderUser.getId()
+                  ? msg.getSender().getName()
+                  : msg.getReceiver().getName(),
           msg.getStatus(),
           msg.getDate().toString(),
-          msg.getSender().getId() == senderUser.getId() ? true : false
+    msg.getSender().getId() == senderUser.getId()
         )
       );
     });
-    privateChats.put(senderUser.getId(), messages);
 
-    return privateChats;
+    return sortMessagesByCurrentDateDesc(messages);
   }
+  public List<ListMessageInPrivateResponse> sortMessagesByCurrentDateDesc(List<ListMessageInPrivateResponse> messages) {
+    Collections.sort(messages, new Comparator<ListMessageInPrivateResponse>() {
+      @Override
+      public int compare(ListMessageInPrivateResponse message1, ListMessageInPrivateResponse message2) {
+        return message2.currentDate().compareTo(message1.currentDate());
+      }
+    });
 
+    return messages;
+  }
   public List<ListMessageInPrivateResponse> ListchatPrivateResponse(User user) {
     List<ListMessageInPrivateResponse> messages = new ArrayList<>();
     List<MessagePrivate> messageSenderPrivateList = messagesPrivateRepository.findLastMessagesForUser(

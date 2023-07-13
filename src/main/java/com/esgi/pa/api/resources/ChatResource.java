@@ -63,36 +63,9 @@ public class ChatResource {
     );
     return message;
   }
-
-  /*@MessageMapping("/private/user")
-  @SendTo("/chat/private")
-  public Map<Long, List<SendMessageInPrivate>> processGetPrivateMessage(SendMessageInPrivate message) throws TechnicalNotFoundException {
-    User senderUser = userService.getById(message.senderUser());
-    User receiveUser = userService.getById(message.receiverUser());
-    System.out.println("receiveUser "+message.toString());
-    return chatService.chatPrivateResponse(senderUser, receiveUser);
-  }*/
-  @MessageMapping("/private/user")
-  @SendTo("/chat/private")
-  public String processGetPrivateMessage(String message) throws TechnicalNotFoundException {
-    
-    System.out.println("receiveUser "+message);
-    return "Bonjour quoi";
-  }
-
-  @MessageMapping("/private-chat-message")
-  public SendMessageInPrivate processSendPrivateMessage(
-    @Payload SendMessageInPrivate message
-  ) throws TechnicalNotFoundException {
-    User senderUser = userService.getById(message.senderUser());
-    User receiverUser = userService.getById(message.receiverUser());
-    messageService.dispatchMessagePrivate(senderUser, receiverUser, message);
-    return message;
-  }
-
   @MessageMapping("/game")
   @SendTo("/game/lobby")
-  public String processGamePlayer(GetLobbyRequest getLobbyRequest ) throws TechnicalNotFoundException, IOException {
+  public String processGamePlayer(GetLobbyRequest getLobbyRequest) throws TechnicalNotFoundException, IOException {
     Lobby lobby = lobbyService.getById(getLobbyRequest.lobby());
     Optional<Move> move= moveService.findLastMove(lobby);
     if(move.isPresent()) {
