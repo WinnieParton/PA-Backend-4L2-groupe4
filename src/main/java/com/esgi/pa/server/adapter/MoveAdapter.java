@@ -2,7 +2,6 @@ package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
-import com.esgi.pa.domain.enums.GameStatusEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MovesRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,9 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minus(1, ChronoUnit.MINUTES);
         return movesRepository.findFirstByLobbyAndMoveDateAfterOrderByMoveDateDesc(lobby, oneMinuteAgo);
     }
-
+    public Optional<Move> findByLobbyMove(Lobby lobby) {
+        return movesRepository.findFirstByLobbyOrderByMoveDateDesc(lobby);
+    }
     @Override
     public List<Move> findAll() {
         // TODO Auto-generated method stub

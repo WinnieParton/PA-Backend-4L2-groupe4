@@ -4,7 +4,6 @@ import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
 import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
-import com.esgi.pa.domain.entities.MessagePrivate;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.ChatService;
@@ -12,12 +11,9 @@ import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

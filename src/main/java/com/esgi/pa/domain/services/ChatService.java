@@ -1,7 +1,6 @@
 package com.esgi.pa.domain.services;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
-import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
 import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInLobbyResponse;
 import com.esgi.pa.domain.entities.Chat;
@@ -11,11 +10,10 @@ import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.StatusMessageEnum;
 import com.esgi.pa.server.adapter.ChatAdapter;
 import com.esgi.pa.server.repositories.MessagesPrivateRepository;
-
-import java.util.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -120,7 +118,7 @@ public class ChatService {
     Collections.sort(messages, new Comparator<ListMessageInPrivateResponse>() {
       @Override
       public int compare(ListMessageInPrivateResponse message1, ListMessageInPrivateResponse message2) {
-        return message2.currentDate().compareTo(message1.currentDate());
+        return message1.currentDate().compareTo(message2.currentDate());
       }
     });
 
@@ -133,20 +131,22 @@ public class ChatService {
     );
 
     messageSenderPrivateList.forEach(msg -> {
-      messages.add(
-        new ListMessageInPrivateResponse(
-          msg.getSender().getId(),
-          msg.getMessage(),
-          msg.getSender().getName(),
-          msg.getReceiver().getName(),
-          msg.getReceiver().getId(),
-          msg.getReceiver().getId() == user.getId()
-            ? msg.getSender().getName()
-            : msg.getReceiver().getName(),
-          msg.getStatus(),
-          msg.getDate().toString(),
-          msg.getReceiver().getId() == user.getId() ? false : true
-        )
+      String name = msg.getReceiver().getId() == user.getId()
+              ? msg.getSender().getName()
+              : msg.getReceiver().getName();
+      if(name != user.getName())
+        messages.add(
+          new ListMessageInPrivateResponse(
+            msg.getSender().getId(),
+            msg.getMessage(),
+            msg.getSender().getName(),
+            msg.getReceiver().getName(),
+            msg.getReceiver().getId(),
+            name,
+            msg.getStatus(),
+            msg.getDate().toString(),
+            msg.getReceiver().getId() == user.getId() ? false : true
+          )
       );
     });
 

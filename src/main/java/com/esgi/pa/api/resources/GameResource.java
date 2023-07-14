@@ -1,38 +1,36 @@
 package com.esgi.pa.api.resources;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
-import java.io.IOException;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.esgi.pa.api.dtos.requests.move.MoveDto;
 import com.esgi.pa.api.dtos.requests.game.AddGameRequest;
+import com.esgi.pa.api.dtos.requests.move.GetLobbyRequest;
+import com.esgi.pa.api.dtos.requests.move.MoveDto;
 import com.esgi.pa.api.dtos.responses.game.GameDto;
 import com.esgi.pa.api.dtos.responses.game.GetAllGameResponse;
 import com.esgi.pa.api.dtos.responses.game.GetFileGameDtoResponse;
 import com.esgi.pa.api.mappers.GameMapper;
 import com.esgi.pa.api.mappers.MoveMapper;
 import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.Move;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.MoveService;
-
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -99,5 +97,19 @@ public class GameResource {
     } catch (IOException e) {
       throw new RuntimeException("File not found", e);
     }
+  }
+
+  @GetMapping("/move/{idlobby}")
+  public String processGamePlayer(@PathVariable Long idlobby) throws TechnicalNotFoundException, IOException {
+    Lobby lobby = lobbyService.getById(idlobby);
+    Optional<Move> move= moveService.findLastMoveLobbyDisplayBoard(lobby);
+    if(move.isPresent()) {
+      if(move.get().getEndPart())
+        return move.get().getGameState();
+      gameService.closeWriter();
+      return "";
+    }
+    else
+      return "";
   }
 }

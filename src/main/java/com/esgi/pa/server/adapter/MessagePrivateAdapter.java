@@ -1,10 +1,8 @@
 package com.esgi.pa.server.adapter;
 
-import com.esgi.pa.domain.entities.Message;
 import com.esgi.pa.domain.entities.MessagePrivate;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MessagesPrivateRepository;
-import com.esgi.pa.server.repositories.MessagesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

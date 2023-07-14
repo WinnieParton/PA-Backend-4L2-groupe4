@@ -1,10 +1,10 @@
 package com.esgi.pa.api.mappers;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInLobbyResponse;
 import com.esgi.pa.domain.entities.Message;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface MessageMapper {
     static List<ReceiveMessageInLobbyResponse> toGetmessageResponse(List<Message> entities) {

@@ -1,14 +1,12 @@
 package com.esgi.pa.api.dtos.requests.friend;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.esgi.pa.domain.enums.RequestStatus;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import lombok.Builder;
+
+import javax.validation.constraints.NotNull;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)

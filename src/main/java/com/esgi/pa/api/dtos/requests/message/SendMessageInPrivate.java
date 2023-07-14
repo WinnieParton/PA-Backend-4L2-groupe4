@@ -1,12 +1,12 @@
 package com.esgi.pa.api.dtos.requests.message;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.esgi.pa.domain.enums.StatusMessage;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.esgi.pa.domain.enums.StatusMessage;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 public record SendMessageInPrivate(

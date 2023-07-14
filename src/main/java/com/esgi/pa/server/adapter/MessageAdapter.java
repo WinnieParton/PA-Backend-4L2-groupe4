@@ -1,15 +1,13 @@
 package com.esgi.pa.server.adapter;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Message;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MessagesRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -1,10 +1,9 @@
 package com.esgi.pa.server.repositories;
 
 import com.esgi.pa.domain.entities.Game;
+import com.esgi.pa.domain.entities.Ranking;
 import com.esgi.pa.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.esgi.pa.domain.entities.Ranking;
 
 import java.util.List;
 import java.util.Optional;

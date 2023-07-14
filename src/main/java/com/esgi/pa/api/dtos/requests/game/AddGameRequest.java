@@ -1,15 +1,14 @@
 package com.esgi.pa.api.dtos.requests.game;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Builder;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
-import lombok.Builder;
-import org.springframework.web.multipart.MultipartFile;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)

@@ -1,11 +1,11 @@
 package com.esgi.pa.api.dtos.responses.user;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.esgi.pa.domain.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.List;
 
-import com.esgi.pa.domain.enums.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 public record GetUserResponse(

@@ -1,12 +1,5 @@
 package com.esgi.pa.domain.services;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
@@ -18,8 +11,13 @@ import com.esgi.pa.domain.enums.StatusMessage;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.MessageAdapter;
 import com.esgi.pa.server.adapter.MessagePrivateAdapter;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

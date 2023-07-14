@@ -1,9 +1,9 @@
 package com.esgi.pa.api.mappers;
 
-import java.util.List;
-
 import com.esgi.pa.api.dtos.responses.game.GameDto;
 import com.esgi.pa.domain.entities.Game;
+
+import java.util.List;
 
 public interface GameMapper {
 
