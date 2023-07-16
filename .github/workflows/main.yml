@@ -19,7 +19,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -38,8 +37,8 @@ jobs:
       - name: Set up JDK 19
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
-          java-version: '19'
+          distribution: "temurin"
+          java-version: "19"
           overwrite-settings: false
       - name: Run Clean And Install
         run: mvn clean install
@@ -54,9 +53,9 @@ jobs:
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}  # Replace with the actual EC2 instance host/IP
-          username: ${{ secrets.EC2_USERNAME }}  # Replace with the actual SSH username
-          key: ${{ secrets.EC2_PRIVATE_KEY }}  # Replace with the actual private key value
+          host: ${{ secrets.EC2_HOST }} # Replace with the actual EC2 instance host/IP
+          username: ${{ secrets.EC2_USERNAME }} # Replace with the actual SSH username
+          key: ${{ secrets.EC2_PRIVATE_KEY }} # Replace with the actual private key value
 
           # Define the commands to execute on the EC2 instance
           script: |
@@ -66,4 +65,3 @@ jobs:
             sudo systemctl stop pa.service  # Stop the existing Spring Boot application service
             sudo cp target/pa-0.0.1-SNAPSHOT.jar /var/www/pa.jar  # Replace with the path where your Spring Boot application should be deployed
             sudo systemctl start pa.service  # Start the Spring Boot application service
-
