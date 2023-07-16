@@ -61,7 +61,7 @@ jobs:
           # Define the commands to execute on the EC2 instance
           script: |
             cd /var/www/pa-backend  # Replace with the actual path to your project directory
-            sudo git pull origin main  # Pull the latest changes from the main branch
+            sudo su -c "git pull origin main"  # Pull the latest changes from the main branch using the SSH protocol
             sudo mvn clean install  # Build the project using Maven
             sudo systemctl stop pa.service  # Stop the existing Spring Boot application service
             sudo cp target/pa-0.0.1-SNAPSHOT.jar /var/www/pa.jar  # Replace with the path where your Spring Boot application should be deployed
