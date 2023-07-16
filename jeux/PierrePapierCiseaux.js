@@ -28,6 +28,73 @@ function display(){
     },
   ]
 }
+function displayover(player1Choice, player2Choice){
+  let player1data = {}
+  let player2data = {}
+
+  if(player1Choice === "pierre")
+    player1data ={
+      type: "BUTTON",
+      content: {
+        type: "img",
+        src: "https://zupimages.net/up/23/28/53md.jpg",
+      },
+      value: "pierre",
+      player: "player1"
+    }
+  else if(player1Choice === "papier")
+    player1data ={
+    type: "BUTTON",
+        content: {
+    type: "img",
+        src: "https://zupimages.net/up/23/28/t4ls.jpg",
+  },
+    value: "papier",
+      player: "player1"
+  }
+  else if(player1Choice === "ciseaux")
+    player1data ={
+      type: "BUTTON",
+      content: {
+        type: "img",
+        src: "https://zupimages.net/up/23/28/ihln.jpg",
+      },
+      value: "ciseaux",
+      player: "player1"
+    }
+  if(player2Choice === "pierre")
+    player2data ={
+      type: "BUTTON",
+      content: {
+        type: "img",
+        src: "https://zupimages.net/up/23/28/53md.jpg",
+      },
+      value: "pierre",
+      player: "player2"
+    }
+  else if(player2Choice === "papier")
+    player2data = {
+      type: "BUTTON",
+      content: {
+        type: "img",
+        src: "https://zupimages.net/up/23/28/t4ls.jpg",
+      },
+      value: "papier",
+      player: "player2"
+    }
+  else if(player2Choice === "ciseaux")
+    player2data ={
+      type: "BUTTON",
+      content: {
+        type: "img",
+        src: "https://zupimages.net/up/23/28/ihln.jpg",
+      },
+      value: "ciseaux",
+      player: "player2"
+    }
+  return [player1data, player2data];
+  //JSON.stringify( Object.assign({}, {player1data, player2data}))
+}
 function getDisplay(message) {
   return JSON.stringify(
     Object.assign(
@@ -116,7 +183,7 @@ async function playGame() {
 
     playAgain = false;
     console.log(JSON.stringify( Object.assign({}, {
-      display: display(),
+      display: displayover(player1Choice, player2Choice),//display(),
       result,
       gam_over: true,
   })));
