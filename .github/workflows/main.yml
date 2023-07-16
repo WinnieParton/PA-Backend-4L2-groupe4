@@ -59,7 +59,7 @@ jobs:
 
           # Define the commands to execute on the EC2 instance
           script: |
-            cd /var/www/pa-backend  # Replace with the actual path to your project directory
+            cd /home/ubuntu/pa-backend  # Replace with the actual path to your project directory
             sudo su -c "git pull origin main"  # Pull the latest changes from the main branch using the SSH protocol
             sudo mvn clean install  # Build the project using Maven
             sudo mvn package  # Build the project using Maven
