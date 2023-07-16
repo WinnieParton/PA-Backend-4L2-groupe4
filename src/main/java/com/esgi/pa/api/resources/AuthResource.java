@@ -57,9 +57,9 @@ public class AuthResource {
       )
     );
   }
-
-//   @GetMapping("/hello")
-//   public String processGetPrivateMessage() {
-//     return "hello monel ca va?";
-//   } 
+ 
+  @GetMapping("/hello")
+  public String hello() {
+    return "hello monel ca va?";
+  } 
 }
