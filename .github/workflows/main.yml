@@ -52,7 +52,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: SSH into EC2 instance
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}  # Replace with the actual EC2 instance host/IP
           username: ${{ secrets.EC2_USERNAME }}  # Replace with the actual SSH username
