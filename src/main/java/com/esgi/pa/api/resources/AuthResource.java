@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 import com.esgi.pa.api.dtos.requests.auth.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.auth.UserLoginRequest;
 import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
+import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,5 +55,10 @@ public class AuthResource {
         request.role()
       )
     );
+  }
+
+  @GetMapping
+  public String hello() {
+    return "Bonjour";
   }
 }
