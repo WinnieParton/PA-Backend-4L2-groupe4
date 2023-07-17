@@ -62,10 +62,6 @@ jobs:
             cd /home/ubuntu/pa-backend  # Replace with the actual path to your project directory
             git pull origin main  # Pull the latest changes from the main branch using the SSH protocol
             sudo /opt/apache-maven-3.9.3/bin/mvn clean install  # Build the project using Maven
-    
-           sudo chown ubuntu:ubuntu -R target/
-           
+            sudo chown ubuntu:ubuntu -R target/
             sudo systemctl stop pa.service  # Stop the existing Spring Boot application service
-            
             sudo systemctl start pa.service  # Start the Spring Boot application service
- 
