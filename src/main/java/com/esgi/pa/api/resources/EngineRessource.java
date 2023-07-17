@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/engine")
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class EngineRessource {
   )
   public ResponseEntity<String> runEngine(
     @PathVariable Long idlobby,
-    @RequestBody String jsonData
+    @Valid @RequestBody String jsonData
   ) throws TechnicalNotFoundException, IOException {
     Lobby lobby = lobbyService.getById(idlobby);
     // Construire les en-têtes de la réponse avec le type de contenu JSON

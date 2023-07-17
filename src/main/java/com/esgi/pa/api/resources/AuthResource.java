@@ -3,16 +3,6 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-import javax.validation.Valid;
-
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.esgi.pa.api.dtos.requests.auth.CreateUserRequest;
 import com.esgi.pa.api.dtos.requests.auth.UserLoginRequest;
 import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
@@ -20,9 +10,16 @@ import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.AuthService;
-
 import io.swagger.annotations.Api;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
@@ -56,10 +53,5 @@ public class AuthResource {
         request.role()
       )
     );
-  }
-
-  @GetMapping("/hello")
-  public String processGetPrivateMessage() {
-    return "hello monel ca va?";
   }
 }
