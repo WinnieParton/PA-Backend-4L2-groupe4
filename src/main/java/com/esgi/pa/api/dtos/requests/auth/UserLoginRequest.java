@@ -8,6 +8,12 @@ import javax.validation.constraints.NotBlank;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
+/**
+ * Requête pour la connexion d'un utilisateur
+ *
+ * @param email    email de l'utilisateur
+ * @param password mot de passe de l'utilisateur
+ */
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UserLoginRequest(

@@ -3,9 +3,13 @@ package com.esgi.pa.domain.services;
 import com.esgi.pa.domain.entities.*;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.RankingAdapter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,5 +69,21 @@ public class RankingService {
         moveService.saveEndMove(move.get());
 
         return getLobbyParticipantsRanking(lobby);
+    }
+
+    public Map<Long, Double> calculateScoresByPlayers(String scoresByPlayersRequest) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        TypeReference<List<List<Double>>> typeReference = new TypeReference<>() {
+        };
+        List<List<Double>> dataList = objectMapper.readValue(scoresByPlayersRequest, typeReference);
+
+        Map<Long, Double> scoresByPlayers = new LinkedHashMap<>();
+        for (List<Double> entry : dataList) {
+            Long key = entry.get(0).longValue();
+            Double value = entry.get(1);
+            scoresByPlayers.put(key, value);
+        }
+
+        return scoresByPlayers;
     }
 }

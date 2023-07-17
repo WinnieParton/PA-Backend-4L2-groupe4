@@ -21,19 +21,23 @@ public class MoveService {
             Move.builder()
                 .lobby(lobby)
                 .gameState(gameState)
-                    .endPart(Boolean.FALSE)
+                .endPart(Boolean.FALSE)
                 .build());
     }
+
     public Optional<Move> findLastMove(Lobby lobby) {
         return moveAdapter.findByLobby(lobby);
     }
+
     public Optional<Move> findLastMoveLobbyDisplayBoard(Lobby lobby) {
         return moveAdapter.findByLobby(lobby);
     }
+
     public List<Move> getAllMovesForLobby(Lobby lobby) {
         return moveAdapter.findAllByLobby(lobby);
     }
-    public void saveEndMove(Move move){
+
+    public void saveEndMove(Move move) {
         moveAdapter.save(move);
     }
 }

@@ -8,9 +8,15 @@ import javax.validation.constraints.NotNull;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
+/**
+ * Requête de réponse à une demande d'amitié
+ *
+ * @param sender id du demandeur
+ * @param status statut de la réponse
+ */
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record AnswerFriendRequest(@NotNull(message = "sender Id is required") Long sender,
-        @NotNull(message = "Status is required") RequestStatus status) {
+                                  @NotNull(message = "Status is required") RequestStatus status) {
 
 }

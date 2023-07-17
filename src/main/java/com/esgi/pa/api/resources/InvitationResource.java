@@ -2,7 +2,7 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.invitation.AnswerInvitationRequest;
 import com.esgi.pa.api.dtos.requests.invitation.InviteFriendToLobbyRequest;
-import com.esgi.pa.api.dtos.responses.AllUserInvitationsResponse;
+import com.esgi.pa.api.dtos.responses.invitation.AllUserInvitationsResponse;
 import com.esgi.pa.api.dtos.responses.invitation.InvitationDto;
 import com.esgi.pa.api.mappers.InvitationMapper;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * Contient les routes concernant les invitations aux lobbies
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/invitation")
@@ -39,33 +42,31 @@ public class InvitationResource {
     @ResponseStatus(OK)
     public InvitationDto inviteFriendToLobby(@PathVariable Long id, @RequestBody InviteFriendToLobbyRequest inviteFriendToLobbyRequest) throws TechnicalNotFoundException, TechnicalFoundException {
         return InvitationMapper.toDto(
-                invitationService.inviteFriendToLobby(
-                        userService.getById(inviteFriendToLobbyRequest.friendId()),
-                        lobbyService.getById(id)
-                )
+            invitationService.inviteFriendToLobby(
+                userService.getById(inviteFriendToLobbyRequest.friendId()),
+                lobbyService.getById(id)
+            )
         );
     }
 
     /**
      * Réponds à une invitation à un lobby
-     *
-     * @param id                      id de l'invitation
+     * @param id id de l'invitation
      * @param answerInvitationRequest body de la requête contient l'id user, l'id lobby et la réponse à l'invitation
-     * @return InvitationDto - contient le retour de la réponse à l'invitation
+     * @return contient le retour de la réponse à l'invitation
      * @throws TechnicalNotFoundException si un des ids contenu n'existe pas
      */
     @PatchMapping("{id}")
     @ResponseStatus(OK)
     public InvitationDto answerInvitation(@PathVariable Long id, @RequestBody AnswerInvitationRequest answerInvitationRequest) throws TechnicalNotFoundException {
         return InvitationMapper.toDto(
-                invitationService.handleResponse(
-                        invitationService.getById(id),
-                        answerInvitationRequest.response()));
+            invitationService.handleResponse(
+                invitationService.getById(id),
+                answerInvitationRequest.response()));
     }
 
     /**
      * Récupère l'ensemble des invitations d'un utilisateur qui n'ont pas eu de réponses
-     *
      * @param userId id de l'utilisateur
      * @return List de l'ensemble invitations qu'il a reçu
      * @throws TechnicalNotFoundException si l'utilisateur n'éxiste pas
@@ -74,7 +75,7 @@ public class InvitationResource {
     @ResponseStatus(OK)
     public AllUserInvitationsResponse getAllInvitations(@PathVariable Long userId) throws TechnicalNotFoundException {
         return InvitationMapper.toAllUserInvitationsResponse(
-                invitationService.getAllByReceiver(
-                        userService.getById(userId)));
+            invitationService.getAllByReceiver(
+                userService.getById(userId)));
     }
 }

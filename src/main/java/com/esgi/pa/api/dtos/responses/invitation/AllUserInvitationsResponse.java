@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos.responses;
+package com.esgi.pa.api.dtos.responses.invitation;
 
 import com.esgi.pa.api.dtos.responses.invitation.InvitationDto;
 
