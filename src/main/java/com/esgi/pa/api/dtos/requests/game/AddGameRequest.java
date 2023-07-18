@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 /**
- * Requête d'ajout de jeu
+ * DTO de requête d'ajout de jeu
  *
  * @param name        nom du jeu
  * @param description description du jeu

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 /**
- * Requête de réponse à une demande d'amitié
+ * DTO de requête de réponse à une demande d'amitié
  *
  * @param sender id du demandeur
  * @param status statut de la réponse

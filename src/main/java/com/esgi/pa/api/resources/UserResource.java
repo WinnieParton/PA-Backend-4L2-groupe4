@@ -63,7 +63,7 @@ public class UserResource {
     @GetMapping("/chat/list/{myUserId}")
     public List<ListMessageInPrivateResponse> getFriends(@PathVariable Long myUserId) throws TechnicalNotFoundException {
         User user = userService.getById(myUserId);
-        return chatService.ListchatPrivateResponse(user);
+        return chatService.listChatPrivateResponse(user);
     }
 
     /**

@@ -6,6 +6,9 @@ import lombok.Builder.Default;
 
 import javax.persistence.*;
 
+/**
+ * Entité représentant une relation d'amitié
+ */
 @Data
 @Builder
 @Entity

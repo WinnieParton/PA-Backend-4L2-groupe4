@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 /**
- * Body de la requête de création de compte
+ * DTO de requête de création de compte
  *
  * @param name     nom de l'utilisateur
  * @param email    email de l'utilisateur

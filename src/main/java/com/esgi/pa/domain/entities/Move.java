@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entité représentant un état donnée d'un lors d'une partie
+ */
 @Data
 @Builder
 @Entity

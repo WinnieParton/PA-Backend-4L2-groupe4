@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité représentant un salon de jeu
+ */
 @Data
 @Builder
 @Entity

@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * Entité représentant un rang pour un utilisateur sur un jeu
+ */
 @Data
 @Builder
 @Entity

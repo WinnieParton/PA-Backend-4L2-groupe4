@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service de gestion des amis
+ */
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -20,13 +23,13 @@ public class FriendService {
 
     public Friend sendRequest(User sender, User receiver) throws TechnicalFoundException {
         if (((!checkIfFriend(sender, receiver) && !isSenderReceiver(sender, receiver)) ||
-                (!checkIfFriend(receiver, sender) && !isSenderReceiver(receiver, sender))) &&
-                !checkIfFriendSended(sender, receiver)) {
+            (!checkIfFriend(receiver, sender) && !isSenderReceiver(receiver, sender))) &&
+            !checkIfFriendSended(sender, receiver)) {
             return friendAdapter.save(
-                    Friend.builder()
-                            .user1(sender)
-                            .user2(receiver)
-                            .build());
+                Friend.builder()
+                    .user1(sender)
+                    .user2(receiver)
+                    .build());
         } else throw new TechnicalFoundException("Sender already friend with user : " + receiver);
     }
 
@@ -58,20 +61,19 @@ public class FriendService {
         return switch (status) {
             case ACCEPTED -> acceptRequest(sender, receiver);
             case REJECTED -> rejectRequest(sender, receiver);
-            default ->
-                    throw new TechnicalNotFoundException(HttpStatus.FORBIDDEN, "Unexpected error with friend request status : " + status);
+            default -> throw new TechnicalNotFoundException(HttpStatus.FORBIDDEN, "Unexpected error with friend request status : " + status);
         };
     }
 
     private Friend acceptRequest(User sender, User receiver) throws TechnicalNotFoundException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
-                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
+            .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
         return friendAdapter.save(friend.withStatus(RequestStatus.ACCEPTED));
     }
 
     private Friend rejectRequest(User sender, User receiver) throws TechnicalNotFoundException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
-                .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
+            .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
         return friendAdapter.save(friend.withStatus(RequestStatus.REJECTED));
     }
 }

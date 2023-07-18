@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Entité représentant un utilisateur
+ */
 @Data
 @Builder
 @Entity
