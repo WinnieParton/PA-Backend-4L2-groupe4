@@ -8,9 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * Interface de persistence pour les chats
+ */
 public interface ChatsRepository extends JpaRepository<Chat, Long> {
 
     Optional<Chat> findByLobby(Lobby lobby);
+
     @Query("SELECT c FROM Chat c LEFT JOIN FETCH c.messages WHERE c.lobby = :lobby")
     Optional<Chat> findByLobbyWithMessages(@Param("lobby") Lobby lobby);
 }

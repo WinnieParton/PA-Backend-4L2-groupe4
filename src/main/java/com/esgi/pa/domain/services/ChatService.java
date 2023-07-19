@@ -9,7 +9,7 @@ import com.esgi.pa.domain.entities.MessagePrivate;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.StatusMessageEnum;
 import com.esgi.pa.server.adapter.ChatAdapter;
-import com.esgi.pa.server.adapter.PrivateMessageAdapter;
+import com.esgi.pa.server.adapter.MessagePrivateAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.*;
 public class ChatService {
 
     private final ChatAdapter chatAdapter;
-    private final PrivateMessageAdapter privateMessageAdapter;
+    private final MessagePrivateAdapter messagePrivateAdapter;
 
     /**
      * Persite le chat
@@ -70,35 +70,33 @@ public class ChatService {
         Map<Long, List<SendMessageInLobbyRequest>> privateChats = new HashMap<>();
         List<SendMessageInLobbyRequest> messages = new ArrayList<>();
 
-        receiveMessageInLobbyResponses.forEach(message -> {
-            messages.add(
-                new SendMessageInLobbyRequest(
-                    message.senderName(),
-                    chat.get().getLobby().getId(),
-                    message.message(),
-                    chat
-                        .get()
-                        .getLobby()
-                        .getParticipants()
-                        .stream()
-                        .filter(user -> Objects.equals(user.getId(), message.senderName()))
-                        .findFirst()
-                        .get()
-                        .getName(),
-                    chat
-                        .get()
-                        .getLobby()
-                        .getParticipants()
-                        .stream()
-                        .filter(user -> !Objects.equals(user.getId(), message.senderName()))
-                        .findFirst()
-                        .get()
-                        .getName(),
-                    StatusMessageEnum.JOIN,
-                    message.currentDate()
-                )
-            );
-        });
+        receiveMessageInLobbyResponses.forEach(message -> messages.add(
+            new SendMessageInLobbyRequest(
+                message.senderName(),
+                chat.get().getLobby().getId(),
+                message.message(),
+                chat
+                    .get()
+                    .getLobby()
+                    .getParticipants()
+                    .stream()
+                    .filter(user -> Objects.equals(user.getId(), message.senderName()))
+                    .findFirst()
+                    .get()
+                    .getName(),
+                chat
+                    .get()
+                    .getLobby()
+                    .getParticipants()
+                    .stream()
+                    .filter(user -> !Objects.equals(user.getId(), message.senderName()))
+                    .findFirst()
+                    .get()
+                    .getName(),
+                StatusMessageEnum.JOIN,
+                message.currentDate()
+            )
+        ));
         privateChats.put(chat.get().getLobby().getId(), messages);
         return privateChats;
     }
@@ -112,8 +110,8 @@ public class ChatService {
      */
     public List<ListMessageInPrivateResponse> chatPrivateResponse(User senderUser, User receiveUser) {
         List<ListMessageInPrivateResponse> messages = new ArrayList<>();
-        List<MessagePrivate> messageSenderPrivateList = privateMessageAdapter.findBySenderOrReceiverOrderByDateDesc(senderUser, senderUser);
-        List<MessagePrivate> messageReceiverPrivateList = privateMessageAdapter.findBySenderOrReceiverOrderByDateDesc(receiveUser, receiveUser);
+        List<MessagePrivate> messageSenderPrivateList = messagePrivateAdapter.findBySenderOrReceiverOrderByDateDesc(senderUser, senderUser);
+        List<MessagePrivate> messageReceiverPrivateList = messagePrivateAdapter.findBySenderOrReceiverOrderByDateDesc(receiveUser, receiveUser);
         List<MessagePrivate> mergedList = new ArrayList<>();
         mergedList.addAll(messageSenderPrivateList);
         mergedList.addAll(messageReceiverPrivateList);
@@ -121,23 +119,21 @@ public class ChatService {
         Set<MessagePrivate> uniqueMessages = new HashSet<>(mergedList);
         List<MessagePrivate> messagePrivateList = new ArrayList<>(uniqueMessages);
 
-        messagePrivateList.forEach(msg -> {
-            messages.add(
-                new ListMessageInPrivateResponse(
-                    msg.getSender().getId(),
-                    msg.getMessage(),
-                    msg.getSender().getName(),
-                    msg.getReceiver().getName(),
-                    msg.getReceiver().getId(),
-                    Objects.equals(msg.getReceiver().getId(), senderUser.getId())
-                        ? msg.getSender().getName()
-                        : msg.getReceiver().getName(),
-                    msg.getStatus(),
-                    msg.getDate().toString(),
-                    Objects.equals(msg.getSender().getId(), senderUser.getId())
-                )
-            );
-        });
+        messagePrivateList.forEach(msg -> messages.add(
+            new ListMessageInPrivateResponse(
+                msg.getSender().getId(),
+                msg.getMessage(),
+                msg.getSender().getName(),
+                msg.getReceiver().getName(),
+                msg.getReceiver().getId(),
+                Objects.equals(msg.getReceiver().getId(), senderUser.getId())
+                    ? msg.getSender().getName()
+                    : msg.getReceiver().getName(),
+                msg.getStatus(),
+                msg.getDate().toString(),
+                Objects.equals(msg.getSender().getId(), senderUser.getId())
+            )
+        ));
 
         return sortMessagesByCurrentDateDesc(messages);
     }
@@ -161,7 +157,7 @@ public class ChatService {
      */
     public List<ListMessageInPrivateResponse> listChatPrivateResponse(User user) {
         List<ListMessageInPrivateResponse> messages = new ArrayList<>();
-        List<MessagePrivate> messageSenderPrivateList = privateMessageAdapter.findLastMessagesForUser(user);
+        List<MessagePrivate> messageSenderPrivateList = messagePrivateAdapter.findLastMessagesForUser(user);
 
         messageSenderPrivateList.forEach(msg -> {
             String name = Objects.equals(msg.getReceiver().getId(), user.getId())

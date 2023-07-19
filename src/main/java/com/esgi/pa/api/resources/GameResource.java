@@ -139,7 +139,7 @@ public class GameResource {
     @GetMapping("/move/{idlobby}")
     public String processGamePlayer(@PathVariable Long idlobby) throws TechnicalNotFoundException, IOException {
         Lobby lobby = lobbyService.getById(idlobby);
-        Optional<Move> move = moveService.findLastMoveLobbyDisplayBoard(lobby);
+        Optional<Move> move = moveService.findLastMove(lobby);
         if (move.isPresent()) {
             if (move.get().getEndPart())
                 return move.get().getGameState();

@@ -8,9 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Interface de persistence pour les messages privés
+ */
 public interface MessagesPrivateRepository extends JpaRepository<MessagePrivate, Long> {
 
     List<MessagePrivate> findBySenderOrReceiverOrderByDateDesc(User user, User sender);
+
     @Query("SELECT mp FROM MessagePrivate mp WHERE mp.date IN (SELECT MAX(m.date) FROM MessagePrivate m WHERE m.sender = :user OR m.receiver = :user GROUP BY CASE WHEN m.sender = :user THEN m.receiver ELSE m.sender END)")
     List<MessagePrivate> findLastMessagesForUser(@Param("user") User user);
 }

@@ -1,9 +1,6 @@
 package com.esgi.pa.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,8 +24,10 @@ public class Move {
     private Lobby lobby;
     @Column(columnDefinition = "text")
     private String gameState;
+    @With
     @Column(name = "move_date")
     private LocalDateTime moveDate;
+    @With
     private Boolean endPart = Boolean.FALSE;
 
 }

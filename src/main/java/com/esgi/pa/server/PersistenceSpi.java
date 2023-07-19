@@ -3,6 +3,9 @@ package com.esgi.pa.server;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface de persistence pour tous les adapters
+ */
 public interface PersistenceSpi<T, ID> {
 
     T save(T o);

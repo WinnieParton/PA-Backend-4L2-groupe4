@@ -92,8 +92,7 @@ public class RankingResource {
         return RankingMapper.toNoGameRankingRespsonse(
             rankingService.updateRankings(
                 lobbyService.getById(idLobby),
-                userService.getById(
-                    updateRankingsRequest.winnerId()),
+                userService.getById(updateRankingsRequest.winnerId()),
                 rankingService.calculateScoresByPlayers(updateRankingsRequest.scoresByPlayers())));
     }
 }

@@ -23,6 +23,9 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service de gestion des jeux
+ */
 @Service
 @RequiredArgsConstructor
 public class GameService {
@@ -35,6 +38,14 @@ public class GameService {
     private static StringBuilder outputBuilder;
     private static boolean isNewInstance = true; // Flag to track if a new instance needs to be created
     private static final String UPLOAD_DIR = "src/main/resources/files/";
+
+    /**
+     * Récupère les données relative à un jeu par son id numérique
+     *
+     * @param gameId id numérique du jeu
+     * @return les données relative au jeu
+     * @throws TechnicalNotFoundException si le jeu n'est pas trouvé
+     */
     public Game getById(Long gameId) throws TechnicalNotFoundException {
         return gameAdapter.findById(gameId)
             .orElseThrow(
@@ -42,6 +53,19 @@ public class GameService {
                     "Cannot find game with id : " + gameId));
     }
 
+    /**
+     * Crée une entité jeu
+     *
+     * @param name        nom du jeu
+     * @param description description du jeu
+     * @param gameFiles   lien des fichiers de jeu
+     * @param miniature   lien vers l'image miniature du jeu
+     * @param minPlayers  nombre minimum de joueurs
+     * @param maxPlayers  nombre maximum de joueurs
+     * @return la nouvelle entité jeu
+     * @throws TechnicalFoundException si le jeu existe déjà
+     * @throws IOException             si problème lors de l'enregistrement des fichiers de jeu
+     */
     public Game createGame(String name, String description, MultipartFile gameFiles, String miniature, int minPlayers,
                            int maxPlayers) throws TechnicalFoundException, IOException {
         if (gameAdapter.findByName(name))
@@ -58,24 +82,38 @@ public class GameService {
                 .build());
     }
 
+    /**
+     * Sauvegarde les fichiers de jeu
+     *
+     * @param file     fichiers à enregistrer
+     * @param fileName nom du fichier
+     * @return nom du fichier
+     * @throws IOException si erreur lors de l'enregistrement
+     */
     public String saveFile(MultipartFile file, String fileName) throws IOException {
-        // Set the file path where you want to save the file
         String filePath = UPLOAD_DIR + fileName;
-
-        // Convert the MultipartFile to a byte array
         byte[] fileBytes = file.getBytes();
-
-        // Save the file to the target location
         FileCopyUtils.copy(fileBytes, new File(filePath));
-
         return fileName;
     }
 
+    /**
+     * Récupère l'ensemble des jeux
+     *
+     * @return la liste des jeux
+     */
     public List<Game> findAll() {
         return gameAdapter.findAll();
     }
 
-    public String runEngine(Lobby lobby, String jsonData) throws IOException {
+    /**
+     * Lance le moteur de jeu
+     *
+     * @param lobby    id du lobby
+     * @param jsonData les données d'entrée pour le moteur de jeu
+     * @return le retour du moteur de jeu
+     */
+    public String runEngine(Lobby lobby, String jsonData) {
         String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
 
         if ("py".equals(extension)) {
@@ -83,73 +121,81 @@ public class GameService {
         } else if ("js".equals(extension)) {
             return runScriptJavaScript(lobby, jsonData);
         } else {
-            return "The file is not a Python file.";
+            return "Langage non supporté";
         }
     }
 
-    public String runScriptPython(Lobby lobby, String jsonData) throws IOException {
+    /**
+     * Run un fichier python
+     *
+     * @param lobby    lobby dans lequel le jeu est en cours
+     * @param jsonData données en entrée
+     * @return le nouvel état du jeu
+     */
+    public String runScriptPython(Lobby lobby, String jsonData) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            // Check if jsonData is equal to {"init":{"players":2}}
             JsonNode jsonNode = objectMapper.readTree(jsonData);
             JsonNode initNode = jsonNode.get("init");
             if (initNode != null && initNode.toString().equals("{\"players\":2}")) {
                 isNewInstance = true;
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
-                // Create a new instance only if jsonData matches the expected JSON structure
                 String pythonCommand = getPythonCommand();
-                  if (pythonCommand == null) {
-                      throw new IOException("Python or Python3 not found in the environment");
-                  }
+                if (pythonCommand == null) {
+                    throw new IOException("Python or Python3 not found in the environment");
+                }
                 createNewInstance(pythonCommand, UPLOAD_DIR + lobby.getGame().getGameFiles());
             }
-            // Send the JSON data to the input of the Python script
             writer.write(jsonData);
             writer.newLine();
             writer.flush();
 
-            // Wait for a brief moment to allow the output to be captured
             Thread.sleep(500);
 
-            // Retirer les caractères null et autres caractères indésirables
             String output = outputBuilder.toString().replaceAll("\\p{Cntrl}", "");
 
-            // Use ObjectWriter to serialize the output with indentation
             ObjectWriter writer = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
             output = writer.writeValueAsString(objectMapper.readTree(output));
 
-            // Clear the outputBuilder for the next request
             outputBuilder.setLength(0);
 
-            // Return the output as the response
             moveService.saveGameState(lobby, output);
             return output;
-        } catch (IOException  | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script Python\" }";
         }
     }
+
+    /**
+     * Ferme l'instance de jeu
+     *
+     * @throws IOException si un problème survient lors de la fermeture
+     */
     public void closeWriter() throws IOException {
         writer.close();
     }
+
+    /**
+     * Créer une nouvelle instance de jeu
+     *
+     * @param type     type d'instance à lancer
+     * @param fileName nom du fichier
+     * @throws IOException si erreur lors de la création d'une instance
+     */
     private void createNewInstance(String type, String fileName) throws IOException {
-        // Execute the Python script as a process
         ProcessBuilder pb = new ProcessBuilder(type, fileName);
         pb.redirectErrorStream(true);
         process = pb.start();
 
-        // Get the input/output streams of the Python process
         writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
         reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        // Initialize the outputBuilder
         outputBuilder = new StringBuilder();
-        // Start a separate thread to continuously read and store the output from the Python process
         Thread outputThread = new Thread(() -> {
             try {
                 String line;
-                // Ignorer les lignes commençant par "Traceback" ou "File"
                 boolean skipLines = false;
                 while ((line = reader.readLine()) != null) {
                     if (line.startsWith("Traceback") || line.startsWith("File")) {
@@ -164,51 +210,45 @@ public class GameService {
             }
         });
         outputThread.start();
-
-        isNewInstance = false; // Set the flag to false indicating that a new instance is created
-
+        isNewInstance = false;
     }
 
-    public String runScriptJavaScript(Lobby lobby, String jsonData) throws IOException {
+    /**
+     * Run un fichier javascript
+     *
+     * @param lobby    lobby dans lequel le jeu est en cours
+     * @param jsonData données en entrée
+     * @return nouvel état du jeu
+     */
+    public String runScriptJavaScript(Lobby lobby, String jsonData) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            // Check if jsonData is equal to {"init":{"players":2}}
             JsonNode jsonNode = objectMapper.readTree(jsonData);
             JsonNode initNode = jsonNode.get("init");
             if (initNode != null && initNode.toString().equals("{\"players\":2}")) {
                 isNewInstance = true;
             }
             if (isNewInstance || process == null || writer == null || reader == null) {
-                // Create a new instance only if jsonData matches the expected JSON structure
                 createNewInstance("node", UPLOAD_DIR + lobby.getGame().getGameFiles());
             }
 
-            // Read the JSON data as a Map
-            Map<String, Object> dataMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {
+            Map<String, Object> dataMap = objectMapper.readValue(jsonData, new TypeReference<>() {
             });
-
-            // Convert the Map back to JSON string in a single-line format
             String formattedJsonData = objectMapper.writeValueAsString(dataMap);
 
-            // Send the JSON data to the input of the Python script
             writer.write(formattedJsonData);
             writer.newLine();
             writer.flush();
 
-            // Wait for a brief moment to allow the output to be captured
             Thread.sleep(500);
 
-            // Retirer les caractères null et autres caractères indésirables
             String output = outputBuilder.toString().replaceAll("\\p{Cntrl}", "");
 
-            // Use ObjectWriter to serialize the output with indentation
             ObjectWriter writer = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
             output = writer.writeValueAsString(objectMapper.readTree(output));
 
-            // Clear the outputBuilder for the next request
             outputBuilder.setLength(0);
 
-            // Return the output as the response
             moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
@@ -217,53 +257,65 @@ public class GameService {
         }
     }
 
-    public String getLanguageFromExtension(String fileName ) {
+    /**
+     * Récupère le langage en fonction de l'extension d'un fichier
+     *
+     * @param fileName nom du fichier
+     * @return le nom du langage de programmation
+     */
+    public String getLanguageFromExtension(String fileName) {
         String extension = FilenameUtils.getExtension(fileName);
-        switch (extension.toLowerCase()) {
-            case "py":
-                return "Python";
-            case "js":
-                return "JavaScript";
-            case "java":
-                return "Java";
-            default:
-                return "Unknown";
-        }
+        return switch (extension.toLowerCase()) {
+            case "py" -> "Python";
+            case "js" -> "JavaScript";
+            case "java" -> "Java";
+            default -> "Unknown";
+        };
     }
 
+    /**
+     * Récupère le fichier de jeu
+     *
+     * @param fileName nom du fichier de jeu
+     * @return le fichier de jeu
+     * @throws IOException si problème lors de la récupération du fichier
+     */
     public String getFileContent(String fileName) throws IOException {
         File file = new File("src/main/resources/files/" + fileName);
         byte[] fileBytes = Files.readAllBytes(file.toPath());
         return new String(fileBytes, StandardCharsets.UTF_8);
     }
-    
+
+    /**
+     * Permet de vérfié l'existence du package python3 sur l'environnement
+     *
+     * @return le nom de package python disponible sur l'environnement
+     */
     private String getPythonCommand() {
-    // Try executing "python3" command first
-    try {
-        ProcessBuilder pb = new ProcessBuilder("python3", "--version");
-        Process process = pb.start();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line = reader.readLine();
-        if (line != null && line.startsWith("Python 3")) {
-            return "python3";
+        try {
+            ProcessBuilder pb = new ProcessBuilder("python3", "--version");
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = reader.readLine();
+            if (line != null && line.startsWith("Python 3")) {
+                return "python3";
+            }
+        } catch (IOException e) {
+            // Ignore exception
         }
-    } catch (IOException e) {
-        // Ignore exception
-    }
 
-    // If "python3" command failed or not found, try "python" command
-    try {
-        ProcessBuilder pb = new ProcessBuilder("python", "--version");
-        Process process = pb.start();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line = reader.readLine();
-        if (line != null && (line.startsWith("Python 2") || line.startsWith("Python 3"))) {
-            return "python";
+        try {
+            ProcessBuilder pb = new ProcessBuilder("python", "--version");
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = reader.readLine();
+            if (line != null && (line.startsWith("Python 2") || line.startsWith("Python 3"))) {
+                return "python";
+            }
+        } catch (IOException e) {
+            // Ignore exception
         }
-    } catch (IOException e) {
-        // Ignore exception
-    }
 
-    return null; // Python or Python3 not found
-}
+        return null;
+    }
 }
