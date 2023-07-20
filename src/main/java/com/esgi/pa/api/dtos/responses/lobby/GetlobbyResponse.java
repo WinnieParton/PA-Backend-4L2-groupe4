@@ -29,7 +29,6 @@ public record GetlobbyResponse(
     NoFriendsUserResponse creator,
     GameDto game,
     boolean isPrivate,
-    GameStatusEnum status,
     LocalDateTime createdAt,
     LocalDateTime updateAt,
     List<NoFriendsUserResponse> participants) {

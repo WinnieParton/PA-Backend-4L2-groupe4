@@ -5,6 +5,8 @@ import com.esgi.pa.api.dtos.responses.ranking.GlobalRankingResponse;
 import com.esgi.pa.api.dtos.responses.ranking.NoGameRankingResponse;
 import com.esgi.pa.api.dtos.responses.ranking.UserRankingsResponse;
 import com.esgi.pa.api.mappers.RankingMapper;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -88,11 +92,10 @@ public class RankingResource {
      * @throws JsonProcessingException    si il y a un problème lors du traitement des scores
      */
     @PostMapping("/lobby/{idLobby}/endgame")
-    public List<NoGameRankingResponse> updateParticipantsRanking(@PathVariable Long idLobby, @RequestBody UpdateRankingsRequest updateRankingsRequest) throws TechnicalNotFoundException, JsonProcessingException {
-        return RankingMapper.toNoGameRankingRespsonse(
-            rankingService.updateRankings(
-                lobbyService.getById(idLobby),
-                userService.getById(updateRankingsRequest.winnerId()),
-                rankingService.calculateScoresByPlayers(updateRankingsRequest.scoresByPlayers())));
+    public List<NoGameRankingResponse> updateParticipantsRanking(@PathVariable Long idLobby, @RequestBody UpdateRankingsRequest updateRankingsRequest) throws TechnicalNotFoundException, JsonProcessingException, ExecutionException, InterruptedException {
+        Lobby lobby = lobbyService.getById(idLobby);
+        User user = userService.getById(updateRankingsRequest.winnerId());
+        gameService.closePythonInstance();
+        return RankingMapper.toNoGameRankingRespsonse(rankingService.updateRankings( lobby, user, updateRankingsRequest.scoresByPlayers()));
     }
 }

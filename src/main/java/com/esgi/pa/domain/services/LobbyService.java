@@ -39,7 +39,6 @@ public class LobbyService {
                 .game(game)
                 .invitationOnly(isInvitationOnly)
                 .participants(List.of(user))
-                .status(GameStatusEnum.PENDING)
                 .build());
     }
 
@@ -72,16 +71,6 @@ public class LobbyService {
      */
     public Lobby save(Lobby lobby) {
         return lobbyAdapter.save(lobby);
-    }
-
-    /**
-     * Persiste le lobby avec un l'état "pause"
-     *
-     * @param lobby le lobby à pauser
-     * @return le nouvel état du lobby
-     */
-    public Lobby pauseGame(Lobby lobby) {
-        return save(lobby.withStatus(GameStatusEnum.PAUSED));
     }
 
     /**

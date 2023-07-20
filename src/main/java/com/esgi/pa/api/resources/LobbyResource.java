@@ -90,20 +90,4 @@ public class LobbyResource {
                 gameService.getById(request.game()),
                 request.isPrivate()));
     }
-
-    /**
-     * Permet de changer le statut d'une partie
-     *
-     * @param idlobby id numérique du lobby
-     * @throws TechnicalNotFoundException si un élément n'est pas trouvé
-     * @throws IOException                si problème avec le writer
-     */
-    @PatchMapping("/{idlobby}")
-    @ResponseStatus(NO_CONTENT)
-    public void pauseGame(@PathVariable Long idlobby) throws TechnicalNotFoundException, IOException {
-        gameService.closeWriter();
-        lobbyService.pauseGame(
-            lobbyService.getById(idlobby));
-    }
-
 }

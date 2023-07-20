@@ -2,6 +2,7 @@ package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.ActionEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MovesRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +39,16 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
-    public Optional<Move> findByLobby(Lobby lobby) {
-        LocalDateTime oneMinuteAgo = LocalDateTime.now().minus(1, ChronoUnit.MINUTES);
-        return movesRepository.findFirstByLobbyAndMoveDateAfterOrderByMoveDateDesc(lobby, oneMinuteAgo);
+    public Optional<Move> findByLobbyActionOutput(Lobby lobby) {
+        return movesRepository.findFirstByLobbyAndActionEnumOrderByIdDesc(lobby, ActionEnum.OUTPUT);
+    }
+
+    public List<Move> findByListLobbyActionInput(Lobby lobby) {
+        return movesRepository.findByLobbyAndEndPartFalseAndActionEnumOrderByIdAsc(lobby, ActionEnum.INPUT);
+    }
+
+    public List<Move> findListLastMoveALobby(Lobby lobby) {
+        return movesRepository.findByLobbyAndEndPartFalseOrderByMoveDateDesc(lobby);
     }
 
     @Override

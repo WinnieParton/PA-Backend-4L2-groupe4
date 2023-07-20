@@ -14,9 +14,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-
+import org.springframework.scheduling.annotation.Async;
+import java.util.concurrent.CompletableFuture;
 /**
  * Service de gestion des rankings
  */
@@ -61,17 +64,6 @@ public class RankingService {
     }
 
     /**
-     * Récupère un Optional du rang d'un utilisateur sur un jeu
-     *
-     * @param user utilisateur dont on veut le rang
-     * @param game jeu dont on veut le rang
-     * @return un Optional du rang recherché
-     */
-    public Optional<Ranking> getRankingForUserOnGameEnoughException(User user, Game game) {
-        return rankingAdapter.findByGameAndPlayer(game, user);
-    }
-
-    /**
      * Récupère la liste des participants à un lobby
      *
      * @param lobby le lobby dont on veut les participants
@@ -88,33 +80,53 @@ public class RankingService {
      *
      * @param lobby  lobby auquel appartiennent les joueur
      * @param winner le gagnant de la partie
-     * @param scores les scores des joueurs
+     * @param scoresByPlayersRequest les scores des joueurs
      * @return la liste des nouveaux rankings des joueurs connecté au lobby
      */
-    public List<Ranking> updateRankings(Lobby lobby, User winner, Map<Long, Double> scores) throws TechnicalNotFoundException {
-        for (User participant : lobby.getParticipants()) {
-            Optional<Ranking> ranking = getRankingForUserOnGameEnoughException(participant, lobby.getGame());
-            if (ranking.isEmpty())
-                ranking = Optional.of(new Ranking(lobby.getGame(), participant));
+    @Async
+    public CompletableFuture<List<Ranking>> updateRankingsAsync(Lobby lobby, User winner, String scoresByPlayersRequest){
+        try {
+            Map<Long, Double> scores =  calculateScoresByPlayers(scoresByPlayersRequest).get();
+        lobby.getParticipants().stream().toList().forEach(participant -> {
             if (participant.equals(winner)) {
-                rankingAdapter.save(
-                    ranking.get()
-                        .withScore(ranking.get().getScore() + scores.get(winner.getId()))
-                        .withGamePlayed(ranking.get().getGamePlayed() + 1));
+
+                    Optional<Ranking> ranking = rankingAdapter.findByGameAndPlayer(lobby.getGame(), participant);
+                    if (ranking.isEmpty()) {
+                        ranking = Optional.of(new Ranking(lobby.getGame(), participant));
+                    }
+                    rankingAdapter.save(
+                            ranking.get()
+                                    .withScore(ranking.get().getScore() + scores.get(winner.getId()))
+                                    .withGamePlayed(ranking.get().getGamePlayed() + 1));
+
             } else {
-                rankingAdapter.save(
-                    ranking.get()
-                        .withScore(ranking.get().getScore() + scores.get(participant.getId()))
-                        .withGamePlayed(ranking.get().getGamePlayed() + 1));
+                    Optional<Ranking> ranking = rankingAdapter.findByGameAndPlayer(lobby.getGame(), participant);
+                    if (ranking.isEmpty()) {
+                        ranking = Optional.of(new Ranking(lobby.getGame(), participant));
+                    }
+                    rankingAdapter.save(
+                            ranking.get()
+                                    .withScore(ranking.get().getScore() + scores.get(participant.getId()))
+                                    .withGamePlayed(ranking.get().getGamePlayed() + 1));
+
             }
+        });
+        } catch (JsonProcessingException | ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            List<Move> moves = moveService.findListLastMove(lobby);
+        for (Move move : moves) {
+            move.setEndPart(Boolean.TRUE);
+            moveService.saveEndMove(move);
         }
-        Move move = moveService.findLastMove(lobby)
-            .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, format("move not found with lobby id: %s", lobby.getId())));
-        moveService.saveEndMove(move.withEndPart(Boolean.TRUE));
 
-        return getLobbyParticipantsRanking(lobby);
+        List<Ranking> rankings = getLobbyParticipantsRanking(lobby);
+        return CompletableFuture.completedFuture(rankings);
     }
-
+    public List<Ranking> updateRankings(Lobby lobby, User user, String scoresByPlayersRequest) throws ExecutionException, InterruptedException {
+        return updateRankingsAsync(lobby, user, scoresByPlayersRequest).get();
+    }
     /**
      * Calcule les scores de chaque player
      *
@@ -122,7 +134,8 @@ public class RankingService {
      * @return les scores de chaque joueur sous forme d'une map <idjoueur, score>
      * @throws JsonProcessingException si problème avec la lecture du JSON
      */
-    public Map<Long, Double> calculateScoresByPlayers(String scoresByPlayersRequest) throws JsonProcessingException {
+    @Async
+    public CompletableFuture<Map<Long, Double>> calculateScoresByPlayers(String scoresByPlayersRequest) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<List<Double>>> typeReference = new TypeReference<>() {
         };
@@ -134,6 +147,6 @@ public class RankingService {
             scoresByPlayers.put(key, value);
         }
 
-        return scoresByPlayers;
+        return CompletableFuture.completedFuture(scoresByPlayers);
     }
 }

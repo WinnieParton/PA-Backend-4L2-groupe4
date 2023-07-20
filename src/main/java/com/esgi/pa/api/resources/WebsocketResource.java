@@ -84,12 +84,9 @@ public class WebsocketResource {
     @SendTo("/game/lobby")
     public String processGamePlayer(GetLobbyRequest getLobbyRequest) throws TechnicalNotFoundException, IOException {
         Lobby lobby = lobbyService.getById(getLobbyRequest.lobby());
-        Optional<Move> move = moveService.findLastMove(lobby);
-        if (move.isPresent()) {
-            if (!move.get().getEndPart())
-                return move.get().getGameState();
-            gameService.closeWriter();
-        }
+        Optional<Move> move = moveService.findLastMoveOutput(lobby);
+        if (move.isPresent() && !move.get().getEndPart())
+            return move.get().getGameState();
         return "";
     }
 }

@@ -20,7 +20,6 @@ public interface LobbyMapper {
             UserMapper.toNoFriendsUserResponse(entity.getCreator()),
             GameMapper.toDto(entity.getGame()),
             entity.isInvitationOnly(),
-            entity.getStatus(),
             entity.getCreatedAt(),
             entity.getUpdateAt(),
             UserMapper.toNoFriendsUserResponse(entity.getParticipants()));

@@ -137,14 +137,11 @@ public class GameResource {
      * @throws IOException                si problème avec le writer
      */
     @GetMapping("/move/{idlobby}")
-    public String processGamePlayer(@PathVariable Long idlobby) throws TechnicalNotFoundException, IOException {
+    public String processGamePlayer(@PathVariable Long idlobby) throws TechnicalNotFoundException {
         Lobby lobby = lobbyService.getById(idlobby);
-        Optional<Move> move = moveService.findLastMove(lobby);
-        if (move.isPresent()) {
-            if (move.get().getEndPart())
-                return move.get().getGameState();
-            gameService.closeWriter();
-        }
+        Optional<Move> move = moveService.findLastMoveOutput(lobby);
+        if (move.isPresent() && move.get().getEndPart())
+            return move.get().getGameState();
         return "";
     }
 }

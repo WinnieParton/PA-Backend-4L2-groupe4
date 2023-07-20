@@ -38,10 +38,6 @@ public class Lobby {
 
     private boolean invitationOnly;
 
-    @With
-    @Enumerated(EnumType.STRING)
-    private GameStatusEnum status;
-
     @Default
     private LocalDateTime createdAt = LocalDateTime.now();
 

@@ -2,6 +2,8 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.ActionEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.GameAdapter;
@@ -114,14 +116,34 @@ public class GameService {
      * @return le retour du moteur de jeu
      */
     public String runEngine(Lobby lobby, String jsonData) {
+        moveService.saveGameState(lobby, jsonData, ActionEnum.INPUT);
         String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
-
+        String output ="";
+        List<Move> listLasMove = moveService.findListLastMoveInput(lobby);
         if ("py".equals(extension)) {
-            return runScriptPython(lobby, jsonData);
+            for (Move move : listLasMove) {
+                output = runScriptPython(lobby, move.getGameState());
+            };
+            closePythonInstance();
         } else if ("js".equals(extension)) {
-            return runScriptJavaScript(lobby, jsonData);
+            output = runScriptJavaScript(lobby, jsonData);
         } else {
-            return "Langage non supporté";
+            output = "Langage non supporté";
+        }
+        if(output!="null")
+            moveService.saveGameState(lobby, output, ActionEnum.OUTPUT);
+        return output;
+    }
+    /**
+     * Methode pour fermer l'instance
+     */
+    public void closePythonInstance() {
+        if (process != null) {
+            process.destroy();
+            process = null;
+            writer = null;
+            reader = null;
+            isNewInstance = true;
         }
     }
 
@@ -160,21 +182,11 @@ public class GameService {
 
             outputBuilder.setLength(0);
 
-            moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return "{ \"error\": \"Erreur lors de l'exécution du script Python\" }";
         }
-    }
-
-    /**
-     * Ferme l'instance de jeu
-     *
-     * @throws IOException si un problème survient lors de la fermeture
-     */
-    public void closeWriter() throws IOException {
-        writer.close();
     }
 
     /**
@@ -249,7 +261,6 @@ public class GameService {
 
             outputBuilder.setLength(0);
 
-            moveService.saveGameState(lobby, output);
             return output;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
