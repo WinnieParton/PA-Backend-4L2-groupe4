@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les chats
+ */
 @Service
 @RequiredArgsConstructor
 public class ChatAdapter implements PersistenceSpi<Chat, Long> {
@@ -52,6 +55,7 @@ public class ChatAdapter implements PersistenceSpi<Chat, Long> {
     public Optional<Chat> findChatByLobby(Lobby lobby) {
         return chatsRepository.findByLobby(lobby);
     }
+
     public Optional<Chat> findChatByLobbyWithMessages(Lobby lobby) {
         return chatsRepository.findByLobbyWithMessages(lobby);
     }

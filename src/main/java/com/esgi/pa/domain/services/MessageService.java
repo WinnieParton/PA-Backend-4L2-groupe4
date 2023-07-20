@@ -19,56 +19,53 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * Service de gestion des messages
+ */
 @Service
 @RequiredArgsConstructor
 public class MessageService {
 
-  private final SimpMessagingTemplate simpMessagingTemplate;
-  private final MessageAdapter messageAdapter;
-  private final MessagePrivateAdapter messagePrivateAdapter;
-  private final ChatService chatService;
-  private final LobbyService lobbyService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final MessageAdapter messageAdapter;
+    private final MessagePrivateAdapter messagePrivateAdapter;
+    private final ChatService chatService;
+    private final LobbyService lobbyService;
 
-  public void dispatchMessage(
-    GetlobbyMessageResponse lobby,
-    User user,
-    SendMessageInLobbyRequest message
-  ) throws TechnicalNotFoundException {
-    lobby
-      .participants()
-      .forEach(participant -> {
-        if (!Objects.equals(participant.id(), user.getId())) {
-          simpMessagingTemplate.convertAndSendToUser(
-                  participant.name(),"/private", message);
-        }
-      });
-    Chat chat = chatService.saveChat(lobbyService.getById(lobby.id()));
-    String dateString = message.currentDate();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-      "dd/MM/yyyy HH:mm:ss"
-    );
-    LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-    Message message2 = new Message(chat, user, message.message(), dateTime);
-    messageAdapter.save(message2);
-  }
+    /**
+     * Process le message à transmettre aux utilisateurs dans un lobby
+     *
+     * @param lobby   lobby auquel le chat appartient
+     * @param user    utilisateur à l'origine du message
+     * @param message informations relative au message
+     * @throws TechnicalNotFoundException si un élément n'est pas trouvé
+     */
+    public void dispatchMessage(GetlobbyMessageResponse lobby, User user, SendMessageInLobbyRequest message) throws TechnicalNotFoundException {
+        lobby.participants().forEach(participant -> {
+            if (!Objects.equals(participant.id(), user.getId())) {
+                simpMessagingTemplate.convertAndSendToUser(participant.name(), "/private", message);
+            }
+        });
+        Chat chat = chatService.saveChat(lobbyService.getById(lobby.id()));
+        String dateString = message.currentDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+        Message message2 = new Message(chat, user, message.message(), dateTime);
+        messageAdapter.save(message2);
+    }
 
-  public void dispatchMessagePrivate(
-    User senderUser,
-    User receiverUser,
-    SendMessageInPrivate message
-  )  {
-    String dateString = message.currentDate();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-      "dd/MM/yyyy HH:mm:ss"
-    );
-    LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-    MessagePrivate message2 = new MessagePrivate(
-      senderUser,
-      receiverUser,
-      message.message(),
-      dateTime,
-      StatusMessage.UNREAD
-    );
-    messagePrivateAdapter.save(message2);
-  }
+    /**
+     * Process les messages envoyé dans les chats privés
+     *
+     * @param senderUser   utilisateur à l'origine du message
+     * @param receiverUser utilisateur receveur
+     * @param message      informations relative au message
+     */
+    public void dispatchMessagePrivate(User senderUser, User receiverUser, SendMessageInPrivate message) {
+        String dateString = message.currentDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessage.UNREAD);
+        messagePrivateAdapter.save(message2);
+    }
 }

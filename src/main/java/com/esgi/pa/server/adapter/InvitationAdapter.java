@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les invitations aux lobbies
+ */
 @Service
 @RequiredArgsConstructor
 public class InvitationAdapter implements PersistenceSpi<Invitation, Long> {
@@ -21,6 +24,7 @@ public class InvitationAdapter implements PersistenceSpi<Invitation, Long> {
     public Invitation save(Invitation o) {
         return invitationsRepository.save(o);
     }
+
     @Override
     public List<Invitation> saveAll(List<Invitation> oList) {
         // TODO Auto-generated method stub

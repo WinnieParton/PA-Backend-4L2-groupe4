@@ -16,6 +16,9 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+/**
+ * Serivce d'authentification de l'application
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -25,6 +28,16 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Permet la création d'un nouvel utilisateur
+     *
+     * @param name     nom de l'utilisateur
+     * @param email    email de l'utilisateur
+     * @param password mot de passe de l'utilisateur
+     * @param role     rôle de l'utilisateur
+     * @return un token JWT pour l'utilisateur
+     * @throws TechnicalFoundException si l'utilisateur existe déjà
+     */
     public String create(String name, String email, String password, RoleEnum role) throws TechnicalFoundException {
         if (userAdapter.findByEmail(email).isEmpty()) {
             User savedUser = userAdapter.save(
@@ -45,6 +58,14 @@ public class AuthService {
         }
     }
 
+    /**
+     * Permet la connexion d'un utilisateur existant
+     *
+     * @param email    email de l'utilisateur
+     * @param password mot dep passe de l'utilisateur
+     * @return un token JWT pour l'utilisateur
+     * @throws TechnicalNotFoundException si l'utilisateur n'existe pas
+     */
     public String login(String email, String password) throws TechnicalNotFoundException {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
