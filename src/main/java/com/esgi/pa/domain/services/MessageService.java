@@ -2,6 +2,7 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
+import com.esgi.pa.api.dtos.requests.video.MessageRequest;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
 import com.esgi.pa.domain.entities.Chat;
 import com.esgi.pa.domain.entities.Message;
@@ -67,5 +68,9 @@ public class MessageService {
         LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
         MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessage.UNREAD);
         messagePrivateAdapter.save(message2);
+    }
+
+    public void dispatchMessageVideo(String to, MessageRequest request)  {
+        simpMessagingTemplate.convertAndSendToUser(to, "/private/video", request);
     }
 }

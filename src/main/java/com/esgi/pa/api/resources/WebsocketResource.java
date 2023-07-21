@@ -2,6 +2,8 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.move.GetLobbyRequest;
+import com.esgi.pa.api.dtos.requests.video.MessageRequest;
+import com.esgi.pa.api.dtos.responses.video.MessageResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.MessageMapper;
 import com.esgi.pa.domain.entities.Chat;
@@ -88,5 +90,19 @@ public class WebsocketResource {
         if (move.isPresent() && !move.get().getEndPart())
             return move.get().getGameState();
         return "";
+    }
+
+    @MessageMapping("/callUser")
+    @SendTo("/chat/callUser")
+    public MessageResponse callUser(@Payload MessageRequest request) {
+         messageService.dispatchMessageVideo(request.getUserToCall(),request);
+         return new MessageResponse(request.getSignalData(), request.getFrom(), request.getName());
+    }
+
+    @MessageMapping("/answerCall")
+    @SendTo("/chat/callAccepted")
+    public MessageResponse answerCall(@Payload MessageRequest request) {
+        messageService.dispatchMessageVideo(request.getFrom(),request);
+        return new MessageResponse(request.getSignalData(), request.getFrom(), request.getName());
     }
 }
