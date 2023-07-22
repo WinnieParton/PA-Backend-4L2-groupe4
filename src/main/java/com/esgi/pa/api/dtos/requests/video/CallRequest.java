@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 @Data
-public class MessageRequest {
+public class CallRequest {
+    private Boolean call;
     private Long lobby;
-    private String userToCall;
-    private JsonNode signalData;
-    private String from;
-    private String name;
+    private Long userConnect;
 }

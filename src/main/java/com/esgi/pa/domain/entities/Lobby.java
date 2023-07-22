@@ -52,4 +52,6 @@ public class Lobby {
 
     @OneToOne(mappedBy = "lobby", cascade = CascadeType.ALL)
     private Chat chat;
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.LAZY)
+    private List<VideoCall> videoCalls = new ArrayList<>();
 }
