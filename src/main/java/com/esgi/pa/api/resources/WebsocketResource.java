@@ -18,6 +18,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.util.List;
@@ -102,20 +103,20 @@ public class WebsocketResource {
 
     @MessageMapping("/answerCall")
     @SendTo("/chat/callAccepted")
-    public MessageResponse answerCall(@Payload MessageRequest request) throws TechnicalNotFoundException {
+    public MessageRequest answerCall(@Payload MessageRequest request) throws TechnicalNotFoundException {
         messageService.dispatchMessageVideo(request.getFrom(), request, "accept");
-        return new MessageResponse(request.getSignalData(), request.getFrom(), request.getName());
+        return request;
     }
 
     @MessageMapping("/start/callUser")
     public CallRequest callUserStart(@Payload CallRequest request) throws TechnicalNotFoundException {
-        messageService.dispatchMessageVideoCall(request);
+        messageService.dispatchMessageVideoCall(request, "start");
         return request;
     }
 
-    @MessageMapping("/data/callUser")
-    @SendTo("/chat/data/callUser")
-    public MessageResponse lastDatacallUser(@Payload MessageRequest request) throws TechnicalNotFoundException {
-        return messageService.lastInfosDataVideo(request);
+    @MessageMapping("/end/callUser")
+    public CallRequest callUserLeave(@Payload CallRequest request) throws TechnicalNotFoundException {
+        messageService.dispatchMessageVideoCall(request, "leave");
+        return request;
     }
 }

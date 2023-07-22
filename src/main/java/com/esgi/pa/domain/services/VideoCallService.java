@@ -27,7 +27,11 @@ public class VideoCallService {
     }
 
     public Optional<VideoCall> findVideoPending(Lobby lobby) {
-        return videoCallAdapter.findByLobbyAndVideoStatusEnum(lobby, VideoStatusEnum.START);
+        return videoCallAdapter.findByLobby(lobby);
+    }
+
+    public void deleteVideo(VideoCall videoCall) {
+        videoCallAdapter.delete(videoCall);
     }
 
 }

@@ -16,5 +16,5 @@ import java.util.Optional;
  * Interface de persistence pour les appels video
  */
 public interface VideoCallRepository extends JpaRepository<VideoCall, Long> {
-    Optional<VideoCall> findByLobbyAndVideoStatusEnum(Lobby lobby, VideoStatusEnum videoStatusEnum);
+    Optional<VideoCall> findByLobby(Lobby lobby);
 }

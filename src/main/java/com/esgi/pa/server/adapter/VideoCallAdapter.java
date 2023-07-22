@@ -52,7 +52,11 @@ public class VideoCallAdapter implements PersistenceSpi<VideoCall, Long> {
         return videoCallRepository.findAll().removeAll(longs);
     }
 
-    public Optional<VideoCall> findByLobbyAndVideoStatusEnum(Lobby lobby, VideoStatusEnum videoStatusEnum){
-        return videoCallRepository.findByLobbyAndVideoStatusEnum(lobby,videoStatusEnum);
+    public Optional<VideoCall> findByLobby(Lobby lobby){
+        return videoCallRepository.findByLobby(lobby);
+    }
+
+    public void delete(VideoCall videoCall){
+        videoCallRepository.delete(videoCall);
     }
 }

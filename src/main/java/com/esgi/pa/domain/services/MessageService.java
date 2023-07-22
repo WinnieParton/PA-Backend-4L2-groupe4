@@ -75,7 +75,6 @@ public class MessageService {
     }
 
     public void dispatchMessageVideo(String to, MessageRequest request, String etat) throws TechnicalNotFoundException {
-        simpMessagingTemplate.convertAndSendToUser(to, "/private/video", request);
         Lobby lobby = lobbyService.getById(request.getLobby());
         VideoCall videoCall = new VideoCall();
         Optional<VideoCall> op = videoCallService.findVideoPending(lobby);
@@ -89,25 +88,34 @@ public class MessageService {
             videoCall.setLobby(lobby);
             videoCall.setVideoStatusEnum(VideoStatusEnum.START);
             videoCallService.saveVideo(videoCall);
-        }else {
-            videoCall.setVideoStatusEnum(VideoStatusEnum.LEAVE);
-            videoCallService.saveVideo(videoCall);
+            simpMessagingTemplate.convertAndSendToUser(to, "/private/video", request);
+        }else{
+            simpMessagingTemplate.convertAndSendToUser(to, "/private/video/accepted", request);
         }
+
     }
 
-    public void dispatchMessageVideoCall(CallRequest request) throws TechnicalNotFoundException {
-        Lobby lobby = lobbyService.getById(request.getLobby());
-        User user = userService.getById(request.getUserConnect());
-        lobby.getParticipants().forEach(participant -> {
-            if (!Objects.equals(participant.getId(), user.getId())) {
-                simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/video/call", request);
+    public void dispatchMessageVideoCall(CallRequest request, String etat) throws TechnicalNotFoundException {
+        if(etat == "start") {
+            Lobby lobby = lobbyService.getById(request.getLobby());
+            User user = userService.getById(request.getUserConnect());
+            lobby.getParticipants().forEach(participant -> {
+                if (!Objects.equals(participant.getId(), user.getId())) {
+                    simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/video/call", request);
+                }
+            });
+        }else{
+            Lobby lobby = lobbyService.getById(request.getLobby());
+            User user = userService.getById(request.getUserConnect());
+            lobby.getParticipants().forEach(participant -> {
+                if (!Objects.equals(participant.getId(), user.getId())) {
+                    simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/video/call/leave", request);
+                }
+            });
+            Optional<VideoCall> op = videoCallService.findVideoPending(lobby);
+            if(op.isPresent()) {
+                videoCallService.deleteVideo(op.get());
             }
-        });
-    }
-
-    public MessageResponse lastInfosDataVideo (MessageRequest request) throws TechnicalNotFoundException {
-        Lobby lobby = lobbyService.getById(request.getLobby());
-        Optional<VideoCall> videoCall = videoCallService.findVideoPending(lobby);
-        return new MessageResponse(videoCall.get().getSignalData(), videoCall.get().getCallFrom(), videoCall.get().getName());
+        }
     }
 }

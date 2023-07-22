@@ -26,7 +26,6 @@ public class VideoCall {
     private String callFrom;
     private String name;
     @ManyToOne
-    @JoinColumn(name = "lobby_id")
     private Lobby lobby;
     private VideoStatusEnum videoStatusEnum;
 
