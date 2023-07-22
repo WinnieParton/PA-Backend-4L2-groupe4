@@ -2,6 +2,9 @@ package com.esgi.pa.api.resources;
 
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.move.GetLobbyRequest;
+import com.esgi.pa.api.dtos.requests.video.CallRequest;
+import com.esgi.pa.api.dtos.requests.video.MessageRequest;
+import com.esgi.pa.api.dtos.responses.video.MessageResponse;
 import com.esgi.pa.api.mappers.LobbyMapper;
 import com.esgi.pa.api.mappers.MessageMapper;
 import com.esgi.pa.domain.entities.Chat;
@@ -15,6 +18,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,5 +92,31 @@ public class WebsocketResource {
         if (move.isPresent() && !move.get().getEndPart())
             return move.get().getGameState();
         return "";
+    }
+
+    @MessageMapping("/callUser")
+    @SendTo("/chat/callUser")
+    public MessageResponse callUser(@Payload MessageRequest request) throws TechnicalNotFoundException {
+         messageService.dispatchMessageVideo(request.getUserToCall(), request, "call");
+         return new MessageResponse(request.getSignalData(), request.getFrom(), request.getName());
+    }
+
+    @MessageMapping("/answerCall")
+    @SendTo("/chat/callAccepted")
+    public MessageRequest answerCall(@Payload MessageRequest request) throws TechnicalNotFoundException {
+        messageService.dispatchMessageVideo(request.getFrom(), request, "accept");
+        return request;
+    }
+
+    @MessageMapping("/start/callUser")
+    public CallRequest callUserStart(@Payload CallRequest request) throws TechnicalNotFoundException {
+        messageService.dispatchMessageVideoCall(request, "start");
+        return request;
+    }
+
+    @MessageMapping("/end/callUser")
+    public CallRequest callUserLeave(@Payload CallRequest request) throws TechnicalNotFoundException {
+        messageService.dispatchMessageVideoCall(request, "leave");
+        return request;
     }
 }
