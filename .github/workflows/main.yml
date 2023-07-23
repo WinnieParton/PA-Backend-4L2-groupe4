@@ -30,7 +30,7 @@ jobs:
           SPRING_JPA_HIBERNATE_DDL_AUTO: ${{ env.SPRING_JPA_HIBERNATE_DDL_AUTO }}
         ports:
           - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
+    
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2
@@ -53,15 +53,16 @@ jobs:
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }} # Replace with the actual EC2 instance host/IP
-          username: ${{ secrets.EC2_USERNAME }} # Replace with the actual SSH username
-          key: ${{ secrets.EC2_PRIVATE_KEY }} # Replace with the actual private key value
+          host: ${{ secrets.EC2_HOST }} 
+          username: ${{ secrets.EC2_USERNAME }} 
+          key: ${{ secrets.EC2_PRIVATE_KEY }} 
 
-          # Define the commands to execute on the EC2 instance
+          # Connexion à l'instance EC2 et exécution  du projet
           script: |
-            cd /home/ubuntu/pa-backend  # Replace with the actual path to your project directory
-            git pull origin main  # Pull the latest changes from the main branch using the SSH protocol
-            sudo /opt/apache-maven-3.9.3/bin/mvn clean install  # Build the project using Maven
+            cd /home/ubuntu/pa-backend 
+            git config pull.rebase true 
+            git pull origin main  
+            sudo /opt/apache-maven-3.9.3/bin/mvn clean install  
             sudo chown ubuntu:ubuntu -R target/
-            sudo systemctl stop pa.service  # Stop the existing Spring Boot application service
-            sudo systemctl start pa.service  # Start the Spring Boot application service
+            sudo systemctl stop pa.service  
+            sudo systemctl start pa.service  
