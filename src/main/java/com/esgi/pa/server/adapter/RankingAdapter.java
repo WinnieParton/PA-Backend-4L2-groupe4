@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les rangs des utilisateurs sur les jeux
+ */
 @Service
 @RequiredArgsConstructor
 public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
@@ -46,9 +49,11 @@ public class RankingAdapter implements PersistenceSpi<Ranking, Long> {
     public List<Ranking> findRankingPlayer(User user){
         return rankingsRepository.findByPlayerOrderByScoreDesc(user);
     }
+
     public List<Ranking> findRankingGame(Game game){
         return rankingsRepository.findByGameOrderByScoreDesc(game);
     }
+
     @Override
     public boolean removeById(Long id) {
         // TODO Auto-generated method stub

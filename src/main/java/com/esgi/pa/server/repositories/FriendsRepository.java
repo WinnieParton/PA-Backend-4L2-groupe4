@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface de persistence pour les amis
+ */
 public interface FriendsRepository extends JpaRepository<Friend, Long> {
 
     Optional<Friend> findByUser1AndUser2(User user1, User user2);

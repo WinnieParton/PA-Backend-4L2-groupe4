@@ -6,6 +6,9 @@ import lombok.Builder.Default;
 
 import javax.persistence.*;
 
+/**
+ * Entité représentant une invitation à un lobby
+ */
 @Data
 @Builder
 @Entity

@@ -10,6 +10,9 @@ import com.esgi.pa.domain.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contient les méthodes pour mapper les entités amis du domain vers des dtos
+ */
 public interface FriendMapper {
 
     static GetFriendRequestSentResponse toGetFriendRequestSentResponse(Friend entity) {
@@ -26,7 +29,7 @@ public interface FriendMapper {
             .distinct()
             .toList();
     }
-    
+
     static GetFriendRequestReceivedResponse toFriendRequestReceivedResponse(Friend entity) {
         return new GetFriendRequestReceivedResponse(
             entity.getId(),
@@ -37,10 +40,10 @@ public interface FriendMapper {
 
     static GetFriendRequestReceivedResponse toFriendRequestResponse(Friend entity, User user) {
         return new GetFriendRequestReceivedResponse(
-                entity.getId(),
-                UserMapper.toNoFriendsUserResponse(entity.getUser1()),
-                entity.getUser2().getId(),
-                entity.getStatus());
+            entity.getId(),
+            UserMapper.toNoFriendsUserResponse(entity.getUser1()),
+            entity.getUser2().getId(),
+            entity.getStatus());
     }
 
     static List<GetFriendRequestReceivedResponse> toFriendRequestReceivedResponse(List<Friend> entities) {
@@ -54,14 +57,15 @@ public interface FriendMapper {
         List<GetFriendRequestReceivedResponse> result = new ArrayList<>();
         entities.forEach(friend -> {
             result.add(new GetFriendRequestReceivedResponse(
-                    friend.getId(),
-                    UserMapper.toNoFriendsUserResponse(user == friend.getUser1() ? friend.getUser2() : friend.getUser1()),
-                    user == friend.getUser1() ?friend.getUser2().getId():friend.getUser1().getId(),
-                    friend.getStatus()));
+                friend.getId(),
+                UserMapper.toNoFriendsUserResponse(user == friend.getUser1() ? friend.getUser2() : friend.getUser1()),
+                user == friend.getUser1() ?friend.getUser2().getId():friend.getUser1().getId(),
+                friend.getStatus()));
         });
 
         return result;
     }
+
     static AnswerFriendRequestResponse toAnswerFriendRequestResponse(Friend entity) {
         return new AnswerFriendRequestResponse(
             entity.getId(),

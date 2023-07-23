@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité représentant un chat de discussion
+ */
 @Data
 @Builder
 @Entity

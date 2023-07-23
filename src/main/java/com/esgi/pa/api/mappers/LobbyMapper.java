@@ -8,45 +8,47 @@ import com.esgi.pa.domain.entities.Lobby;
 
 import java.util.List;
 
+/**
+ * Contient les méthodes pour mapper les entités lobby du domain vers des dtos
+ */
 public interface LobbyMapper {
 
     static GetlobbyResponse toGetlobbyResponse(Lobby entity) {
         return new GetlobbyResponse(
-                entity.getId(),
-                entity.getName(),
-                UserMapper.toNoFriendsUserResponse(entity.getCreator()),
-                GameMapper.toDto(entity.getGame()),
-                entity.isInvitationOnly(),
-                entity.getStatus(),
-                entity.getCreatedAt(),
-                entity.getUpdateAt(),
-                UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
+            entity.getId(),
+            entity.getName(),
+            UserMapper.toNoFriendsUserResponse(entity.getCreator()),
+            GameMapper.toDto(entity.getGame()),
+            entity.isInvitationOnly(),
+            entity.getCreatedAt(),
+            entity.getUpdateAt(),
+            UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
     }
 
     static List<GetlobbyResponse> toGetlobbyResponse(List<Lobby> entities) {
         return entities.stream()
-                .map(LobbyMapper::toGetlobbyResponse)
-                .distinct()
-                .toList();
+            .map(LobbyMapper::toGetlobbyResponse)
+            .distinct()
+            .toList();
     }
 
     static CreateLobbyResponse toCreateLobbyResponse(Lobby entity) {
         return new CreateLobbyResponse(
-                entity.getId(),
-                entity.getCreatedAt());
+            entity.getId(),
+            entity.getCreatedAt());
     }
 
     static LobbyInvitationResponse toLobbyInvitationResponse(Lobby lobby) {
         return new LobbyInvitationResponse(
-                lobby.getId(),
-                lobby.getName(),
-                UserMapper.toNoFriendsUserResponse(lobby.getCreator()),
-                GameMapper.toDto(lobby.getGame()));
+            lobby.getId(),
+            lobby.getName(),
+            UserMapper.toNoFriendsUserResponse(lobby.getCreator()),
+            GameMapper.toDto(lobby.getGame()));
     }
 
     static GetlobbyMessageResponse toGetlobbyMessageResponse(Lobby entity) {
         return new GetlobbyMessageResponse(
-                entity.getId(),
-                UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
+            entity.getId(),
+            UserMapper.toNoFriendsUserResponse(entity.getParticipants()));
     }
 }

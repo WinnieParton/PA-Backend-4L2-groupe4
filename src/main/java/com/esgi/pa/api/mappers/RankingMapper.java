@@ -8,6 +8,9 @@ import com.esgi.pa.domain.entities.Ranking;
 
 import java.util.List;
 
+/**
+ * Contient les méthodes pour mapper les entités ranking du domain vers des dtos
+ */
 public interface RankingMapper {
 
     static GlobalRankingResponse toGlobalRankingResponse(List<Ranking> rankings) {
@@ -42,9 +45,9 @@ public interface RankingMapper {
 
     static RankingDto toRankingDto(Ranking ranking) {
         return new RankingDto(
-                ranking.getId(),
-                GameMapper.toDto(ranking.getGame()),
-                UserMapper.toNoFriendsUserResponse(ranking.getPlayer()),
-                ranking.getScore());
+            ranking.getId(),
+            GameMapper.toDto(ranking.getGame()),
+            UserMapper.toNoFriendsUserResponse(ranking.getPlayer()),
+            ranking.getScore());
     }
 }

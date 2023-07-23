@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * DTO de requête d'ajout d'ami
+ *
+ * @param sender id du demandeur
+ */
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public record AddFriendRequest(@NotNull(message = "sender Id is required") Long sender) {
 }

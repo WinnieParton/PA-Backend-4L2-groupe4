@@ -11,6 +11,14 @@ import javax.validation.constraints.Size;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
+/**
+ * DTO de requête de création de compte
+ *
+ * @param name     nom de l'utilisateur
+ * @param email    email de l'utilisateur
+ * @param password mot de passe de l'utilisateur
+ * @param role     role de l'utilisateur
+ */
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreateUserRequest(

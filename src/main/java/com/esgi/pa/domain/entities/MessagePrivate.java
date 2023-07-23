@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entité représentant un message privé
+ */
 @Data
 @Builder
 @Entity

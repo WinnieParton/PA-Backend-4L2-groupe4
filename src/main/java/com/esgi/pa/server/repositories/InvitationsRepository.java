@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface de persistence pour les invitations
+ */
 public interface InvitationsRepository extends JpaRepository<Invitation, Long> {
 
     Optional<Invitation> getInvitationByUserAndLobby(User user, Lobby lobby);

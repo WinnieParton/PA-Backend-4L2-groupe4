@@ -1,7 +1,6 @@
 package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.LobbiesRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les lobbies
+ */
 @Service
 @RequiredArgsConstructor
 public class LobbyAdapter implements PersistenceSpi<Lobby, Long> {
@@ -30,10 +32,6 @@ public class LobbyAdapter implements PersistenceSpi<Lobby, Long> {
     @Override
     public Optional<Lobby> findById(Long id) {
         return lobbiesRepository.findById(id);
-    }
-
-    public List<Lobby> findByCreatorId(User id) {
-        return lobbiesRepository.findByCreator(id);
     }
 
     @Override

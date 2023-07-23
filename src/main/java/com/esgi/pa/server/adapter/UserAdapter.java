@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les utilisateurs
+ */
 @Component
 @RequiredArgsConstructor
 public class UserAdapter implements PersistenceSpi<User, Long> {
@@ -28,10 +31,6 @@ public class UserAdapter implements PersistenceSpi<User, Long> {
     @Override
     public Optional<User> findById(Long id) {
         return usersRepository.findById(id);
-    }
-
-    public Optional<User> findByName(String username) {
-        return usersRepository.findByName(username);
     }
 
     public Optional<User> findByEmail(String email) {

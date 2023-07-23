@@ -1,13 +1,15 @@
 package com.esgi.pa.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.esgi.pa.domain.enums.ActionEnum;
+import com.esgi.pa.domain.enums.StatusMessage;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entité représentant un état donnée d'un lors d'une partie
+ */
 @Data
 @Builder
 @Entity
@@ -24,8 +26,11 @@ public class Move {
     private Lobby lobby;
     @Column(columnDefinition = "text")
     private String gameState;
+    @With
     @Column(name = "move_date")
     private LocalDateTime moveDate;
+    @With
     private Boolean endPart = Boolean.FALSE;
+    private ActionEnum actionEnum;
 
 }

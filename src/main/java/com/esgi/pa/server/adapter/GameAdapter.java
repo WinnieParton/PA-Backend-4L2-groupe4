@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les jeux
+ */
 @Service
 @RequiredArgsConstructor
 public class GameAdapter implements PersistenceSpi<Game, Long> {
@@ -22,10 +25,7 @@ public class GameAdapter implements PersistenceSpi<Game, Long> {
 
     @Override
     public List<Game> saveAll(List<Game> oList) {
-        for (Game game : oList) {
-            gamesRepository.save(game);
-        }
-        return oList;
+        return gamesRepository.saveAll(oList);
     }
 
     @Override

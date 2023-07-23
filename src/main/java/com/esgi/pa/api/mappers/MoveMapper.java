@@ -5,6 +5,9 @@ import com.esgi.pa.domain.entities.Move;
 
 import java.util.List;
 
+/**
+ * Contient les méthodes pour mapper les entités move/état du jeu du domain vers des dtos
+ */
 public interface MoveMapper {
 
     static MoveDto toDto(Move move) {

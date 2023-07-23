@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité représentant un salon de jeu
+ */
 @Data
 @Builder
 @Entity
@@ -35,10 +38,6 @@ public class Lobby {
 
     private boolean invitationOnly;
 
-    @With
-    @Enumerated(EnumType.STRING)
-    private GameStatusEnum status;
-
     @Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -53,4 +52,6 @@ public class Lobby {
 
     @OneToOne(mappedBy = "lobby", cascade = CascadeType.ALL)
     private Chat chat;
+    @OneToMany
+    private List<VideoCall> videoCalls = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.ActionEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.MovesRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Adapter de persistence pour les étapes de jeu
+ */
 @Service
 @RequiredArgsConstructor
 public class MoveAdapter implements PersistenceSpi<Move, Long> {
@@ -20,8 +24,7 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
 
     @Override
     public Move save(Move o) {
-        o.setMoveDate(LocalDateTime.now());
-        return movesRepository.save(o);
+        return movesRepository.save(o.withMoveDate(LocalDateTime.now()));
     }
 
     @Override
@@ -35,13 +38,19 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
-    public Optional<Move> findByLobby(Lobby lobby) {
-        LocalDateTime oneMinuteAgo = LocalDateTime.now().minus(1, ChronoUnit.MINUTES);
-        return movesRepository.findFirstByLobbyAndMoveDateAfterOrderByMoveDateDesc(lobby, oneMinuteAgo);
+
+    public Optional<Move> findByLobbyActionOutput(Lobby lobby) {
+        return movesRepository.findFirstByLobbyAndActionEnumOrderByIdDesc(lobby, ActionEnum.OUTPUT);
     }
-    public Optional<Move> findByLobbyMove(Lobby lobby) {
-        return movesRepository.findFirstByLobbyOrderByMoveDateDesc(lobby);
+
+    public List<Move> findByListLobbyActionInput(Lobby lobby) {
+        return movesRepository.findByLobbyAndEndPartFalseAndActionEnumOrderByIdAsc(lobby, ActionEnum.INPUT);
     }
+
+    public List<Move> findListLastMoveALobby(Lobby lobby) {
+        return movesRepository.findByLobbyAndEndPartFalseOrderByMoveDateDesc(lobby);
+    }
+
     @Override
     public List<Move> findAll() {
         // TODO Auto-generated method stub

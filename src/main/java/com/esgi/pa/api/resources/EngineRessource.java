@@ -13,38 +13,44 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
-import javax.validation.Valid;
-
+/**
+ * Contient les routes permettant la communication avec les moteurs de jeux
+ */
 @RestController
 @RequestMapping("/engine")
 @RequiredArgsConstructor
 @Api(tags = "Engine Template API")
 public class EngineRessource {
 
-  private final LobbyService lobbyService;
-  private final GameService gameService;
-  private final SimpMessagingTemplate simpMessagingTemplate;
-  @PostMapping(
-    value = "/{idlobby}",
-    consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE
-  )
-  public ResponseEntity<String> runEngine(
-    @PathVariable Long idlobby,
-    @Valid @RequestBody String jsonData
-  ) throws TechnicalNotFoundException, IOException {
-    Lobby lobby = lobbyService.getById(idlobby);
-    // Construire les en-têtes de la réponse avec le type de contenu JSON
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    String output = gameService.runEngine(lobby, jsonData);
-    //dispatch game in websocket
-    lobby.getParticipants()
-            .forEach(participant -> {simpMessagingTemplate.convertAndSendToUser(
-                        participant.getName(),"/game", output);});
-    // Retourner la réponse JSON renvoyée par le engine Python avec les en-têtes appropriés
-    return new ResponseEntity<>(output, headers, HttpStatus.OK);
-  }
+    private final LobbyService lobbyService;
+    private final GameService gameService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+    /**
+     * Traite les requêtes de lancement d'un jeu
+     *
+     * @param idlobby  id numérique du lobby
+     * @param jsonData informations sur l'état du lobby à transmettre au moteur de jeu
+     * @return ResponseEntity contenant l'état du jeu après le processing du moteur
+     * @throws TechnicalNotFoundException si un élément n'est pas trouvé
+     * @throws IOException                si erreur dans l'execution du moteur
+     */
+    @PostMapping(value = "/{idlobby}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> runEngine(@PathVariable Long idlobby, @Valid @RequestBody String jsonData) throws TechnicalNotFoundException, IOException {
+        Lobby lobby = lobbyService.getById(idlobby);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String output = gameService.runEngine(lobby, jsonData);
+        lobby.getParticipants()
+            .forEach(participant -> {
+                simpMessagingTemplate.convertAndSendToUser(
+                    participant.getName(), "/game", output);
+            });
+        return new ResponseEntity<>(output, headers, HttpStatus.OK);
+    }
 }
