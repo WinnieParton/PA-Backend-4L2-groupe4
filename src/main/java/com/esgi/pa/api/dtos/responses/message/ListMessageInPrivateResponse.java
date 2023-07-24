@@ -1,6 +1,6 @@
 package com.esgi.pa.api.dtos.responses.message;
 
-import com.esgi.pa.domain.enums.StatusMessage;
+import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import javax.validation.constraints.NotBlank;
@@ -29,7 +29,7 @@ public record ListMessageInPrivateResponse(
     @NotBlank(message = "Receiver Name is required") String receiverName,
     @NotBlank(message = "Receiver Id is required") Long receiverUser,
     @NotBlank(message = "Name Name is required") String name,
-    StatusMessage status,
+    StatusMessagePrivateEnum status,
     String currentDate,
     Boolean send) {
 }

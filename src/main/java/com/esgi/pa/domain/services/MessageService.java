@@ -5,14 +5,12 @@ import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.requests.video.CallRequest;
 import com.esgi.pa.api.dtos.requests.video.MessageRequest;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
-import com.esgi.pa.api.dtos.responses.video.MessageResponse;
 import com.esgi.pa.domain.entities.*;
-import com.esgi.pa.domain.enums.StatusMessage;
+import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
 import com.esgi.pa.domain.enums.VideoStatusEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.MessageAdapter;
 import com.esgi.pa.server.adapter.MessagePrivateAdapter;
-import com.esgi.pa.server.adapter.VideoCallAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -70,8 +68,9 @@ public class MessageService {
         String dateString = message.currentDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessage.UNREAD);
+        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessagePrivateEnum.UNREAD);
         messagePrivateAdapter.save(message2);
+        simpMessagingTemplate.convertAndSendToUser(receiverUser.getName(), "/private/message-friend", message);
     }
 
     public void dispatchMessageVideo(String to, MessageRequest request, String etat) throws TechnicalNotFoundException {

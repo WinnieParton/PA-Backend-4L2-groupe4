@@ -1,6 +1,6 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import lombok.*;
 import lombok.Builder.Default;
 
@@ -29,6 +29,6 @@ public class Invitation {
 
     @Default
     @With
-    private RequestStatus accepted = RequestStatus.PENDING;
+    private RequestStatusEnum accepted = RequestStatusEnum.PENDING;
 
 }

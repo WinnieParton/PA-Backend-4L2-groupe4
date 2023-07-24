@@ -3,7 +3,7 @@ package com.esgi.pa.domain.enums;
 /**
  * Enum représentant le statut d'un message
  */
-public enum StatusMessage {
+public enum StatusMessagePrivateEnum {
     READ,
     UNREAD
 }

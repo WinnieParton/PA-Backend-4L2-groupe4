@@ -117,6 +117,7 @@ public class GameService {
      */
     public String runEngine(Lobby lobby, String jsonData) {
         moveService.saveGameState(lobby, jsonData, ActionEnum.INPUT);
+        moveService.verifyRollback();
         String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
         String output ="";
         List<Move> listLasMove = moveService.findListLastMoveInput(lobby);
@@ -134,6 +135,7 @@ public class GameService {
             moveService.saveGameState(lobby, output, ActionEnum.OUTPUT);
         return output;
     }
+
     /**
      * Methode pour fermer l'instance
      */

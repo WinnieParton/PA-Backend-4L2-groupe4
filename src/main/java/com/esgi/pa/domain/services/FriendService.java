@@ -2,7 +2,7 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.FriendAdapter;
@@ -113,7 +113,7 @@ public class FriendService {
      * @return la relation d'amitié
      * @throws TechnicalNotFoundException si un élément n'est pas trouvé
      */
-    public Friend handleRequest(User sender, User receiver, RequestStatus status) throws TechnicalNotFoundException {
+    public Friend handleRequest(User sender, User receiver, RequestStatusEnum status) throws TechnicalNotFoundException {
         return switch (status) {
             case ACCEPTED -> acceptRequest(sender, receiver);
             case REJECTED -> rejectRequest(sender, receiver);
@@ -133,7 +133,7 @@ public class FriendService {
     private Friend acceptRequest(User sender, User receiver) throws TechnicalNotFoundException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
-        return friendAdapter.save(friend.withStatus(RequestStatus.ACCEPTED));
+        return friendAdapter.save(friend.withStatus(RequestStatusEnum.ACCEPTED));
     }
 
     /**
@@ -147,6 +147,6 @@ public class FriendService {
     private Friend rejectRequest(User sender, User receiver) throws TechnicalNotFoundException {
         Friend friend = friendAdapter.findByUserAndFriend(sender, receiver)
             .orElseThrow(() -> new TechnicalNotFoundException(HttpStatus.NOT_FOUND, "Friend request not found", sender));
-        return friendAdapter.save(friend.withStatus(RequestStatus.REJECTED));
+        return friendAdapter.save(friend.withStatus(RequestStatusEnum.REJECTED));
     }
 }

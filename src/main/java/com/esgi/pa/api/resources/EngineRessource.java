@@ -1,9 +1,12 @@
 package com.esgi.pa.api.resources;
 
+import com.esgi.pa.api.dtos.responses.move.GetmovesResponse;
+import com.esgi.pa.api.mappers.MoveMapper;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
+import com.esgi.pa.domain.services.MoveService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +31,7 @@ public class EngineRessource {
     private final LobbyService lobbyService;
     private final GameService gameService;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final MoveService moveService;
 
     /**
      * Traite les requêtes de lancement d'un jeu
@@ -51,6 +55,7 @@ public class EngineRessource {
                 simpMessagingTemplate.convertAndSendToUser(
                     participant.getName(), "/game", output);
             });
+        moveService.getHistorieMoveInLobby(lobby);
         return new ResponseEntity<>(output, headers, HttpStatus.OK);
     }
 }

@@ -1,7 +1,8 @@
 package com.esgi.pa.domain.entities;
 
 import com.esgi.pa.domain.enums.ActionEnum;
-import com.esgi.pa.domain.enums.StatusMessage;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
+import com.esgi.pa.domain.enums.RollbackEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,5 +33,6 @@ public class Move {
     @With
     private Boolean endPart = Boolean.FALSE;
     private ActionEnum actionEnum;
+    private RollbackEnum rollback;
 
 }

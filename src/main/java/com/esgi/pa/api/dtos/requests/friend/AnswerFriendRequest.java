@@ -1,6 +1,6 @@
 package com.esgi.pa.api.dtos.requests.friend;
 
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Builder;
 
@@ -17,6 +17,6 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record AnswerFriendRequest(@NotNull(message = "sender Id is required") Long sender,
-                                  @NotNull(message = "Status is required") RequestStatus status) {
+                                  @NotNull(message = "Status is required") RequestStatusEnum status) {
 
 }

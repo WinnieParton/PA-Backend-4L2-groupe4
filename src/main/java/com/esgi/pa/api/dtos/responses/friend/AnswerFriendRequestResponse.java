@@ -1,7 +1,7 @@
 package com.esgi.pa.api.dtos.responses.friend;
 
 import com.esgi.pa.api.dtos.responses.user.NoFriendsUserResponse;
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
@@ -16,6 +16,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public record AnswerFriendRequestResponse(
     Long id,
     NoFriendsUserResponse friend,
-    RequestStatus status) {
+    RequestStatusEnum status) {
 
 }

@@ -1,6 +1,6 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import lombok.*;
 import lombok.Builder.Default;
 
@@ -30,6 +30,6 @@ public class Friend {
     @With
     @Default
     @Enumerated(EnumType.STRING)
-    private RequestStatus status = RequestStatus.PENDING;
+    private RequestStatusEnum status = RequestStatusEnum.PENDING;
 
 }

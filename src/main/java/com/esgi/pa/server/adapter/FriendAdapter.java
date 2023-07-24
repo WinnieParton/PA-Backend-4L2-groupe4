@@ -2,7 +2,7 @@ package com.esgi.pa.server.adapter;
 
 import com.esgi.pa.domain.entities.Friend;
 import com.esgi.pa.domain.entities.User;
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.esgi.pa.server.PersistenceSpi;
 import com.esgi.pa.server.repositories.FriendsRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,15 +42,15 @@ public class FriendAdapter implements PersistenceSpi<Friend, Long> {
     }
 
     public List<Friend> findByUser1(User o) {
-        return repository.findByUser1AndStatus(o, RequestStatus.PENDING);
+        return repository.findByUser1AndStatus(o, RequestStatusEnum.PENDING);
     }
 
     public List<Friend> findByUser2(User o) {
-        return repository.findByUser2AndStatus(o, RequestStatus.PENDING);
+        return repository.findByUser2AndStatus(o, RequestStatusEnum.PENDING);
     }
 
     public List<Friend> findByUser2orUser1(User o) {
-        return repository.findByUser2AndStatusOrUser1AndStatus(o, RequestStatus.ACCEPTED, o, RequestStatus.ACCEPTED);
+        return repository.findByUser2AndStatusOrUser1AndStatus(o, RequestStatusEnum.ACCEPTED, o, RequestStatusEnum.ACCEPTED);
     }
 
     public boolean existsByUser1AndUser2(User o, User o1) {

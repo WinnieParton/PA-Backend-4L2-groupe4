@@ -1,6 +1,7 @@
 package com.esgi.pa.api.mappers;
 
 import com.esgi.pa.api.dtos.requests.move.MoveDto;
+import com.esgi.pa.api.dtos.responses.move.GetMoveResponse;
 import com.esgi.pa.domain.entities.Move;
 
 import java.util.List;
@@ -23,4 +24,16 @@ public interface MoveMapper {
             .distinct()
             .toList();
     }
+    static GetMoveResponse toDtoGet(Move move) {
+        return new GetMoveResponse(
+                move.getId(),
+                move.getGameState());
+    }
+    static List<GetMoveResponse> toHistoryMovesForOneLobby(List<Move> moves) {
+        return moves.stream()
+                .map(MoveMapper::toDtoGet)
+                .distinct()
+                .toList();
+    }
+
 }

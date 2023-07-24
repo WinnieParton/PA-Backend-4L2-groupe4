@@ -3,7 +3,7 @@ package com.esgi.pa.domain.services;
 import com.esgi.pa.domain.entities.Invitation;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.InvitationAdapter;
@@ -62,7 +62,7 @@ public class InvitationService {
      * @return le nouvel état de l'invitation
      * @throws TechnicalNotFoundException si l'invitation n'est pas trouvé
      */
-    public Invitation handleResponse(Invitation invitation, RequestStatus requestStatus) throws TechnicalNotFoundException {
+    public Invitation handleResponse(Invitation invitation, RequestStatusEnum requestStatus) throws TechnicalNotFoundException {
         return switch (requestStatus) {
             case ACCEPTED -> acceptInvitation(invitation.getUser(), invitation.getLobby());
             case REJECTED -> rejectInvitation(invitation.getUser(), invitation.getLobby());
@@ -82,7 +82,7 @@ public class InvitationService {
     private Invitation rejectInvitation(User user, Lobby lobby) throws TechnicalNotFoundException {
         Invitation invitation = invitationAdapter.getInvitationByUserAndLobby(user, lobby)
             .orElseThrow(() -> new TechnicalNotFoundException(String.format("Cannot find invitation for user id : %s and lobby id : %s", user.getId(), lobby.getId())));
-        return invitationAdapter.save(invitation.withAccepted(RequestStatus.REJECTED));
+        return invitationAdapter.save(invitation.withAccepted(RequestStatusEnum.REJECTED));
     }
 
     /**
@@ -97,7 +97,7 @@ public class InvitationService {
         Invitation invitation = invitationAdapter.getInvitationByUserAndLobby(user, lobby)
             .orElseThrow(() -> new TechnicalNotFoundException(String.format("Cannot find invitation for user id : %s and lobby id : %s", user.getId(), lobby.getId())));
         lobbyService.addUserToLobby(user, lobby);
-        return invitationAdapter.save(invitation.withAccepted(RequestStatus.ACCEPTED));
+        return invitationAdapter.save(invitation.withAccepted(RequestStatusEnum.ACCEPTED));
     }
 
     /**
@@ -109,7 +109,7 @@ public class InvitationService {
     public List<Invitation> getAllByReceiver(User user) {
         return invitationAdapter.findAllByUser(user)
             .stream()
-            .filter(invitation -> RequestStatus.PENDING.equals(invitation.getAccepted()))
+            .filter(invitation -> RequestStatusEnum.PENDING.equals(invitation.getAccepted()))
             .distinct()
             .toList();
     }

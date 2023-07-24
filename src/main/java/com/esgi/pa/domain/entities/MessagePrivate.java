@@ -1,6 +1,6 @@
 package com.esgi.pa.domain.entities;
 
-import com.esgi.pa.domain.enums.StatusMessage;
+import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,9 +37,9 @@ public class MessagePrivate {
 
     private LocalDateTime date;
 
-    private StatusMessage status;
+    private StatusMessagePrivateEnum status;
 
-    public MessagePrivate(User sender, User receiver, String message, LocalDateTime date, StatusMessage status) {
+    public MessagePrivate(User sender, User receiver, String message, LocalDateTime date, StatusMessagePrivateEnum status) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;

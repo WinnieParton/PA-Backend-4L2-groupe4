@@ -1,6 +1,6 @@
 package com.esgi.pa.api.dtos.responses.friend;
 
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 
 /**
  * DTO de réponse d'une demande d'ajout d'ami
@@ -10,6 +10,6 @@ import com.esgi.pa.domain.enums.RequestStatus;
  */
 public record AddFriendResponse(
     Long id,
-    RequestStatus status) {
+    RequestStatusEnum status) {
 
 }

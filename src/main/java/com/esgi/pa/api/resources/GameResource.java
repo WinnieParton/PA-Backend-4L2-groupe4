@@ -140,8 +140,10 @@ public class GameResource {
     public String processGamePlayer(@PathVariable Long idlobby) throws TechnicalNotFoundException {
         Lobby lobby = lobbyService.getById(idlobby);
         Optional<Move> move = moveService.findLastMoveOutput(lobby);
-        if (move.isPresent() && move.get().getEndPart())
+        if (move.isPresent() && move.get().getEndPart()) {
+            moveService.getHistorieMoveInLobby(lobby);
             return move.get().getGameState();
+        }
         return "";
     }
 }

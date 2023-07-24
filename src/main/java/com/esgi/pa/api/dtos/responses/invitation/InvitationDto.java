@@ -1,6 +1,6 @@
 package com.esgi.pa.api.dtos.responses.invitation;
 
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -16,5 +16,5 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 public record InvitationDto(
     Long id,
     LobbyInvitationResponse lobby,
-    RequestStatus accepted) {
+    RequestStatusEnum accepted) {
 }

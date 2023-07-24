@@ -1,7 +1,7 @@
 package com.esgi.pa.api.dtos.responses.friend;
 
 import com.esgi.pa.api.dtos.responses.user.NoFriendsUserResponse;
-import com.esgi.pa.domain.enums.RequestStatus;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 
 /**
  * DTO de réponse à une requête de récupération d'une demande d'ami envoyé
@@ -15,6 +15,6 @@ public record GetFriendRequestSentResponse(
     Long id,
     Long user,
     NoFriendsUserResponse friend,
-    RequestStatus status) {
+    RequestStatusEnum status) {
 
 }
