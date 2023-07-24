@@ -72,7 +72,7 @@ public class MoveService {
     }
 
     public List<Move> findListLastMoveInPut(Lobby lobby) {
-        return moveAdapter.findListLastMoveALobby(lobby);
+        return moveAdapter.findByListLobbyLastActionInput(lobby);
     }
 
     /**
@@ -166,7 +166,7 @@ public class MoveService {
     }
     public void getHistorieMoveInLobby(Lobby lobby) {
         GetmovesResponse getmovesResponse = new GetmovesResponse(MoveMapper.toHistoryMovesForOneLobby(
-                findListLastMove(lobby)));
+                findListLastMoveInPut(lobby)));
         lobby.getParticipants().forEach(participant -> {
             simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/historic/move", getmovesResponse);
         });

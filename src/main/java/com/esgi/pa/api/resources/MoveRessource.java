@@ -36,7 +36,7 @@ public class MoveRessource {
      * @param idUser les informations relative à utilisateur
      * @param answerMoveRequest les informations relative à la gestion du rollback
      */
-    @GetMapping("/rollback/{idUser}")
+    @PostMapping("/rollback/{idUser}")
     @ResponseStatus(OK)
     public void createoranswerRollback(@PathVariable Long idUser, AnswerMoveRequest answerMoveRequest) throws TechnicalNotFoundException {
         User user = userService.getById(idUser);

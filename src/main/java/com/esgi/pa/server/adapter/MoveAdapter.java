@@ -58,7 +58,7 @@ public class MoveAdapter implements PersistenceSpi<Move, Long> {
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
     public List<Move> findByListLobbyLastActionInput(Lobby lobby) {
-        return movesRepository.findByLobbyAndEndPartFalseAndActionEnumAndRollbackNotOrderByIdAsc(lobby, ActionEnum.INPUT, RollbackEnum.POP);
+        return movesRepository.findByLobbyAndEndPartFalseAndActionEnumOrderByIdAsc(lobby, ActionEnum.INPUT);
     }
     public List<Move> findAllByLobby(Lobby lobby) {
         return movesRepository.findAllByLobby(lobby);
