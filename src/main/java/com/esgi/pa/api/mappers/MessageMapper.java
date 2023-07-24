@@ -18,12 +18,9 @@ public interface MessageMapper {
     }
 
     static ReceiveMessageInLobbyResponse toGetmessageResponse(Message message) {
-        LocalDateTime sentAt = message.getSentAt();
-        String sentAtString = (sentAt != null) ? sentAt.toString() : "";
-
         return new ReceiveMessageInLobbyResponse(
             message.getCreator().getId(),
             message.getContent(),
-            sentAtString);
+                message.getSentAt());
     }
 }

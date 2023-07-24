@@ -50,10 +50,7 @@ public class MessageService {
             }
         });
         Chat chat = chatService.saveChat(lobbyService.getById(lobby.id()));
-        String dateString = message.currentDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-        Message message2 = new Message(chat, user, message.message(), dateTime);
+        Message message2 = new Message(chat, user, message.message(),  message.currentDate());
         messageAdapter.save(message2);
     }
 
@@ -65,10 +62,8 @@ public class MessageService {
      * @param message      informations relative au message
      */
     public void dispatchMessagePrivate(User senderUser, User receiverUser, SendMessageInPrivate message) {
-        String dateString = message.currentDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(), dateTime, StatusMessagePrivateEnum.UNREAD);
+        System.out.println("ddddddddddddddd  "+ message.currentDate());
+        MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(),  message.currentDate(), StatusMessagePrivateEnum.UNREAD);
         messagePrivateAdapter.save(message2);
         simpMessagingTemplate.convertAndSendToUser(receiverUser.getName(), "/private/message-friend", message);
     }

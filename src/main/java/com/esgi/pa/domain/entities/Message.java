@@ -34,9 +34,9 @@ public class Message {
     @Column(columnDefinition = "text")
     private String content;
 
-    private LocalDateTime sentAt;
+    private String sentAt;
 
-    public Message(Chat chat, User creator, String content, LocalDateTime sentAt) {
+    public Message(Chat chat, User creator, String content, String sentAt) {
         this.chat = chat;
         this.creator = creator;
         this.content = content;

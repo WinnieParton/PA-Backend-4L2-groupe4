@@ -31,7 +31,6 @@ import java.util.Optional;
 public class MoveService {
 
     private final MoveAdapter moveAdapter;
-    private final LobbyService lobbyService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     /**
@@ -118,15 +117,15 @@ public class MoveService {
      * Permet de envoyer ou demander un rollback
      * @throws TechnicalNotFoundException si le move n'est pas trouvé
      */
-    public void answerRollback(User user, RollbackEnum status, Long id) throws TechnicalNotFoundException {
-        Move move = getById(id);
+    public void answerRollback(User user, RollbackEnum status, Move move , String output) throws TechnicalNotFoundException {
+
         if(status == RollbackEnum.POP){
-            move.setRollback(RollbackEnum.UNPOP);
-            List<Move> moveToPop = moveAdapter.listMovePop(id);
-            moveToPop.forEach(movepop ->{
-                movepop.setRollback(RollbackEnum.POP);
-                moveAdapter.save(movepop);
-            });
+            move.getLobby().getParticipants()
+                .forEach(participant -> {
+                    simpMessagingTemplate.convertAndSendToUser(
+                            participant.getName(), "/game", output);
+                });
+            getHistorieMoveInLobby(move.getLobby());
         }else{
             move.setRollback(status);
         }
@@ -139,6 +138,16 @@ public class MoveService {
             if (!Objects.equals(participant.getId(), user.getId())) {
                 simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/rollback", answerMoveRequest);
             }
+        });
+    }
+
+    public void popAccept( Move move){
+        move.setRollback(RollbackEnum.POP);
+        List<Move> moveToPop = moveAdapter.listMovePop(move.getId());
+        System.out.println(moveToPop.size());
+        moveToPop.forEach(movepop ->{
+            movepop.setRollback(RollbackEnum.POP);
+            moveAdapter.save(movepop);
         });
     }
     /**

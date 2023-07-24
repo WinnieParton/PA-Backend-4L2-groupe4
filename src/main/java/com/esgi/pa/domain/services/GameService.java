@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Service de gestion des jeux
@@ -131,11 +132,27 @@ public class GameService {
         } else {
             output = "Langage non supporté";
         }
-        if(output!="null")
+        if(!Objects.equals(output, "null") && !output.contains("Erreur lors de l'exécution"))
             moveService.saveGameState(lobby, output, ActionEnum.OUTPUT);
         return output;
     }
+    public String runEngineRollback(Lobby lobby,  List<Move> listLasMove) {
+        moveService.verifyRollback();
+        String extension = FilenameUtils.getExtension(lobby.getGame().getGameFiles());
+        String output ="";
+        if ("py".equals(extension)) {
+            for (Move move : listLasMove) {
+                output = runScriptPython(lobby, move.getGameState());
+            };
+            closePythonInstance();
+        } else if ("js".equals(extension)) {
+            output = runScriptJavaScript(lobby, "");
+        } else {
+            output = "Langage non supporté";
+        }
 
+        return output;
+    }
     /**
      * Methode pour fermer l'instance
      */

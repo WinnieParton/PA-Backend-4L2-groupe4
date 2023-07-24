@@ -10,11 +10,14 @@ import com.esgi.pa.api.mappers.MoveMapper;
 import com.esgi.pa.domain.entities.Game;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.RollbackEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.GameService;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.MoveService;
+import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * Contient les routes lié aux jeux
@@ -41,6 +45,7 @@ public class GameResource {
     private final GameService gameService;
     private final LobbyService lobbyService;
     private final MoveService moveService;
+    private final UserService userService;
 
     /**
      * Permet le traitement des requêtes de création de jeu
@@ -145,5 +150,24 @@ public class GameResource {
             return move.get().getGameState();
         }
         return "";
+    }
+
+    /**
+     * Traite les requêtes de rollback à un jeu de lobby
+     *
+     * @param idUser les informations relative à utilisateur
+     * @param idmove les informations relative à utilisateur
+     * @param status les informations relative à la gestion du rollback
+     */
+    @GetMapping("/rollback/{idUser}/idmove/{idmove}/status/{status}")
+    @ResponseStatus(OK)
+    public void createoranswerRollback(@PathVariable Long idUser, @PathVariable Long idmove, @PathVariable RollbackEnum status) throws TechnicalNotFoundException {
+        User user = userService.getById(idUser);
+        Move move = moveService.getById(idmove);
+        if(status == status.POP)
+            moveService.popAccept(move);
+        List<Move> listLasMove = moveService.findListLastMoveInput(move.getLobby());
+        String output = gameService.runEngineRollback(move.getLobby(), listLasMove);
+        moveService.answerRollback(user, status, move, output);
     }
 }

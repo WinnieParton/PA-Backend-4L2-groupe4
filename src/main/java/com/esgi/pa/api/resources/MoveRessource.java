@@ -5,6 +5,7 @@ import com.esgi.pa.api.dtos.responses.move.GetmovesResponse;
 import com.esgi.pa.api.mappers.MoveMapper;
 import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.enums.RollbackEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.LobbyService;
 import com.esgi.pa.domain.services.MoveService;
@@ -30,16 +31,5 @@ public class MoveRessource {
     private final MoveService moveService;
     private final UserService userService;
 
-    /**
-     * Traite les requêtes de rollback à un jeu de lobby
-     *
-     * @param idUser les informations relative à utilisateur
-     * @param answerMoveRequest les informations relative à la gestion du rollback
-     */
-    @PostMapping("/rollback/{idUser}")
-    @ResponseStatus(OK)
-    public void createoranswerRollback(@PathVariable Long idUser, AnswerMoveRequest answerMoveRequest) throws TechnicalNotFoundException {
-        User user = userService.getById(idUser);
-        moveService.answerRollback(user, answerMoveRequest.status(), answerMoveRequest.move());
-    }
+
 }

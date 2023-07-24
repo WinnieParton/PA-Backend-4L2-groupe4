@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 /**
@@ -28,6 +30,6 @@ public record SendMessageInPrivate(
     @NotBlank(message = "Receiver Name is required") String receiverName,
     @NotBlank(message = "Receiver Id is required") Long receiverUser,
     StatusMessagePrivateEnum status,
-    String currentDate,
+    LocalDateTime currentDate,
     Boolean send
 ) {}
