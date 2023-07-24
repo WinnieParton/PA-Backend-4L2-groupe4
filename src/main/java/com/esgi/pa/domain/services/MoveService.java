@@ -52,16 +52,6 @@ public class MoveService {
                 .build());
     }
     /**
-     * Récupère le lobbyd' état du jeu d'un lobby
-     *
-     * @param lobby le lobby dont on veut récupérer l'état du jeu
-     * @return l'historique d' état du jeu
-     */
-    public List<Move> findByLobbyHistorieMove(Lobby lobby){
-        return moveAdapter.findListLastMoveALobby(lobby);
-    }
-
-    /**
      * Récupère le dernier état du jeu d'un lobby
      *
      * @param lobby le lobby dont on veut récupérer l'état du jeu
@@ -78,6 +68,10 @@ public class MoveService {
      * @return List du dernier état du jeu
      */
     public List<Move> findListLastMove(Lobby lobby) {
+        return moveAdapter.findListLastMoveALobby(lobby);
+    }
+
+    public List<Move> findListLastMoveInPut(Lobby lobby) {
         return moveAdapter.findListLastMoveALobby(lobby);
     }
 
@@ -126,17 +120,21 @@ public class MoveService {
      */
     public void answerRollback(User user, RollbackEnum status, Long id) throws TechnicalNotFoundException {
         Move move = getById(id);
-        move.setRollback(RollbackEnum.UNPOP);
-        moveAdapter.save(move);
         if(status == RollbackEnum.POP){
+            move.setRollback(RollbackEnum.UNPOP);
             List<Move> moveToPop = moveAdapter.listMovePop(id);
             moveToPop.forEach(movepop ->{
                 movepop.setRollback(RollbackEnum.POP);
-                moveAdapter.save(move);
+                moveAdapter.save(movepop);
             });
+        }else{
+            move.setRollback(status);
         }
+        if(status == RollbackEnum.PENDING)
+            move.setRollBackDate(LocalDateTime.now());
+        move = moveAdapter.save(move);
 
-        AnswerRollback answerMoveRequest = new  AnswerRollback(move.getId(), move.getGameState(),status);
+        AnswerRollback answerMoveRequest = new  AnswerRollback(move.getId(), move.getGameState(),status, move.getRollBackDate().toString());
         move.getLobby().getParticipants().forEach(participant -> {
             if (!Objects.equals(participant.getId(), user.getId())) {
                 simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/rollback", answerMoveRequest);
@@ -166,10 +164,9 @@ public class MoveService {
             }
         });
     }
-
     public void getHistorieMoveInLobby(Lobby lobby) {
         GetmovesResponse getmovesResponse = new GetmovesResponse(MoveMapper.toHistoryMovesForOneLobby(
-                findByLobbyHistorieMove(lobby)));
+                findListLastMove(lobby)));
         lobby.getParticipants().forEach(participant -> {
             simpMessagingTemplate.convertAndSendToUser(participant.getName(), "/private/historic/move", getmovesResponse);
         });

@@ -162,7 +162,7 @@ public class WebsocketResource {
     return message;
   }
 
-  @MessageMapping("/message")
+  @MessageMapping("/message-friend")
   @SendTo("/chat/message-friend")
   public List<ListMessageInPrivateResponse> processGetPrivateMessage(
     SendMessageInPrivate message

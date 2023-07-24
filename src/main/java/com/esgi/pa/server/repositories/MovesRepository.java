@@ -18,6 +18,7 @@ public interface MovesRepository extends JpaRepository<Move, Long> {
     List<Move> findAllByLobby(Lobby lobby);
     Optional<Move> findFirstByLobbyAndActionEnumAndRollbackNotOrderByIdDesc(Lobby lobby, ActionEnum actionEnum, RollbackEnum rollbackEnum);
     List<Move> findByLobbyAndEndPartFalseAndActionEnumAndRollbackNotOrderByIdAsc(Lobby lobby, ActionEnum actionEnum, RollbackEnum rollbackEnum);
+    List<Move> findByLobbyAndEndPartFalseAndActionEnumOrderByIdAsc(Lobby lobby, ActionEnum actionEnum, RollbackEnum rollbackEnum);
     List<Move> findByLobbyAndEndPartFalseOrderByMoveDateDesc(Lobby lobby);
     List<Move> findByRollback(RollbackEnum rollback);
     List<Move> findByIdGreaterThanOrderByIdAsc(Long moveId);

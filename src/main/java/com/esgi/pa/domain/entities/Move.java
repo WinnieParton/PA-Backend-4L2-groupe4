@@ -34,5 +34,6 @@ public class Move {
     private Boolean endPart = Boolean.FALSE;
     private ActionEnum actionEnum;
     private RollbackEnum rollback;
+    private LocalDateTime rollBackDate;
 
 }
