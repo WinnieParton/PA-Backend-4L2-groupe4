@@ -1,24 +1,29 @@
 package com.esgi.pa.domain.services;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
 import com.esgi.pa.api.dtos.requests.message.SendMessageInPrivate;
 import com.esgi.pa.api.dtos.requests.video.CallRequest;
 import com.esgi.pa.api.dtos.requests.video.MessageRequest;
 import com.esgi.pa.api.dtos.responses.lobby.GetlobbyMessageResponse;
-import com.esgi.pa.domain.entities.*;
+import com.esgi.pa.domain.entities.Chat;
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.Message;
+import com.esgi.pa.domain.entities.MessagePrivate;
+import com.esgi.pa.domain.entities.User;
+import com.esgi.pa.domain.entities.VideoCall;
 import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
 import com.esgi.pa.domain.enums.VideoStatusEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.MessageAdapter;
 import com.esgi.pa.server.adapter.MessagePrivateAdapter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Service de gestion des messages
@@ -62,7 +67,6 @@ public class MessageService {
      * @param message      informations relative au message
      */
     public void dispatchMessagePrivate(User senderUser, User receiverUser, SendMessageInPrivate message) {
-        System.out.println("ddddddddddddddd  "+ message.currentDate());
         MessagePrivate message2 = new MessagePrivate(senderUser, receiverUser, message.message(),  message.currentDate(), StatusMessagePrivateEnum.UNREAD);
         messagePrivateAdapter.save(message2);
         simpMessagingTemplate.convertAndSendToUser(receiverUser.getName(), "/private/message-friend", message);

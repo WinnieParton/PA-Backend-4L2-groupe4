@@ -35,11 +35,11 @@ public class MessagePrivate {
     @Column(columnDefinition = "text")
     private String message;
 
-    private LocalDateTime date;
+    private String date;
 
     private StatusMessagePrivateEnum status;
 
-    public MessagePrivate(User sender, User receiver, String message, LocalDateTime date, StatusMessagePrivateEnum status) {
+    public MessagePrivate(User sender, User receiver, String message, String date, StatusMessagePrivateEnum status) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;

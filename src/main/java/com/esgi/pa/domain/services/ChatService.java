@@ -112,6 +112,7 @@ public class ChatService {
         List<ListMessageInPrivateResponse> messages = new ArrayList<>();
         List<MessagePrivate> messageSenderPrivateList = messagePrivateAdapter.findBySenderOrReceiverOrderByDateDesc(senderUser, senderUser);
         List<MessagePrivate> messageReceiverPrivateList = messagePrivateAdapter.findBySenderOrReceiverOrderByDateDesc(receiveUser, receiveUser);
+        
         List<MessagePrivate> mergedList = new ArrayList<>();
         mergedList.addAll(messageSenderPrivateList);
         mergedList.addAll(messageReceiverPrivateList);
@@ -135,7 +136,9 @@ public class ChatService {
             )
         ));
 
-        return sortMessagesByCurrentDateDesc(messages);
+         Set<ListMessageInPrivateResponse> uniqueMessagesSort = new HashSet<>(messages);
+        List<ListMessageInPrivateResponse> messagePrivateListSort = new ArrayList<>(uniqueMessagesSort);
+        return sortMessagesByCurrentDateDesc(messagePrivateListSort);
     }
 
     /**
