@@ -1,13 +1,20 @@
 package com.esgi.pa.domain.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * Entité représentant un message privé
@@ -35,11 +42,11 @@ public class MessagePrivate {
     @Column(columnDefinition = "text")
     private String message;
 
-    private LocalDateTime date;
+    private String date;
 
     private StatusMessagePrivateEnum status;
 
-    public MessagePrivate(User sender, User receiver, String message, LocalDateTime date, StatusMessagePrivateEnum status) {
+    public MessagePrivate(User sender, User receiver, String message, String date, StatusMessagePrivateEnum status) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;

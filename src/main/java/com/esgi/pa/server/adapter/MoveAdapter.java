@@ -1,18 +1,19 @@
 package com.esgi.pa.server.adapter;
 
-import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.entities.Move;
-import com.esgi.pa.domain.enums.ActionEnum;
-import com.esgi.pa.domain.enums.RequestStatusEnum;
-import com.esgi.pa.domain.enums.RollbackEnum;
-import com.esgi.pa.server.PersistenceSpi;
-import com.esgi.pa.server.repositories.MovesRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.esgi.pa.domain.entities.Lobby;
+import com.esgi.pa.domain.entities.Move;
+import com.esgi.pa.domain.enums.ActionEnum;
+import com.esgi.pa.domain.enums.RollbackEnum;
+import com.esgi.pa.server.PersistenceSpi;
+import com.esgi.pa.server.repositories.MovesRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Adapter de persistence pour les étapes de jeu

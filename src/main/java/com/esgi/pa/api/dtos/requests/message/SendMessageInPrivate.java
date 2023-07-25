@@ -1,14 +1,12 @@
 package com.esgi.pa.api.dtos.requests.message;
 
-import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
-
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.esgi.pa.domain.enums.StatusMessagePrivateEnum;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 /**
  * DTO de requête d'envoi de message privé
@@ -30,6 +28,6 @@ public record SendMessageInPrivate(
     @NotBlank(message = "Receiver Name is required") String receiverName,
     @NotBlank(message = "Receiver Id is required") Long receiverUser,
     StatusMessagePrivateEnum status,
-    LocalDateTime currentDate,
+    String currentDate,
     Boolean send
 ) {}
