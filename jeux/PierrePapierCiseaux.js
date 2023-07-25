@@ -4,7 +4,7 @@ function display() {
     return [
         {
             "width": "300",
-            "height": "100",
+            "height": "200",
             "content": [
                 {
                     "tag": "image",
@@ -35,7 +35,7 @@ function display() {
         },
         {
             "width": "300",
-            "height": "100",
+            "height": "200",
             "content": [
                 {
                     "tag": "image",
@@ -43,7 +43,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "0",
-                    "y": "0",
+                    "y": "100",
                 },
                 {
                     "tag": "image",
@@ -51,7 +51,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "100",
-                    "y": "0",
+                    "y": "100",
                 },
                 {
                     "tag": "image",
@@ -59,7 +59,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "200",
-                    "y": "0",
+                    "y": "100",
                 },
             ],
             "player": 2
@@ -67,14 +67,14 @@ function display() {
     ]
 }
 
-function createEndSvg(source) {
+function createEndSvg(source, y) {
     return {
         "tag": "image",
         "href": source,
         "height": "100",
         "width": "100",
         "x": "0",
-        "y": 0,
+        "y": y,
     };
 }
 
@@ -84,24 +84,24 @@ function displayover(player1Choice, player2Choice) {
 
     switch (player1Choice) {
         case "pierre":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg");
+            player1data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 0);
             break;
         case "papier":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg");
+            player1data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 0);
             break;
         case "ciseaux":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg");
+            player1data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 0);
             break;
     }
     switch (player2Choice) {
         case "pierre":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg");
+            player2data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 100);
             break;
         case "papier":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg");
+            player2data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 100);
             break;
         case "ciseaux":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg");
+            player2data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 100);
             break;
     }
 
@@ -127,9 +127,9 @@ function getActions(player) {
             "type": "CLICK",
             "player": player,
             "zones": [
-                {"x": 0, "y": 0, "width": 100, "height": 100},
-                {"x": 100, "y": 0, "width": 100, "height": 100},
-                {"x": 200, "y": 0, "width": 100, "height": 100}
+                {"x": 0, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
+                {"x": 100, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
+                {"x": 200, "y": player == 1 ? 0 : 100, "width": 100, "height": 100}
             ]
         }
     ];
