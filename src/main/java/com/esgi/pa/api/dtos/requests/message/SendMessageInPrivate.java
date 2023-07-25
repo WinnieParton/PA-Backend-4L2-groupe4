@@ -30,6 +30,6 @@ public record SendMessageInPrivate(
     @NotBlank(message = "Receiver Name is required") String receiverName,
     @NotBlank(message = "Receiver Id is required") Long receiverUser,
     StatusMessagePrivateEnum status,
-    String currentDate,
+    LocalDateTime currentDate,
     Boolean send
 ) {}

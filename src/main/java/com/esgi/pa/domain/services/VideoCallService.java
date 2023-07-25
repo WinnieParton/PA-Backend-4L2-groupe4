@@ -1,14 +1,19 @@
 package com.esgi.pa.domain.services;
 
-import java.util.Optional;
-
+import com.esgi.pa.api.dtos.requests.message.SendMessageInLobbyRequest;
+import com.esgi.pa.api.dtos.responses.message.ListMessageInPrivateResponse;
+import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInLobbyResponse;
+import com.esgi.pa.domain.entities.*;
+import com.esgi.pa.domain.enums.StatusMessageEnum;
+import com.esgi.pa.domain.enums.VideoStatusEnum;
+import com.esgi.pa.server.adapter.ChatAdapter;
+import com.esgi.pa.server.adapter.LobbyAdapter;
+import com.esgi.pa.server.adapter.MessagePrivateAdapter;
+import com.esgi.pa.server.adapter.VideoCallAdapter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.domain.entities.Lobby;
-import com.esgi.pa.domain.entities.VideoCall;
-import com.esgi.pa.server.adapter.VideoCallAdapter;
-
-import lombok.RequiredArgsConstructor;
+import java.util.*;
 
 /**
  * Service de gestion des chats

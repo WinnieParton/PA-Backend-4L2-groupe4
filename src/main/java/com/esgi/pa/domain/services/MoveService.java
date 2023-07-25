@@ -1,15 +1,5 @@
 package com.esgi.pa.domain.services;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.api.dtos.responses.move.AnswerRollback;
 import com.esgi.pa.api.dtos.responses.move.GetmovesResponse;
 import com.esgi.pa.api.mappers.MoveMapper;
@@ -17,11 +7,21 @@ import com.esgi.pa.domain.entities.Lobby;
 import com.esgi.pa.domain.entities.Move;
 import com.esgi.pa.domain.entities.User;
 import com.esgi.pa.domain.enums.ActionEnum;
+import com.esgi.pa.domain.enums.RequestStatusEnum;
 import com.esgi.pa.domain.enums.RollbackEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.adapter.MoveAdapter;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Service de gestion des états de jeu

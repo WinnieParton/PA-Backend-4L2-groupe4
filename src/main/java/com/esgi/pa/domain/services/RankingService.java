@@ -139,7 +139,6 @@ public class RankingService {
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<List<Double>>> typeReference = new TypeReference<>() {
         };
-        System.out.println("scoresByPlayersRequest  "+scoresByPlayersRequest);
         List<List<Double>> dataList = objectMapper.readValue(scoresByPlayersRequest, typeReference);
         Map<Long, Double> scoresByPlayers = new LinkedHashMap<>();
         for (List<Double> entry : dataList) {
@@ -147,7 +146,6 @@ public class RankingService {
             Double value = entry.get(1);
             scoresByPlayers.put(key, value);
         }
-        System.out.println("scoresByPlayersRequest  "+scoresByPlayers);
 
         return CompletableFuture.completedFuture(scoresByPlayers);
     }
