@@ -1,157 +1,199 @@
 const readline = require("readline");
 
-function display(){
-  return [
-    {
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/53md.jpg",
-      },
-      value: "pierre",
-    },
-    {
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/t4ls.jpg",
-      },
-      value: "papier",
-    },
-     {
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/ihln.jpg",
-      },
-      value: "ciseaux",
-    },
-  ]
+function display() {
+    return [
+        {
+            "width": "300",
+            "height": "200",
+            "content": [
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/53md.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "0",
+                    "y": "0",
+                },
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/t4ls.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "100",
+                    "y": "0",
+                },
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/ihln.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "200",
+                    "y": "0",
+                },
+            ],
+            "player": 1
+        },
+        {
+            "width": "300",
+            "height": "200",
+            "content": [
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/53md.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "0",
+                    "y": "100",
+                },
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/t4ls.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "100",
+                    "y": "100",
+                },
+                {
+                    "tag": "image",
+                    "href": "https://zupimages.net/up/23/28/ihln.jpg",
+                    "height": "100",
+                    "width": "100",
+                    "x": "200",
+                    "y": "100",
+                },
+            ],
+            "player": 2
+        },
+    ]
 }
-function displayover(player1Choice, player2Choice){
-  let player1data = {}
-  let player2data = {}
 
-  if(player1Choice === "pierre")
-    player1data ={
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/53md.jpg",
-      },
-      value: "pierre",
-      player: "player1"
-    }
-  else if(player1Choice === "papier")
-    player1data ={
-    type: "BUTTON",
-        content: {
-    type: "img",
-        src: "https://zupimages.net/up/23/28/t4ls.jpg",
-  },
-    value: "papier",
-      player: "player1"
-  }
-  else if(player1Choice === "ciseaux")
-    player1data ={
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/ihln.jpg",
-      },
-      value: "ciseaux",
-      player: "player1"
-    }
-  if(player2Choice === "pierre")
-    player2data ={
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/53md.jpg",
-      },
-      value: "pierre",
-      player: "player2"
-    }
-  else if(player2Choice === "papier")
-    player2data = {
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/t4ls.jpg",
-      },
-      value: "papier",
-      player: "player2"
-    }
-  else if(player2Choice === "ciseaux")
-    player2data ={
-      type: "BUTTON",
-      content: {
-        type: "img",
-        src: "https://zupimages.net/up/23/28/ihln.jpg",
-      },
-      value: "ciseaux",
-      player: "player2"
-    }
-  return [player1data, player2data];
-  //JSON.stringify( Object.assign({}, {player1data, player2data}))
+function createEndSvg(source, y) {
+    return {
+        "tag": "image",
+        "href": source,
+        "height": "100",
+        "width": "100",
+        "x": "0",
+        "y": y,
+    };
 }
-function getDisplay(message) {
-  return JSON.stringify(
-    Object.assign(
-      {},
-      {
-        message: message,
-        display: display()
-      }
-    )
-  );
+
+function displayover(player1Choice, player2Choice) {
+    let player1data = {}
+    let player2data = {}
+
+    switch (player1Choice) {
+        case "pierre":
+            player1data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 0);
+            break;
+        case "papier":
+            player1data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 0);
+            break;
+        case "ciseaux":
+            player1data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 0);
+            break;
+    }
+    switch (player2Choice) {
+        case "pierre":
+            player2data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 100);
+            break;
+        case "papier":
+            player2data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 100);
+            break;
+        case "ciseaux":
+            player2data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 100);
+            break;
+    }
+
+    return [
+        {
+            "width": "100",
+            "height": "100",
+            "content": [player1data],
+            "player": 1
+        },
+        {
+            "width": "100",
+            "height": "100",
+            "content": [player2data],
+            "player": 2
+        },
+    ]
+}
+
+function getActions(player) {
+    return [
+        {
+            "type": "CLICK",
+            "player": player,
+            "zones": [
+                {"x": 0, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
+                {"x": 100, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
+                {"x": 200, "y": player == 1 ? 0 : 100, "width": 100, "height": 100}
+            ]
+        }
+    ];
+}
+
+function getDisplay(game, player) {
+    return JSON.stringify(
+        Object.assign(
+            {},
+            {
+                "displays": display(),
+                "requested_actions": getActions(player),
+                "game_state": {
+                    "scores": game.scores,
+                    "game_over": false
+                }
+            }
+        )
+    );
 }
 
 class Game {
-  constructor() {
-    this.player1Choice = "";
-    this.player2Choice = "";
-    this.scores = {
-      joueur1: 0,
-      joueur2: 0,
-    };
-  }
 
-  determineWinner(player1Choice, player2Choice) {
-    if (player1Choice === player2Choice) {
-      return "Égalité";
-    } else if (
-      (player1Choice === "pierre" && player2Choice === "ciseaux") ||
-      (player1Choice === "papier" && player2Choice === "pierre") ||
-      (player1Choice === "ciseaux" && player2Choice === "papier")
-    ) {
-      return "joueur1";
-    } else {
-      return "joueur2";
+    constructor() {
+        this.scores = [0, 0];
     }
-  }
 
-  updateScores(winner) {
-    if (winner === "joueur1") {
-      this.scores.joueur1++;
-    } else if (winner === "joueur2") {
-      this.scores.joueur2++;
+    resolvePlayerChoice(playerChoice) {
+        switch (playerChoice.x) {
+            case playerChoice.x >= 0 && playerChoice.x < 100:
+                return "pierre";
+            case playerChoice.x >= 100 && playerChoice.x < 200:
+                return "papier";
+            case playerChoice.x >= 200 && playerChoice.x <= 300:
+                return "ciseaux";
+        }
     }
-  }
 
-  play(player1Choice, player2Choice) {
-    this.player1Choice = player1Choice;
-    this.player2Choice = player2Choice;
+    determineWinner(player1Choice, player2Choice) {
+        if (this.resolvePlayerChoice(player1Choice) === this.resolvePlayerChoice(player2Choice)) {
+            return "Égalité";
+        } else if (
+            (this.resolvePlayerChoice(player1Choice) === "pierre" && this.resolvePlayerChoice(player2Choice) === "ciseaux") ||
+            (this.resolvePlayerChoice(player1Choice) === "papier" && this.resolvePlayerChoice(player2Choice) === "pierre") ||
+            (this.resolvePlayerChoice(player1Choice) === "ciseaux" && this.resolvePlayerChoice(player2Choice) === "papier")
+        ) {
+            return "joueur1";
+        } else {
+            return "joueur2";
+        }
+    }
 
-    const winner = this.determineWinner(this.player1Choice, this.player2Choice);
-    this.updateScores(winner);
+    updateScores(winner) {
+        if (winner === "joueur1") {
+            this.scores[0]++;
+        } else if (winner === "joueur2") {
+            this.scores[1]++;
+        }
+    }
 
-    const result = {
-      winner: winner,
-      scores: this.scores,
-    };
-    return result;
-  }
+    play(player1Choice, player2Choice) {
+        this.updateScores(this.determineWinner(player1Choice, player2Choice));
+        return this.scores;
+    }
 }
 
 const game = new Game();
@@ -160,60 +202,62 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-function getPlayerChoice(player) {
-  return new Promise((resolve) => {
-    console.log(getDisplay(`Joueur ${player}, choisissez pierre, papier ou ciseaux : `));
-    rl.question("",
-      (choice) => {
-        const input = JSON.parse(choice);
-
-        resolve(input.actions.value.trim().toLowerCase());
-      }
-    );
-  });
+function getPlayerChoice(game, player) {
+    return new Promise((resolve) => {
+        console.log(getDisplay(game, player));
+        rl.question("", (choice) => {
+                const input = JSON.parse(choice);
+                resolve(input.actions[0]);
+            }
+        );
+    });
 }
+
 async function playGame() {
-  let playAgain = true;
+    let playAgain = true;
 
-  while (playAgain) {
-    const player1Choice = await getPlayerChoice(1);
-    const player2Choice = await getPlayerChoice(2);
+    while (playAgain) {
+        const player1Choice = await getPlayerChoice(game, 1);
+        const player2Choice = await getPlayerChoice(game, 2);
 
-    const result = game.play(player1Choice, player2Choice);
+        const result = game.play(player1Choice, player2Choice);
 
-    playAgain = false;
-    console.log(JSON.stringify( Object.assign({}, {
-      display: displayover(player1Choice, player2Choice),//display(),
-      result,
-      gam_over: true,
-  })));
-    rl.close();
-    return;
-  }
+        playAgain = false;
+        console.log(JSON.stringify(Object.assign({}, {
+            "displays": displayover(player1Choice, player2Choice),
+            "requested_actions": null, // Must not be null
+            "game_state": {
+                "scores": result,
+                "game_over": true
+            },
+        })));
+        rl.close();
+        return;
+    }
 }
 
 rl.question("", (initialValue) => {
-  try {
-    let inputJson = JSON.parse(initialValue);
-    if (inputJson.init) {
-      playGame();
-    } else {
-      console.log(
-        JSON.stringify({ message: "Erreur lors de l'initialisation" })
-      );
+    try {
+        let inputJson = JSON.parse(initialValue);
+        if (inputJson.init) {
+            playGame();
+        } else {
+            console.log(
+                JSON.stringify({message: "Erreur lors de l'initialisation"})
+            );
+        }
+    } catch (error) {
+        console.log(
+            JSON.stringify(
+                Object.assign(
+                    {},
+                    {
+                        error: "Invalid initial input JSON. Please try again.",
+                    }
+                )
+            )
+        );
+        rl.close();
     }
-  } catch (error) {
-    console.log(
-      JSON.stringify(
-        Object.assign(
-          {},
-          {
-            error: "Invalid initial input JSON. Please try again.",
-          }
-        )
-      )
-    );
-    rl.close();
-  }
 });
 
