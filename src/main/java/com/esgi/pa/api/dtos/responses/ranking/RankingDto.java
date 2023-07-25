@@ -19,5 +19,5 @@ public record RankingDto(
     Long id,
     GameDto game,
     NoFriendsUserResponse player,
-    double score) {
+    Double score) {
 }

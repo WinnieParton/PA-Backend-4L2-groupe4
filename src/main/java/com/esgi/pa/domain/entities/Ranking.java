@@ -26,10 +26,10 @@ public class Ranking {
     private User player;
 
     @With
-    private double score;
+    private Double score;
 
     @With
-    private double gamePlayed;
+    private Double gamePlayed;
 
     public Ranking(Game game, User player) {
         this.game = game;
