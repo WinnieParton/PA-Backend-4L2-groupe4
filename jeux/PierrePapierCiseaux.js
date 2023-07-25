@@ -4,7 +4,7 @@ function display() {
     return [
         {
             "width": "300",
-            "height": "200",
+            "height": "100",
             "content": [
                 {
                     "tag": "image",
@@ -35,7 +35,7 @@ function display() {
         },
         {
             "width": "300",
-            "height": "200",
+            "height": "100",
             "content": [
                 {
                     "tag": "image",
@@ -43,7 +43,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "0",
-                    "y": "100",
+                    "y": "0",
                 },
                 {
                     "tag": "image",
@@ -51,7 +51,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "100",
-                    "y": "100",
+                    "y": "0",
                 },
                 {
                     "tag": "image",
@@ -59,7 +59,7 @@ function display() {
                     "height": "100",
                     "width": "100",
                     "x": "200",
-                    "y": "100",
+                    "y": "0",
                 },
             ],
             "player": 2
@@ -82,39 +82,35 @@ function displayover(player1Choice, player2Choice) {
     let player1data = {}
     let player2data = {}
 
-    switch (player1Choice) {
-        case "pierre":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 0);
-            break;
-        case "papier":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 0);
-            break;
-        case "ciseaux":
-            player1data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 0);
-            break;
+    let p1choice = game.resolvePlayerChoice(player1Choice)
+    let p2choice = game.resolvePlayerChoice(player2Choice)
+
+    if (p1choice == "pierre") {
+        player1data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 0);
+    } else if (p1choice == "papier") {
+        player1data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 0);
+    } else if (p1choice == "ciseaux") {
+        player1data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 0);
     }
-    switch (player2Choice) {
-        case "pierre":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 100);
-            break;
-        case "papier":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 100);
-            break;
-        case "ciseaux":
-            player2data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 100);
-            break;
+
+    if (p2choice == "pierre") {
+        player2data = createEndSvg("https://zupimages.net/up/23/28/53md.jpg", 100);
+    } else if (p2choice == "papier") {
+        player2data = createEndSvg("https://zupimages.net/up/23/28/t4ls.jpg", 100);
+    } else if (p2choice == "ciseaux") {
+        player2data = createEndSvg("https://zupimages.net/up/23/28/ihln.jpg", 100);
     }
 
     return [
         {
             "width": "100",
-            "height": "100",
+            "height": "200",
             "content": [player1data],
             "player": 1
         },
         {
             "width": "100",
-            "height": "100",
+            "height": "200",
             "content": [player2data],
             "player": 2
         },
@@ -127,9 +123,9 @@ function getActions(player) {
             "type": "CLICK",
             "player": player,
             "zones": [
-                {"x": 0, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
-                {"x": 100, "y": player == 1 ? 0 : 100, "width": 100, "height": 100},
-                {"x": 200, "y": player == 1 ? 0 : 100, "width": 100, "height": 100}
+                {"x": 0, "y": 0, "width": 100, "height": 100},
+                {"x": 100, "y": 0, "width": 100, "height": 100},
+                {"x": 200, "y": 0, "width": 100, "height": 100}
             ]
         }
     ];
@@ -158,13 +154,12 @@ class Game {
     }
 
     resolvePlayerChoice(playerChoice) {
-        switch (playerChoice.x) {
-            case playerChoice.x >= 0 && playerChoice.x < 100:
-                return "pierre";
-            case playerChoice.x >= 100 && playerChoice.x < 200:
-                return "papier";
-            case playerChoice.x >= 200 && playerChoice.x <= 300:
-                return "ciseaux";
+        if (playerChoice.x >= 0 && playerChoice.x < 100) {
+            return "pierre";
+        } else if (playerChoice.x >= 100 && playerChoice.x < 200) {
+            return "papier";
+        } else if (playerChoice.x >= 200 && playerChoice.x <= 300) {
+            return "ciseaux";
         }
     }
 
@@ -221,11 +216,10 @@ async function playGame() {
         const player2Choice = await getPlayerChoice(game, 2);
 
         const result = game.play(player1Choice, player2Choice);
-
         playAgain = false;
         console.log(JSON.stringify(Object.assign({}, {
             "displays": displayover(player1Choice, player2Choice),
-            "requested_actions": null, // Must not be null
+            "requested_actions": getActions(1),
             "game_state": {
                 "scores": result,
                 "game_over": true
