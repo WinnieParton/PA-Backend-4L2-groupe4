@@ -1,10 +1,9 @@
 package com.esgi.pa.api.mappers;
 
+import java.util.List;
+
 import com.esgi.pa.api.dtos.responses.message.ReceiveMessageInLobbyResponse;
 import com.esgi.pa.domain.entities.Message;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Contient les méthodes pour mapper les entités message du domain vers des dtos

@@ -1,13 +1,11 @@
 package com.esgi.pa.api.dtos.responses.message;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
-
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 /**
  * DTO de réponse à une requête
